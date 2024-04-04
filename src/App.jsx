@@ -109,7 +109,7 @@ function App() {
     const randomNumber = Math.floor(Math.random() * artists.length);
     setRandomArtistName(artists[randomNumber]);
   }
-
+console.log({ CLIENT_ID, CLIENT_SECRET });
   // function to get spotify token
   async function getTokenHandler() {
     const TOKEN_URL = "https://accounts.spotify.com/api/token";
