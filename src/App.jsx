@@ -41,7 +41,7 @@ function App() {
   const [expiredToken, setExpiredToken] = useState(false);
   const [userData, setUserData] = useState(null);
   const [userDataLoading, setUserDataLoading] = useState(true);
- 
+
   const [userDataError, setUserDataError] = useState(false);
   const [topArtistData, setTopArtistData] = useState([]);
   const [authUserPlaylistData, setAuthUserPlaylistData] = useState([]);
@@ -58,58 +58,14 @@ function App() {
   const [randomArtistName, setRandomArtistName] = useState("");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [cpModalText, setCpModalText] = useState(null);
-  // const [initialError, setInitialError] = useState("");
-  // const CLIENT_ID = "2c7f4b8912e1478991e9c8c3a45c5aa7";
-  // const CLIENT_SECRET = "88cf70b1f4ef47f9877a09bd4c468f80";
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
-  // const artists = [
-  //   "Kendrick Lamar",
-  //   "Beyoncé",
-  //   "Drake",
-  //   "Cardi B",
-  //   "Eminem",
 
-  //   "Travis Scott",
-  //   "Ariana Grande",
-  //   "J. Cole",
-  //   "Rihanna",
-  //   "Jay-Z",
-  //   "Taylor Swift",
-  //   "Post Malone",
-  //   "Lil Wayne",
-  //   "Dua Lipa",
-  //   "Nicki Minaj",
-  //   "Ed Sheeran",
-  //   "Kanye West",
-  //   "Billie Eilish",
-  //   "Future",
-  //   "Lady Gaga",
-  //   "Khalid",
-  //   "SZA",
-  //   "Bruno Mars",
-  //   "Lizzo",
-  //   "The Weeknd",
-  //   "Megan Thee Stallion",
-  //   "Childish Gambino",
-  //   "Justin Bieber",
-  //   "Katy Perry",
-  //   "Logic",
-  //   "Lil Nas X",
-  //   "Shawn Mendes",
-  //   "A$AP Rocky",
-  //   "Alicia Keys",
-  //   "Chris Brown",
-  //   "John Legend",
-  //   "Migos",
-  //   "A$AP Ferg",
-  // ];
-  // a function to get a random artist from the array of artist above
   function getRandomArtistName() {
     const randomNumber = Math.floor(Math.random() * artists.length);
     setRandomArtistName(artists[randomNumber]);
   }
-// console.log({ CLIENT_ID, CLIENT_SECRET });
+  // console.log({ CLIENT_ID, CLIENT_SECRET });
   // function to get spotify token
   async function getTokenHandler() {
     const TOKEN_URL = "https://accounts.spotify.com/api/token";
@@ -214,13 +170,13 @@ function App() {
   useEffect(() => {
     const hash = window.location.hash;
     if (hash && !authAccessToken) {
-      const hashedToken = hash
-        .substring(1)
-        .split("&")
-        .find((elem) => elem.startsWith("access_token"))
-        .split("=")[1];
-      // console.log(hashedToken);
-      window.location.hash = "";
+      const hashedToken = hash.substring(1).split("&")[0].split("=")[1]
+      //   .substring(1)
+      //   .split("&")
+      //   .find((elem) => elem.startsWith("access_token"))
+      //   .split("=")[1];
+      // // console.log(hashedToken);
+      // window.location.hash = "";
       setAuthAccessToken(hashedToken);
     }
   }, []);
@@ -232,8 +188,6 @@ function App() {
   //   },
   //   body: JSON.stringify(bodyData),
   // };
-
-
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -247,7 +201,6 @@ function App() {
       JSON.stringify(authAccessToken)
     );
   }, [authAccessToken]);
- 
 
   const genresArray = [
     "Kendrick Lamar",
@@ -503,7 +456,8 @@ function App() {
         setUserDataError(true);
         setUserDataLoading(false);
         //  setExpiredToken(true)
-        console.error("Failed to fetch user data:", response.status);
+        console.error("Failed to fetch user data:", response.status
+        );
       }
     } catch (error) {
       setUserData(null);
@@ -614,7 +568,7 @@ function App() {
     userDataLoading,
     userDataError,
     setCpModalText,
-    cpModalText
+    cpModalText,
     // createPlaylist,
     // createPlaylistData,
     // createPlaylistError,
@@ -632,7 +586,7 @@ function App() {
         {expiredToken && <ExpiredSession setExpiredToken={setExpiredToken} />}
         {!isOnline && <Modals text="No internet connection" />}
         {showPlayModal && <Modals text="Feature currently unavailable" />}
-{cpModalText !== null  && <Modals text={cpModalText} /> }
+        {cpModalText !== null && <Modals text={cpModalText} />}
         <Routess />
       </myContext.Provider>
     </div>
