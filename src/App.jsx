@@ -176,7 +176,7 @@ function App() {
       //   .find((elem) => elem.startsWith("access_token"))
       //   .split("=")[1];
       // // console.log(hashedToken);
-      // window.location.hash = "";
+      window.location.hash = "";
       setAuthAccessToken(hashedToken);
     }
   }, []);
