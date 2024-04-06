@@ -103,11 +103,8 @@ function App() {
       if (response.ok) {
         const data = await response.json();
         return data.artists.items[0].id;
-      } else {
-        setErrorDetails("Details Not Found");
       }
     } catch (error) {
-      setErrorDetails("Details Not Found");
       console.log(error);
     }
   }
@@ -170,7 +167,7 @@ function App() {
   useEffect(() => {
     const hash = window.location.hash;
     if (hash && !authAccessToken) {
-      const hashedToken = hash.substring(1).split("&")[0].split("=")[1]
+      const hashedToken = hash.substring(1).split("&")[0].split("=")[1];
       //   .substring(1)
       //   .split("&")
       //   .find((elem) => elem.startsWith("access_token"))
@@ -207,7 +204,6 @@ function App() {
     "Beyoncé",
     "The Beatles",
     "Jay-Z",
-    "Adele",
     "Eminem",
     "Taylor Swift",
     "Drake",
@@ -456,8 +452,7 @@ function App() {
         setUserDataError(true);
         setUserDataLoading(false);
         //  setExpiredToken(true)
-        console.error("Failed to fetch user data:", response.status
-        );
+        console.error("Failed to fetch user data:", response.status);
       }
     } catch (error) {
       setUserData(null);
@@ -583,7 +578,7 @@ function App() {
     >
       <myContext.Provider value={values}>
         <Navbar />
-        {expiredToken && <ExpiredSession setExpiredToken={setExpiredToken} />}
+        {/* {expiredToken && <ExpiredSession setExpiredToken={setExpiredToken} />} */}
         {!isOnline && <Modals text="No internet connection" />}
         {showPlayModal && <Modals text="Feature currently unavailable" />}
         {cpModalText !== null && <Modals text={cpModalText} />}

@@ -123,7 +123,9 @@ function Home() {
       searchRandomArtistAlbum(randomArtistName);
     }
   }, [randomArtistName, accessToken]);
-
+  function refreshHandler() {
+    window.location.reload();
+  }
   return (
     <ParentLayouts>
       <nav
@@ -139,28 +141,14 @@ function Home() {
 
         {!loggedIn ? <LoginBtn /> : <UserBtn />}
       </nav>
-      <section className="px-[2.5%] w-full pb-4 items-center justify-start">
-        <h2 className="font-[900] text-3xl text-white ellipsis-container">
-          Good {timeOfDay}
-        </h2>
-      </section>
-      {/* {loggedIn && (
-        <>
-          {isLoading && !error && (
-            <section className="px-[2.5%] flex flex-wrap flex-col gap-4">
-              <span className="w-2/4">
-                <Skeleton type='title' />
-              </span>
-              <div className=" flex flex-wrap justify-center gap-x-4 ipad:justify-between  ipad:gap-x-0   ">
-                {numbers.map((numb) => {
-                  return <CardSkeleton key={numb} />;
-                })}
-              </div>
-            </section>
-          )}
-        
-        </>
-      )} */}
+      {!error && (
+        <section className="px-[2.5%] w-full pb-4 items-center justify-start">
+          <h2 className="font-[900] text-3xl text-white ellipsis-container">
+            Good {timeOfDay}
+          </h2>
+        </section>
+      )}
+
       {loggedIn && !isLoading && !error && featuredPlaylistData.length > 0 && (
         <section className="px-[2.5%] flex flex-wrap flex-col pb-8">
           <h2 className="w-full font-[900] text-2xl text-center text-white pb-2 ">
@@ -229,15 +217,26 @@ function Home() {
                 />
               );
             })}
-            
+
             <SocilaMedia />
           </div>
         </section>
       )}
       {error && (
-        <h1 className="text-2xl font-[900] text-center w-full px-[2.5%] pt-8 text-white sm:text-4xl">
-          Something went wrong
-        </h1>
+        <section className="flex flex-col h-[70dvh] max-h-[700px] items-center justify-center gap-4">
+          <h1 className="text-2xl font-[900] text-center w-full px-[2.5%] pt-8 text-white sm:text-4xl">
+            Something went wrong
+          </h1>
+          <span className="flex justify-center items-center">
+            {" "}
+            <button
+              className="button2 text-base type1"
+              onClick={refreshHandler}
+            >
+              Click to refresh
+            </button>
+          </span>
+        </section>
       )}
     </ParentLayouts>
   );
