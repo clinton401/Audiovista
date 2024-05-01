@@ -5,6 +5,7 @@ import ParentLayouts from "../components/ParentLayouts";
 import { myContext } from "../App";
 import DesktopView from "../components/SearchDesktopView";
 import SearchMobileView from "../components/SearchMobileView";
+import { useDebouncedCallback } from "use-debounce";
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputFocused, setInputFocused] = useState(false);
@@ -179,18 +180,19 @@ function Search() {
       setFirstInputFocus(false);
     }
   };
+  const debouncedFetchData = useDebouncedCallback(totalSearchHandler, 500);
   function submitHandler(e) {
     e.preventDefault();
     //  if(inputValue.length > 0) {
-    //   totalSearchHandler(inputValue)
+    //   debouncedFetchData(inputValue)
     //  }
   }
 
   const [playlistVerify, setPlaylistVerify] = useState(false);
   useEffect(() => {
     inputRef.current.focus();
-    scrollToTop()
-    setDocumentTitle('Audiovista - Search')
+    scrollToTop();
+    setDocumentTitle("Audiovista - Search");
   }, []);
   useEffect(() => {
     if (firstInputFocus) {
@@ -311,7 +313,7 @@ function Search() {
     if (accessToken) {
       if (queryRefreshed !== null && queryRefreshed.length > 0) {
         setInputValue(queryRefreshed);
-        totalSearchHandler(queryRefreshed);
+        debouncedFetchData(queryRefreshed);
       }
     }
   }, [accessToken]);
@@ -321,7 +323,7 @@ function Search() {
 
     if (queryRefreshed !== null && queryRefreshed.length > 0) {
       setInputFocused(false);
-      // totalSearchHandler(queryRefreshed);
+      // debouncedFetchData(queryRefreshed);
     }
   }, []);
   // useEffect(() => {
@@ -383,7 +385,7 @@ function Search() {
     if (inputValue.length > 0) {
       setInputFocused(true);
       setFirstInputFocus(true);
-      // totalSearchHandler(inputValue);
+      // debouncedFetchData(inputValue);
     } else {
       setInputFocused(false);
       // setDataError(false);
@@ -398,7 +400,7 @@ function Search() {
   useEffect(() => {
     if (inputValue.length > 0) {
       // setSearchParams({query: inputValue, filter: filters})
-      totalSearchHandler(inputValue);
+      debouncedFetchData(inputValue);
     }
   }, [inputValue]);
   function clearDatas() {
@@ -443,7 +445,7 @@ function Search() {
     }
   }
   // useEffect(() => {
-  //   totalSearchHandler("high school");
+  //   debouncedFetchData("high school");
   // }, []);
   useEffect(() => {
     function removeFocus(event) {

@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/logo.png";
+
 import { useNavigate } from "react-router-dom";
 function NotFoundView() {
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ function NotFoundView() {
         className="button2 text-base type1"
         onClick={() => {
           navigate(`/`);
-          scrollToTop();
         }}
       >
         GO TO HOMEPAGE
