@@ -21,7 +21,7 @@ function Modals({ text }) {
       },
     },
     exit: {
-      // opacity: 0,
+      opacity: 0,
       x: "100vw",
       transition: {
         duration: 0.5,
