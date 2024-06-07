@@ -186,7 +186,7 @@ function App() {
   //   },
   //   body: JSON.stringify(bodyData),
   // };
-  const expireTime = 3600;
+  const expireTime = 15;
   useEffect(() => {
     let intervalId;
     if (accessToken) {
