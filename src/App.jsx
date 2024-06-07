@@ -58,6 +58,7 @@ function App() {
   const [randomArtistName, setRandomArtistName] = useState("");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [cpModalText, setCpModalText] = useState(null);
+    const [elapsedTime, setElapsedTime] = useState(0);
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
 
@@ -185,7 +186,33 @@ function App() {
   //   },
   //   body: JSON.stringify(bodyData),
   // };
+  const expireTime = 3600;
+  useEffect(() => {
+    let intervalId;
+    if (accessToken) {
+      setElapsedTime(0)
+      intervalId = setInterval(() => {
+        setElapsedTime((prevTime) => {
+          if (prevTime >= expireTime) {
+            // Stop at 300 seconds (5 minutes)
+            clearInterval(intervalId);
+            return prevTime;
+          }
+          return prevTime + 1;
+        });
+      }, 1000);
 
+      // Clean up the interval when the component unmounts
+      return () => clearInterval(intervalId);
+    }
+  }, [accessToken]);
+  useEffect(() => {
+    if (elapsedTime === expireTime) {
+      setExpiredToken(true);
+    } else {
+      setExpiredToken(false);
+    }
+  }, [elapsedTime]);
   useEffect(() => {
     window.localStorage.setItem(
       "recent_searches",
@@ -473,10 +500,8 @@ function App() {
   useEffect(() => {
     if (authAccessToken) {
       getCurrentUser();
-      setExpiredToken(false);
-    } else {
-      setExpiredToken(true);
-    }
+      // setExpiredToken(false);
+    } 
   }, [authAccessToken]);
 
   const logOut = () => {
@@ -578,7 +603,9 @@ function App() {
     >
       <myContext.Provider value={values}>
         <Navbar />
-        {/* {expiredToken && <ExpiredSession setExpiredToken={setExpiredToken} />} */}
+        {expiredToken && (
+          <ExpiredSession setExpiredToken={setExpiredToken} getTokenHandler={getTokenHandler} />
+        )}
         {!isOnline && <Modals text="No internet connection" />}
         {showPlayModal && <Modals text="Feature currently unavailable" />}
         {cpModalText !== null && <Modals text={cpModalText} />}
