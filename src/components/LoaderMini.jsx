@@ -1,7 +1,13 @@
 import React from 'react'
 
-function LoaderMini() {
-  return <div className="mini_loader ml-1"></div>;
+function LoaderMini({playlistPage}) {
+  return (
+    <div
+      className={`mini_loader border-2 ${
+        playlistPage ? "border-black" : "border-white"
+      } ml-1`}
+    ></div>
+  );
 }
 
 export default LoaderMini

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React from "react";
 import LoginBtn from "./LoginBtn";
 
-function Modals({ text }) {
+function Modals({ text, playlistPage }) {
   const containerVariant = {
     hidden: {
       opacity: 0,
@@ -51,10 +51,10 @@ function Modals({ text }) {
           variants={containerVariant}
           animate="visible"
           initial="hidden"
-          className="flex items-center transition-all ease-in duration-300  ipad:right-5 justify-center px-[2%] z-[1000]  top-[7%]   fixed w-full   artist_fixed_width"
+          className={`flex items-center transition-all ease-in duration-300  ipad:right-5 justify-center px-[2%] z-[1000]  top-[7%]   fixed w-full  ${!playlistPage ? "artist_fixed_width" : ""} `}
         >
           <span className="w-full ipad:w-[40%] max-w-[350px] flex-col gap-2  shadow-lg rounded-md bg-white flex items-center justify-center font-bold p-3">
-            <h2 className="text-sm ipad:text-base text-primary ">{text}</h2>
+            <h2 className="text-sm ipad:text-base text-center text-primary ">{text}</h2>
             {textVerify && <LoginBtn />}
           </span>
         </motion.div>

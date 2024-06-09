@@ -15,6 +15,7 @@ import SocilaMedia from "./SocilaMedia";
 import { Link, useNavigate } from "react-router-dom";
 import TrackPlayBtn from "./TrackPlayBtn";
 import { myContext } from "../App";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 const PlaylistDesktopView = forwardRef(
   (
     {
@@ -26,6 +27,9 @@ const PlaylistDesktopView = forwardRef(
       BackHandler,
       durationState,
       playlistTracks,
+      userAuth,
+      editPlaylistActiveHandler,
+      editPlaylistActive
     },
     ref
   ) => {
@@ -151,8 +155,19 @@ const PlaylistDesktopView = forwardRef(
               </div>
             </section>
             <div className="pt-6  ipad:pb-[80px] rounded-md " ref={ref}>
-              <section className="flex px-[2.5%]  justify-start items-center gap-6">
+              <section className="flex px-[2.5%]    items-center gap-6">
                 <TrackPlayBtn />
+                {userAuth && (
+                  <button
+                    className="w-[30px] aspect-square relative tooltip-container  rounded-md flex items-center justify-center"
+                    onClick={editPlaylistActiveHandler}
+                  >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                    <p className="   text-sm rounded-md tooltip playlist_tooltip   ">
+                      Edit playlist title
+                    </p>
+                  </button>
+                )}
               </section>
               <section className="w-full pt-6 ">
                 {playlistTracks.length > 0 ? (
@@ -167,7 +182,6 @@ const PlaylistDesktopView = forwardRef(
                     <h2 className="w-full font-[900] text-center text-2xl">
                       Empty {playlistData.type}
                     </h2>
-                    
                   </span>
                 )}
               </section>

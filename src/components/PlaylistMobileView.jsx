@@ -11,6 +11,7 @@ import MobileTracksCard from "./MobileTracksCard";
 import songCover from "../assets/song cover.jpg";
 import { Link } from "react-router-dom";
 import TrackPlayBtn from "./TrackPlayBtn";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 function PlaylistMobileView({
   playlistData,
   isLoading,
@@ -20,6 +21,8 @@ function PlaylistMobileView({
   BackHandler,
   playlistTracks,
   durationState,
+  userAuth,
+  editPlaylistActiveHandler,
 }) {
   return (
     <>
@@ -130,9 +133,21 @@ function PlaylistMobileView({
                 )}
               </span>
             </div>
-            <div className="flex justify-start items-center gap-6 w-full">
+            <div className="flex justify-start flex-wrap items-center gap-6 w-full">
               {" "}
               <TrackPlayBtn />
+              {userAuth && (
+                <button
+                  className="w-[30px] bg-[#333333] aspect-square relative tooltip-container  rounded-md flex items-center justify-center"
+                  id="tpc"
+                  onClick={editPlaylistActiveHandler}
+                >
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                  <p className="   text-sm rounded-md tooltip playlist_tooltip   ">
+                    Edit playlist title
+                  </p>
+                </button>
+              )}
             </div>
           </section>
           {playlistTracks.length > 0 ? (

@@ -209,7 +209,7 @@ function Navbar() {
             {loggedIn && (
               <span className="" onClick={(e) => e.stopPropagation()}>
                 <div className="tooltip-container">
-                  <span className="tooltip">Create playlist</span>
+                  <span className="tooltip text-sm font-[500]">Create playlist</span>
                   <button
                     className={`bg-transparent border-none ${
                       showInput ? "rotate-45" : ""
@@ -397,7 +397,7 @@ function Navbar() {
                                   >
                                     <img
                                       src={imgUrl}
-                                      className="rounded-full shadow-xl object-cover aspect-square  h-[50px]"
+                                      className="rounded-md shadow-xl object-cover aspect-square  h-[50px]"
                                       loading="lazy"
                                       alt={`${art.name} image`}
                                     />

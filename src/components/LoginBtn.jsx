@@ -4,8 +4,9 @@ import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 import { myContext } from "../App";
 function LoginBtn() {
   const { CLIENT_ID, CLIENT_SECRET } = useContext(myContext);
-  const redirectURI = "https://audiovista.netlify.app/";
+  const redirectURI = "http://localhost:5173/";
   const scopes = [
+    "ugc-image-upload",
     "playlist-read-private",
     "playlist-read-collaborative",
     "playlist-modify-private",

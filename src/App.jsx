@@ -186,26 +186,65 @@ function App() {
   //   },
   //   body: JSON.stringify(bodyData),
   // };
-  const expireTime = 3600;
+  const expireTime = 3300;
+ 
+ 
   useEffect(() => {
     let intervalId;
-    if (accessToken) {
-      setElapsedTime(0)
-      intervalId = setInterval(() => {
-        setElapsedTime((prevTime) => {
-          if (prevTime >= expireTime) {
-            // Stop at 300 seconds (5 minutes)
-            clearInterval(intervalId);
-            return prevTime;
-          }
-          return prevTime + 1;
-        });
-      }, 1000);
 
-      // Clean up the interval when the component unmounts
-      return () => clearInterval(intervalId);
+    if (accessToken) {
+      if (!loggedIn) {
+        localStorage.removeItem("startTime");
+
+        // Set start time to now on every mount (reset on refresh)
+        const startTime = Date.now();
+        intervalId = setInterval(() => {
+          const currentTime = Date.now();
+          const elapsed = Math.floor((currentTime - startTime) / 1000);
+
+          if (elapsed >= expireTime) {
+            clearInterval(intervalId);
+            setElapsedTime(expireTime);
+          } else {
+            setElapsedTime(elapsed);
+          }
+        }, 1000);
+      } else {
+        let startTime = localStorage.getItem("startTime");
+
+        if (!startTime) {
+          // If there's no start time in localStorage, set it to the current time
+          startTime = Date.now();
+          localStorage.setItem("startTime", startTime);
+        }
+
+        intervalId = setInterval(() => {
+          // Calculate elapsed time
+          const currentTime = Date.now();
+          const timeElapsed = Math.floor((currentTime - startTime) / 1000);
+
+          if (timeElapsed >= expireTime) {
+            clearInterval(intervalId);
+            setElapsedTime(expireTime);
+              localStorage.removeItem("startTime");
+            // setAuthAccessToken(null);
+          } else {
+            setElapsedTime(timeElapsed);
+          }
+        }, 1000);
+      }
     }
-  }, [accessToken]);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [accessToken, expireTime, loggedIn]);
+  // useEffect(() => {
+  //   if (loggedIn && expiredToken) {
+  //     setAuthAccessToken(null);
+  //   } else if (!loggedIn && expiredToken) {
+  //     getTokenHandler();
+  //   }
+  // }, [loggedIn, expiredToken]);
   useEffect(() => {
     if (elapsedTime === expireTime) {
       setExpiredToken(true);
@@ -213,6 +252,8 @@ function App() {
       setExpiredToken(false);
     }
   }, [elapsedTime]);
+
+  // console.log({elapsedTime, loggedIn, authAccessToken});
   useEffect(() => {
     window.localStorage.setItem(
       "recent_searches",
@@ -475,7 +516,7 @@ function App() {
         //  setExpiredToken(false)
       } else {
         setUserData(null);
-        setAuthAccessToken(null);
+        // setAuthAccessToken(null);
         setUserDataError(true);
         setUserDataLoading(false);
         //  setExpiredToken(true)
@@ -485,7 +526,7 @@ function App() {
       setUserData(null);
       setUserDataLoading(false);
       setUserDataError(true);
-      setAuthAccessToken(null);
+      // setAuthAccessToken(null);
       //  setExpiredToken(true);
       console.error("Error fetching user data:", error);
     }
@@ -604,7 +645,11 @@ function App() {
       <myContext.Provider value={values}>
         <Navbar />
         {expiredToken && (
-          <ExpiredSession setExpiredToken={setExpiredToken} getTokenHandler={getTokenHandler} />
+          <ExpiredSession
+            setExpiredToken={setExpiredToken}
+            getTokenHandler={getTokenHandler}
+            logOut={logOut}
+          />
         )}
         {!isOnline && <Modals text="No internet connection" />}
         {showPlayModal && <Modals text="Feature currently unavailable" />}

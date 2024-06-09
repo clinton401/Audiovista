@@ -52,6 +52,12 @@ header a.active {
   backdrop-filter: blur(2px);
   border: 1px solid rgba(255, 255, 255, 0);
 }
+.blurred3 {
+  background: rgba(0,0,0,0.5);
+-webkit-backdrop-filter: blur(1px);
+backdrop-filter: blur(1px);
+border: 1px solid rgba(0,0,0,0.25);
+}
 .li_parent:hover .ul_child,
 .li_parent:focus .ul_child,
 .li_parent:active .ul_child {
@@ -318,6 +324,9 @@ header a.active {
   margin-top: 8px;
   /* height: calc(100% - 70px); */
 }
+#tpc {
+  background: #333333;
+}
 .tooltip-container {
   color: #ffffff;
   --background: #111111;
@@ -337,14 +346,19 @@ header a.active {
 
   right: 0;
   text-align: center;
-  width: 160px;
-  /* transform: translateX(-50%); */
-  padding: 0.3em 0.6em;
+  min-width: 160px;
+ 
+  padding: 0.5em 1em;
   opacity: 0;
   z-index: 5;
+
   pointer-events: none;
   transition: all 0.3s;
   border-radius: 6px;
+}
+.tooltip.playlist_tooltip, .tooltip.playlist_tooltip::before  {
+  left: 50%;
+   transform: translateX(-50%);
 }
 
 .tooltip::before {
@@ -376,18 +390,20 @@ header a.active {
   text-decoration: underline;
 } */
 .go_back {
-  left: -2000px;
+  /* left: 50%; */
   /* width: auto; */
-  min-width: 90px;
-  top: 135%;
-  z-index: 10;
+  min-width: 120px;
+  top: 0;
+  z-index: 0;
+  scale: 0;
   /* transform: translateX(0); */
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
   transition: all 0.3s ease-in;
 }
-.go_back_btn:hover .go_back,
-.go_back_btn:focus .go_back {
-  left: 50%;
+.go_back_btn:hover .go_back {
+ z-index: 100;
+ scale: 1;
+ top: 120%;
 }
 .genre_width {
   width: calc(20% - 16px);
@@ -457,7 +473,8 @@ header a.active {
 .filter_btn.all,
 .filter_btn.songs,
 .filter_btn.artists,
-.filter_btn.albums {
+.filter_btn.albums,
+.filter_btn.edit {
   color: #333333;
   background-color: #fff;
 }
@@ -465,7 +482,8 @@ header a.active {
 .filter_btn2.all,
 .filter_btn2.songs,
 .filter_btn2.artists,
-.filter_btn2.albums {
+.filter_btn2.albums,
+.filter_btn2.edit {
   color: #333333;
   background-color: #fff;
 }
@@ -670,20 +688,20 @@ header a.active {
 }
 
 .mini_loader {
-  border: 2px solid #ffffff;
+  
   border-left-color: transparent;
   border-radius: 50%;
 }
 
 .mini_loader {
-  border: 2px solid #ffffff;
+  
   border-left-color: transparent;
   width: 20px;
   height: 20px;
 }
 
 .mini_loader {
-  border: 2px solid #ffffff;
+  
   border-left-color: transparent;
   width: 20px;
   height: 20px;
@@ -692,6 +710,7 @@ header a.active {
 .loader_comp_height {
   height: calc(100dvh - 16px);
 }
+
 
 @keyframes spin89345 {
   0% {

@@ -121,7 +121,7 @@ https://api.spotify.com/v1/albums/${encodeURIComponent(id)}`;
       setDurationState(msToHMS(totalDuration));
     }
   }, [totalDuration]);
-
+console.log(albumData);
   return (
     <ParentLayouts ref={parentRef}>
       {!dataError ? (
