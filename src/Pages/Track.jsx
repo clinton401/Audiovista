@@ -10,9 +10,16 @@ function Track() {
   const [dataError, setDataError] = useState(false);
 
   const [trackData, setTrackData] = useState({});
+  const [trackDataLoading, setTrackDataLoading] = useState(true);
+  const [trackDataError, setTrackDataError] = useState(false);
   // const [trackTracks, settrackTracks] = useState([]);
   const [navContentsActive, setNavContentsActive] = useState(false);
   const [durationState, setDurationState] = useState({});
+  const [artistsId, setArtistsId] = useState([]);
+  const [artistsData, setArtistsData] = useState([])
+  const [artistsLoading, setArtistLoading] = useState(true);
+  const [artistsError, setArtistsError] = useState(false);
+
 
   const {
     SEARCH_PARAM,
@@ -29,7 +36,7 @@ function Track() {
   async function getTracks() {
     setDocumentTitle('Audiovista')
     try {
-      setIsLoading(true);
+      setTrackDataLoading(true);
       const SEARCH_URL = `https://api.spotify.com/v1/tracks/${encodeURIComponent(
         id
       )}`;
@@ -38,19 +45,40 @@ function Track() {
         const data = await response.json();
         setTrackData(data);
         setDocumentTitle(`${data.name} | Song`);
-        setDataError(false);
-        setIsLoading(false);
+        setTrackDataError(false);
+        setTrackDataLoading(false);
       } else {
         setTrackData({});
 
-        setDataError(true);
-        setIsLoading(false);
+        setTrackDataError(true);
+        setTrackDataLoading(false);
       }
     } catch (error) {
       setTrackData({});
-      setDataError(true);
-      setIsLoading(false);
+      setTrackDataError(true);
+      setTrackDataLoading(false);
       console.log(error);
+    }
+  };
+  async function getArtistsData() {
+    try {
+      setArtistLoading(true)
+      const SEARCH_URL = `https://api.spotify.com/v1/artists?ids=${artistsId.join(",")}`;
+      const response = await fetch(SEARCH_URL, SEARCH_PARAM);
+      if(response.ok) {
+        const data = await response.json();
+        setArtistsData(data.artists);
+        setArtistsError(false)
+      }
+      else {
+        throw new Error("Failed to fetch artists")
+       }
+    } catch (error) {
+      setArtistsError(true);
+      setArtistsData([]);
+      console.error(error)
+    } finally {
+      setArtistLoading(false)
     }
   }
   useEffect(() => {
@@ -59,6 +87,20 @@ function Track() {
       scrollToTop()
     }
   }, [accessToken, id]);
+  useEffect(() => {
+    if (!trackDataLoading && !artistsLoading) {
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+    }
+  }, [artistsLoading, trackDataLoading]);
+  useEffect(() => {
+    if (!artistsError && !trackDataError) {
+      setDataError(false)
+    } else {
+      setDataError(true)
+    }
+  }, [artistsError, trackDataError])
   useEffect(() => {
     const handleScroll = () => {
       if (!isLoading && !dataError) {
@@ -97,13 +139,25 @@ function Track() {
 
     return { hours, minutes, seconds };
   }
+  function getArtistsId() {
+    const ids = trackData.artists.map(artist => artist.id);
+    setArtistsId(ids);
+  }
+
   useEffect(() => {
     if (Object.keys(trackData).length > 0) {
       setDurationState(msToHMS(trackData.duration_ms));
+      getArtistsId();
+
     } else {
       setDurationState(msToHMS(0));
     }
   }, [trackData]);
+  useEffect(() => {
+    if (artistsId.length > 0) {
+      getArtistsData();
+    }
+  }, [artistsId])
   // console.log({ durationState, trackData });
 
   return (
@@ -120,6 +174,7 @@ function Track() {
               BackHandler={BackHandler}
               durationState={durationState}
               trackData={trackData}
+              artistsData={artistsData}
             />
           </section>
           <section className="block   h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -130,6 +185,7 @@ function Track() {
               BackHandler={BackHandler}
               durationState={durationState}
               trackData={trackData}
+              artistsData={artistsData}
             />
           </section>
         </>

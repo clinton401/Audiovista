@@ -28,6 +28,8 @@ function Home() {
     scrollToTop,
     setDocumentTitle,
     userData,
+    getTokenHandler,
+    logOut,
   } = useContext(myContext);
   async function getFeaturedPlaylists() {
     try {
@@ -231,7 +233,11 @@ function Home() {
             {" "}
             <button
               className="button2 text-base type1"
-              onClick={refreshHandler}
+              onClick={() => {
+                refreshHandler();
+                getTokenHandler();
+                logOut();
+              }}
             >
               Click to refresh
             </button>

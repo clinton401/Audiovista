@@ -12,6 +12,7 @@ function EditPlaylistDetails({
   playlistId,
   getPlaylist,
   setEditSuccessOrFail,
+  editPlaylistActive,
 }) {
   const [fileData, setFileData] = useState({
     playlistImageFile: null,
@@ -25,12 +26,11 @@ function EditPlaylistDetails({
     formDataLoading: false,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [base64Image, setBase64Image] = useState(null)
+  const [base64Image, setBase64Image] = useState(null);
   // const [textFocus]
   const fileInputRef = useRef(null);
   const inputRef = useRef(null);
-  const { accessToken,  artistChange,
-    setArtistChange, } = useContext(myContext);
+  const { accessToken, artistChange, setArtistChange } = useContext(myContext);
   const { playlistImageFile, playlistImageError, playlistImageLoading } =
     fileData;
   const {
@@ -40,38 +40,37 @@ function EditPlaylistDetails({
     formDataLoading,
   } = formData;
   const handleFileChange = (event) => {
-      const selectedFile = event.target.files[0];
-      const maxSizeInBytes = 256 * 1024; 
-      if (selectedFile) {
-          if (selectedFile.size < maxSizeInBytes) {
-              if (!selectedFile.type.startsWith("image/jpeg")) {
-                  setBase64Image(null);
-             setFileData({
-               playlistImageFile: null,
-               playlistImageError: "Please upload a valid JPEG file.",
-             });
-           } else {
-                  const imgLocation = URL.createObjectURL(selectedFile);
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setBase64Image(reader.result.split(",")[1]); // Get the base64 string
-                  };
-                  reader.readAsDataURL(selectedFile);
-             setFileData({
-               playlistImageFile: imgLocation,
-               playlistImageError: null,
-             });
-             //  playlistImageError(null);
-             //  playlistImageFile(selectedFile);
-           }
-          } else {
-                setFileData({
-                  playlistImageFile: null,
-                  playlistImageError: "File size exceeds 256KB",
-                });
-          }
+    const selectedFile = event.target.files[0];
+    const maxSizeInBytes = 256 * 1024;
+    if (selectedFile) {
+      if (selectedFile.size < maxSizeInBytes) {
+        if (!selectedFile.type.startsWith("image/jpeg")) {
+          setBase64Image(null);
+          setFileData({
+            playlistImageFile: null,
+            playlistImageError: "Please upload a valid JPEG file.",
+          });
+        } else {
+          const imgLocation = URL.createObjectURL(selectedFile);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setBase64Image(reader.result.split(",")[1]); // Get the base64 string
+          };
+          reader.readAsDataURL(selectedFile);
+          setFileData({
+            playlistImageFile: imgLocation,
+            playlistImageError: null,
+          });
+          //  playlistImageError(null);
+          //  playlistImageFile(selectedFile);
+        }
+      } else {
+        setFileData({
+          playlistImageFile: null,
+          playlistImageError: "File size exceeds 256KB",
+        });
       }
-       
+    }
   };
   function closePage() {
     editPlaylistActiveHandler();
@@ -87,6 +86,23 @@ function EditPlaylistDetails({
       playlistImageLoading: false,
     });
   }
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape" || event.keyCode === 27) {
+     closePage()
+    }
+  };
+
+  useEffect(() => {
+     if (editPlaylistActive) {
+       window.addEventListener("keydown", handleKeyDown);
+     } else {
+       window.removeEventListener("keydown", handleKeyDown);
+     }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   const detailsData = {
     name: formDataInputValue,
     description: formDataDescription,
@@ -118,7 +134,7 @@ function EditPlaylistDetails({
         );
         setTimeout(() => {
           getPlaylist();
-          setArtistChange(!artistChange)
+          setArtistChange(!artistChange);
           //  window.location.reload();
         }, 60000);
         //    getPlaylist();
@@ -132,16 +148,15 @@ function EditPlaylistDetails({
       });
       console.error(error);
     } finally {
-
       setFormData({
         ...formData,
         formDataLoading: false,
       });
     }
   }
-    const imageData = {
-      data: base64Image,
-    };
+  const imageData = {
+    data: base64Image,
+  };
   async function changeImage() {
     try {
       setFileData({
@@ -163,7 +178,7 @@ function EditPlaylistDetails({
 
       if (!response.ok) {
         throw new Error("Failed to update the playlist image");
-      } 
+      }
     } catch (error) {
       setFileData({
         ...fileData,
@@ -177,7 +192,7 @@ function EditPlaylistDetails({
       });
     }
   }
-// x
+  // x
 
   useEffect(() => {
     if (inputRef.current) {
@@ -248,13 +263,12 @@ function EditPlaylistDetails({
     e.preventDefault();
 
     if (formDataInputValue.length > 0) {
-        changeDetails();
-        if (playlistImageFile && base64Image) {
-          changeImage();
-        }
+      changeDetails();
+      if (playlistImageFile && base64Image) {
+        changeImage();
+      }
     }
   }
-//   console.log(base64Image);
 
   return (
     <section

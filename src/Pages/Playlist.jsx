@@ -190,6 +190,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
               playlistId={playlistData.id}
               getPlaylist={getPlaylist}
               setEditSuccessOrFail={setEditSuccessOrFail}
+              editPlaylistActive={editPlaylistActive}
             />
           )}
           {/* <EditPlaylistDetails editPlaylistActiveHandler={editPlaylistActiveHandler} /> */}

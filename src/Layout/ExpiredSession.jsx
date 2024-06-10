@@ -14,7 +14,11 @@ function ExpiredSession({ setExpiredToken, getTokenHandler, logOut }) {
         <p className="w-full text-center font-bold">OR</p>
         <button
           className="w-full p-2 button font-bold"
-          onClick={() => { logOut(); getTokenHandler();}}
+          onClick={() => {
+            logOut();
+            setExpiredToken();
+            getTokenHandler();
+          }}
         >
           Continue as guest
         </button>

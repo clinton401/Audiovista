@@ -14,7 +14,7 @@ function TrackMobileView({
   isLoading,
   loggedIn,
   dataError,
-
+artistsData,
   BackHandler,
   durationState,
   trackData,
@@ -111,41 +111,43 @@ function TrackMobileView({
           </section>
           <section className="w-full pt-8 px-[2.5%] pb-[120px]">
             <ul className="w-full ">
-              {Object.keys(trackData).length > 0 &&
-                trackData.artists &&
-                trackData.artists.length > 0 && (
-                  <>
-                    {trackData.artists.map((art) => {
-                      return (
-                        <li key={art.id} className="w-full">
-                          <button
-                            className="w-full rounded-md flex overflow-x-hidden gap-4 min-h-[116px] outline-none focus:bg-[#2A2A2A] hover:bg-[#2A2A2A] transition-all ease-in duration-300  items-center p-2"
-                            onClick={() => navigate(`/artist/${art.id}`)}
-                          >
-                            <img
-                              src={avatar}
-                              className="rounded-full shadow-xl object-cover aspect-square  h-[100px]"
-                              alt={`${art.name} image`}
-                              loading="lazy"
-                            />
-                            <span className="flex items-start justify-center flex-col gap-2">
-                              <h4 className="font-[500] text-left text-sm">
-                                Artist
-                              </h4>
-                              <Link
-                                to={`/artist/${art.id}`}
-                                className="font-[900] hover:underline text-left focus:underline text-xl"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                {art.name}
-                              </Link>
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </>
-                )}
+              {artistsData.length > 0 && (
+                <>
+                  {artistsData.map((art) => {
+                    return (
+                      <li key={art.id} className="w-full">
+                        <button
+                          className="w-full rounded-md flex overflow-x-hidden gap-4 min-h-[96px] outline-none focus:bg-[#2A2A2A] hover:bg-[#2A2A2A] transition-all ease-in duration-300  items-center p-2"
+                          onClick={() => navigate(`/artist/${art.id}`)}
+                        >
+                          <img
+                            src={
+                              art.images && art.images.length > 0
+                                ? art.images[0].url
+                                : avatar
+                            }
+                            className="rounded-full shadow-xl object-cover aspect-square  h-[80px]"
+                            alt={`${art.name} image`}
+                            loading="lazy"
+                          />
+                          <span className="flex items-start justify-center flex-col gap-2">
+                            <h4 className="font-[500] text-left text-sm">
+                              Artist
+                            </h4>
+                            <Link
+                              to={`/artist/${art.id}`}
+                              className="font-[900] hover:underline text-left focus:underline text-xl"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {art.name}
+                            </Link>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </>
+              )}
             </ul>
           </section>
         </>

@@ -253,7 +253,7 @@ function App() {
     }
   }, [elapsedTime]);
 
-  // console.log({elapsedTime, loggedIn, authAccessToken});
+  // console.log({elapsedTime, loggedIn});
   useEffect(() => {
     window.localStorage.setItem(
       "recent_searches",
@@ -630,6 +630,7 @@ function App() {
     userDataError,
     setCpModalText,
     cpModalText,
+    getTokenHandler,
     // createPlaylist,
     // createPlaylistData,
     // createPlaylistError,
@@ -651,9 +652,24 @@ function App() {
             logOut={logOut}
           />
         )}
-        {!isOnline && <Modals text="No internet connection" />}
-        {showPlayModal && <Modals text="Feature currently unavailable" />}
-        {cpModalText !== null && <Modals text={cpModalText} />}
+        {!isOnline && (
+          <Modals
+            text="No internet connection"
+            playlistPage={expiredToken ? true : false}
+          />
+        )}
+        {showPlayModal && (
+          <Modals
+            text="Feature currently unavailable"
+            playlistPage={expiredToken ? true : false}
+          />
+        )}
+        {cpModalText !== null && (
+          <Modals
+            text={cpModalText}
+            playlistPage={expiredToken ? true : false}
+          />
+        )}
         <Routess />
       </myContext.Provider>
     </div>
