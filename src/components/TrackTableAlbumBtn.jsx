@@ -128,7 +128,7 @@ function TrackTableAlbumBtn({
       >
         <div className="   px-4 py-2 h-full flex gap-3 w-[85%] justify-between items-center ellipsis-container">
           <div className="flex gap-1 items-center h-full ellipsis-container">
-            <span className="w-[46px] ">{index + 1}</span>
+            <span className="max-w-[46px] min-w-[46px]  text-left ">{index + 1}</span>
             <span className="flex gap-x-3 items-center w-full ellipsis-container h-fulll ">
               {!mainDataVerify && (
                 <img
