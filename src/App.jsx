@@ -249,13 +249,11 @@ function App() {
       getTokenHandler();
     }
   }, [loggedIn, expiredToken]);
-  // useEffect(() => {
-  //   if (elapsedTime === expireTime) {
-  //     setExpiredToken(true);
-  //   } else {
-  //     setExpiredToken(false);
-  //   }
-  // }, [elapsedTime]);
+  useEffect(() => {
+    if (elapsedTime === expireTime) {
+      setAuthAccessToken(null)
+    } 
+  }, [elapsedTime]);
 
   // console.log({elapsedTime, loggedIn});
   useEffect(() => {
