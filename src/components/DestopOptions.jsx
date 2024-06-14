@@ -6,6 +6,7 @@ import {
   faCompactDisc,
   faUserTie,
   faCheck,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,7 +14,14 @@ import { myContext } from "../App";
 import LoginBtn from "./LoginBtn";
 import Modals from "./Modals";
 import LoaderMini from "./LoaderMini";
-function DestopOptions({ artistsData, albumId, trackUri }) {
+function DestopOptions({
+  artistsData,
+  albumId,
+  trackUri,
+  playlistOwner,
+  playlistId,
+  getPlaylist,
+}) {
   const [showOptions, setShowOptions] = useState(false);
   const [addTracksData, setAddTracksData] = useState(null);
   const [addTracksLoading, setAddTracksLoading] = useState(false);
@@ -27,6 +35,7 @@ function DestopOptions({ artistsData, albumId, trackUri }) {
   const [createPlaylistData, setCreatePlaylistData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [inputValueTwo, setInputValueTwo] = useState("");
+  const [removeLoading, setRemoveLoading] = useState(false);
   const [showHidden, setShowHidden] = useState({
     playlist: false,
     artist: false,
@@ -101,7 +110,6 @@ function DestopOptions({ artistsData, albumId, trackUri }) {
       }
     }
   };
-  // console.log(bottomHeight);
 
   useEffect(() => {
     if (loggedIn && userData && showOptions) {
@@ -112,9 +120,7 @@ function DestopOptions({ artistsData, albumId, trackUri }) {
       setNewPlaylistData(owned);
     }
   }, [loggedIn, userData, showOptions]);
-  // useEffect(() => {
-  //   if(playlistData)
-  // }, [playlistData])
+
   useEffect(() => {
     if (showOptions) {
       setInputValue("");
@@ -129,7 +135,6 @@ function DestopOptions({ artistsData, albumId, trackUri }) {
       return playlistName.startsWith(value);
     });
     setNewPlaylistData(filteredResult);
-    
   }
   function handleHover(param) {
     if (param === "artist") {
@@ -138,11 +143,18 @@ function DestopOptions({ artistsData, albumId, trackUri }) {
       setShowHidden({ artist: false, playlist: true });
     }
   }
+  function onBlurHandler(param) {
+    console.log(param);
+    setShowHidden({
+      ...showHidden,
+      [param]: false,
+    });
+  }
   async function submitHandler(e) {
     e.preventDefault();
     let newPlaylistObject;
     if (inputValueTwo.length > 0) {
-      newPlaylistObject = await createPlaylist(bodyObject); 
+      newPlaylistObject = await createPlaylist(bodyObject);
       if (newPlaylistObject) {
         await addTracks(newPlaylistObject.id, newPlaylistObject.name);
       }
@@ -169,11 +181,42 @@ function DestopOptions({ artistsData, albumId, trackUri }) {
     },
     body: JSON.stringify(bodyData),
   };
-  // useEffect(() => {
-  //   if (inputValue.length > 0) {
-  //     setInputValue("");
-  //   }
-  // }, []);
+  const removeTracksBody = {
+    tracks: [
+      {
+        uri: trackUri,
+      },
+    ],
+  };
+  const SEARCH_PARAM_DELETE2 = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(removeTracksBody),
+  };
+  async function removeTracks() {
+    if (accessToken) {
+      try {
+        setRemoveLoading(true);
+        const SEARCH_URL = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+        const response = await fetch(SEARCH_URL, SEARCH_PARAM_DELETE2);
+        if (response.ok) {
+          setCpModalText("Song removed successfully");
+          getPlaylist()
+        } else {
+          throw new Error("Failed to delete song");
+        }
+      } catch (error) {
+        console.error(error);
+        setCpModalText("Failed to delete song");
+      } finally {
+        setRemoveLoading(false);
+        setShowOptions(false);
+      }
+    }
+  }
   async function addTracks(playlist_id, name) {
     if (trackUri) {
       try {
@@ -228,10 +271,9 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
 
   return (
     <div className="relative">
-      
       {showOptions && (
         <span
-          className="w-full fixed z-[5] blurred2 top-0 left-0  h-full"
+          className="w-full fixed z-[500] blurred2 top-0 left-0  h-full"
           onClick={(e) => {
             e.stopPropagation();
             setShowOptions(!showOptions);
@@ -240,7 +282,7 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
       )}
       <span
         ref={ref}
-        className="w-[40px]  flex items-center justify-center "
+        className="w-[40px]  flex items-center t_card_play justify-center "
         onClick={(e) => {
           e.stopPropagation();
 
@@ -252,14 +294,15 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
       </span>
       {showOptions && (
         <ul
-          className={`w-[230px] rounded-md font-bold py-1 px-1 bg-[#333333] absolute ${
+          className={`min-w-[275px] rounded-md font-bold py-1 px-1 bg-[#333333] absolute ${
             isNearBottom ? "bottom-[100%]" : "top-0"
-          } right-[-10px] z-[200]`}
+          } right-[-10px] z-[1000]`}
           onClick={(e) => e.stopPropagation()}
         >
           <li
             className="w-full li_parent relative rounded-sm py-2 px-[5%] text-base flex justify-between items-center hover:bg-[#2A2A2A] active:bg-[#2a2a2a] transition-all ease-in duration-300"
             onMouseEnter={() => handleHover("playlist")}
+            onMouseLeave={() => onBlurHandler("playlist")}
           >
             {" "}
             <span>
@@ -381,10 +424,24 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
               </div>
             )}
           </li>
+          {playlistOwner && (
+            <li className="w-full">
+              <button
+                className="w-full  rounded-sm py-2 px-[5%] text-base flex justify-between items-center hover:bg-[#2A2A2A] active:bg-[#2a2a2a] transition-all ease-in duration-300"
+                onClick={removeTracks}
+              >
+                <span className="flex items-center ">
+                  <FontAwesomeIcon icon={faXmark} className="mr-4" />
+                  Remove from playlist {removeLoading && <LoaderMini />}
+                </span>
+              </button>
+            </li>
+          )}
           {artistsData && artistsData.length > 0 && (
             <li
               className="w-full li_parent relative rounded-sm py-2 px-[5%] text-base flex justify-between items-center hover:bg-[#2A2A2A] active:bg-[#2a2a2a] transition-all ease-in duration-300"
               onMouseEnter={() => handleHover("artist")}
+              onMouseLeave={() => onBlurHandler("artist")}
             >
               {" "}
               {artistsData.length === 1 ? (

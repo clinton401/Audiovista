@@ -104,9 +104,7 @@ const DesktopView = forwardRef(
                   icon={faChevronLeft}
                   className="text-lg  text-white"
                 />
-                <p className=" px-2 py-2 text-sm rounded-md absolute go_back bg-[#36454f] ">
-                  Go Back
-                </p>
+              
               </button>
 
               <form className="relative" onSubmit={submitHandler}>

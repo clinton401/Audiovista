@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import NotFoundView from "../components/NotFoundView";
 import TrackDestopView from "../components/TrackDestopView";
 import TrackMobileView from "../components/TrackMobileView";
+import { msToHMS } from "../lib/utils";
 function Track() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -123,22 +124,7 @@ function Track() {
   const BackHandler = () => {
     navigate(-1);
   };
-  function msToHMS(milliseconds) {
-    // Convert milliseconds to seconds
-    let totalSeconds = Math.floor(milliseconds / 1000);
-
-    // Calculate hours, minutes, and seconds
-    const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    // const minutes =
-    //   calculatedMinutes === 0 ? `0${calculatedMinutes}` : calculatedMinutes;
-    // const seconds =
-    //   calculatedSeconds < 10 ? `0${calculatedSeconds}` : calculatedSeconds;
-
-    return { hours, minutes, seconds };
-  }
+ 
   function getArtistsId() {
     const ids = trackData.artists.map(artist => artist.id);
     setArtistsId(ids);

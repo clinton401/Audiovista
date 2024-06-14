@@ -23,6 +23,7 @@ function PlaylistMobileView({
   durationState,
   userAuth,
   editPlaylistActiveHandler,
+  getPlaylist,
 }) {
   return (
     <>
@@ -174,6 +175,9 @@ function PlaylistMobileView({
                             trackName={td.track.name}
                             type={td.track.type}
                             artistDetails={td.track}
+                            getPlaylist={getPlaylist}
+                            playlistOwner={userAuth}
+                            mainData={playlistData}
                           />
                         );
                       }

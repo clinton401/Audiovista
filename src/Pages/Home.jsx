@@ -143,13 +143,13 @@ function Home() {
 
         {!loggedIn ? <LoginBtn /> : <UserBtn />}
       </nav>
-      {!error && (
+      {/* {!error && (
         <section className="px-[2.5%] w-full pb-4 items-center justify-start">
           <h2 className="font-[900] text-3xl text-white ellipsis-container">
             Good {timeOfDay}
           </h2>
         </section>
-      )}
+      )} */}
 
       {loggedIn && !isLoading && !error && featuredPlaylistData.length > 0 && (
         <section className="px-[2.5%] flex flex-wrap flex-col pb-8">

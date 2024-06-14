@@ -7,7 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import PlaylistMobileView from "../components/PlaylistMobileView";
 import EditPlaylistDetails from "../components/EditPlaylistDetails";
 import Modals from "../components/Modals";
-
+import { msToHMS } from "../lib/utils";
 function Playlist() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -65,19 +65,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
       console.log(error);
     }
   }
-// async function editPlaylistDetails () {
-//   try {
-//     const response = await fetch("https://api.spotify.com/v1/me/tracks", SEARCH_PARAM);
-//     if(response.ok) {
-//       const data =  await response.json();
-//       console.log(data)
-//     } else {
-//       throw new Error("Failed to fetch data ")
-//     }
-//   } catch (error){
-// console.error(error)
-//   }
-// }
+
   useEffect(() => {
     if (accessToken) {
       getPlaylist();
@@ -113,22 +101,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
   const BackHandler = () => {
     navigate(-1);
   };
-  function msToHMS(milliseconds) {
-    // Convert milliseconds to seconds
-    let totalSeconds = Math.floor(milliseconds / 1000);
 
-    // Calculate hours, minutes, and seconds
-    const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    // const minutes =
-    //   calculatedMinutes === 0 ? `0${calculatedMinutes}` : calculatedMinutes;
-    // const seconds =
-    //   calculatedSeconds < 10 ? `0${calculatedSeconds}` : calculatedSeconds;
-
-    return { hours, minutes, seconds };
-  }
   useEffect(() => {
     if (loggedIn && Object.entries(playlistData).length > 0 && userData) {
       const usAuth = playlistData.owner.display_name === userData.display_name;
@@ -208,6 +181,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
               userAuth={userAuth}
               editPlaylistActiveHandler={editPlaylistActiveHandler}
               editPlaylistActive={editPlaylistActive}
+              getPlaylist={getPlaylist}
             />
           </section>
           <section className="block    h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -223,6 +197,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
               userAuth={userAuth}
               editPlaylistActiveHandler={editPlaylistActiveHandler}
               editPlaylistActive={editPlaylistActive}
+              getPlaylist={getPlaylist}
             />
           </section>
         </>

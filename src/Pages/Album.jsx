@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import PlaylistDesktopView from "../components/PlaylistDesktopView";
 import NotFoundView from "../components/NotFoundView";
 import PlaylistMobileView from "../components/PlaylistMobileView";
+import { msToHMS } from "../lib/utils";
 function Album() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -82,22 +83,7 @@ https://api.spotify.com/v1/albums/${encodeURIComponent(id)}`;
   const BackHandler = () => {
     navigate(-1);
   };
-  function msToHMS(milliseconds) {
-    // Convert milliseconds to seconds
-    let totalSeconds = Math.floor(milliseconds / 1000);
-
-    // Calculate hours, minutes, and seconds
-    const hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    // const minutes =
-    //   calculatedMinutes === 0 ? `0${calculatedMinutes}` : calculatedMinutes;
-    // const seconds =
-    //   calculatedSeconds < 10 ? `0${calculatedSeconds}` : calculatedSeconds;
-
-    return { hours, minutes, seconds };
-  }
+ 
   useEffect(() => {
     if (albumTracks.length > 0) {
       const durations = albumTracks.map((track) => track.duration_ms);

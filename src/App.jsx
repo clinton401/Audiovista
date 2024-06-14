@@ -112,6 +112,7 @@ function App() {
   useEffect(() => {
     document.title = documentTitle;
   }, [documentTitle]);
+
   useEffect(() => {
     const updateOnlineStatus = () => {
       setIsOnline(navigator.onLine);
@@ -164,20 +165,24 @@ function App() {
       console.log(error);
     }
   }
+    const hash = window.location.hash;
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash && !authAccessToken) {
+    if (hash) {
       const hashedToken = hash.substring(1).split("&")[0].split("=")[1];
       //   .substring(1)
       //   .split("&")
       //   .find((elem) => elem.startsWith("access_token"))
       //   .split("=")[1];
       // // console.log(hashedToken);
+      setCpModalText(
+        "Login succesful. You have one hour before your session expires"
+      );
       window.location.hash = "";
       setAuthAccessToken(hashedToken);
+
     }
-  }, []);
+  }, [hash]);
   // const SEARCH_PARAM_DELETE = {
   //   method: "DELETE",
   //   headers: {
@@ -186,9 +191,8 @@ function App() {
   //   },
   //   body: JSON.stringify(bodyData),
   // };
-  const expireTime = 3300;
- 
- 
+  const expireTime = 3600;
+//  console.log(elapsedTime, authAccessToken, expiredToken, loggedIn);
   useEffect(() => {
     let intervalId;
 
@@ -226,7 +230,7 @@ function App() {
           if (timeElapsed >= expireTime) {
             clearInterval(intervalId);
             setElapsedTime(expireTime);
-              localStorage.removeItem("startTime");
+              // localStorage.removeItem("startTime");
             // setAuthAccessToken(null);
           } else {
             setElapsedTime(timeElapsed);
@@ -238,20 +242,20 @@ function App() {
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, [accessToken, expireTime, loggedIn]);
-  // useEffect(() => {
-  //   if (loggedIn && expiredToken) {
-  //     setAuthAccessToken(null);
-  //   } else if (!loggedIn && expiredToken) {
-  //     getTokenHandler();
-  //   }
-  // }, [loggedIn, expiredToken]);
   useEffect(() => {
-    if (elapsedTime === expireTime) {
-      setExpiredToken(true);
-    } else {
-      setExpiredToken(false);
+    if (loggedIn && expiredToken) {
+      setAuthAccessToken(null);
+    } else if (!loggedIn && expiredToken) {
+      getTokenHandler();
     }
-  }, [elapsedTime]);
+  }, [loggedIn, expiredToken]);
+  // useEffect(() => {
+  //   if (elapsedTime === expireTime) {
+  //     setExpiredToken(true);
+  //   } else {
+  //     setExpiredToken(false);
+  //   }
+  // }, [elapsedTime]);
 
   // console.log({elapsedTime, loggedIn});
   useEffect(() => {
@@ -475,12 +479,15 @@ function App() {
     }
   }, [authAccessToken, unAuthAccessToken]);
   useEffect(() => {
+    let startTime = localStorage.getItem("startTime");
+     
     if (!authAccessToken) {
       getRandomArtistName();
 
       setLoggedIn(false);
     } else {
       setAccessToken(authAccessToken);
+      //  localStorage.removeItem("startTime");
       getRandomArtistName();
       setLoggedIn(true);
     }
@@ -645,13 +652,13 @@ function App() {
     >
       <myContext.Provider value={values}>
         <Navbar />
-        {expiredToken && (
+        {/* {expiredToken && (
           <ExpiredSession
             setExpiredToken={setExpiredToken}
             getTokenHandler={getTokenHandler}
             logOut={logOut}
           />
-        )}
+        )} */}
         {!isOnline && (
           <Modals
             text="No internet connection"

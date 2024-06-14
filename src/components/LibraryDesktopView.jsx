@@ -2,13 +2,15 @@ import React, { forwardRef } from "react";
 import Loader from "./Loader";
 import NavLayout from "./NavLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faPen } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../assets/user (1).png";
 import Card from "./PlaylistCard";
 import SocilaMedia from "./SocilaMedia";
 import ArtisrtCard from "./ArtisrtCard";
 import { useNavigate, Link } from "react-router-dom";
 import DestopOptions from "./DestopOptions";
+import { msToHMS } from "../lib/utils";
+import TrackTableBtns from "./TrackTableBtns";
 const LibraryDesktopView = forwardRef(
   (
     {
@@ -30,22 +32,6 @@ const LibraryDesktopView = forwardRef(
       navigate(`/track/${idNo}`);
     }
 
-    function msToHMS(milliseconds) {
-      // Convert milliseconds to seconds
-      let totalSeconds = Math.floor(milliseconds / 1000);
-
-      // Calculate hours, minutes, and seconds
-      const hours = Math.floor(totalSeconds / 3600);
-      totalSeconds %= 3600;
-      const calculatedMinutes = Math.floor(totalSeconds / 60);
-      const calculatedSeconds = totalSeconds % 60;
-      const minutes =
-        calculatedMinutes === 0 ? `0${calculatedMinutes}` : calculatedMinutes;
-      const seconds =
-        calculatedSeconds < 10 ? `0${calculatedSeconds}` : calculatedSeconds;
-
-      return { hours, minutes, seconds };
-    }
     return (
       <>
         {!isLoading && !dataError && (
@@ -141,114 +127,19 @@ const LibraryDesktopView = forwardRef(
                           : msToHMS(0);
                         return (
                           <li key={index} className="w-full list-none">
-                            <button
-                              className=" w-full h-[61px] flex items-center rounded-md outline-none focus:bg-[#2A2A2A] hover:bg-[#2A2A2A] transition-all ease-in duration-300  justify-between  cursor-pointer py-2 relative track_card   "
-                              onClick={() => tracksHandler(id)}
-                            >
-                              <span className="   px-4 py-2 h-full flex gap-2 w-[55%] items-center ellipsis-container">
-                                <span className="w-[46px] flex items-center justify-center">
-                                  {index + 1}
-                                </span>
-                                <span className="flex gap-x-3 items-center w-full ellipsis-container h-fulll ">
-                                  <img
-                                    src={imgUrl}
-                                    alt={`${trackName} image`}
-                                    loading="lazy"
-                                    className="rounded-md h-[45px] aspect-square"
-                                  />
-                                  <div className="flex flex-col gap-[1px] w-full justify-center items-start ellipsis-container">
-                                    <h3 className="font-[700] text-white text-base text-left ellipsis-container w-full">
-                                      {trackName}
-                                    </h3>
-                                    <span className="flex gap-1 items-center relative w-auto ellipsis-container">
-                                      {explicit !== null && (
-                                        <>
-                                          {explicit === true && (
-                                            <div className=" h-[15px] rounded-sm aspect-square flex items-center justify-center bg-[#36454F] text-primary font-[900]  text-[10px]">
-                                              E
-                                            </div>
-                                          )}
-                                        </>
-                                      )}
-                                      {artists && (
-                                        <>
-                                          {artists.map((art, index) => (
-                                            <React.Fragment key={art.id}>
-                                              <div className="w-full flex gap-1 items-center ">
-                                                <Link
-                                                  to={`/artist/${art.id}`}
-                                                  className="text-xs w-full font-bold text-tGray z-5 hover:underline track_link relative"
-                                                  onClick={(e) =>
-                                                    e.stopPropagation()
-                                                  }
-                                                >
-                                                  {art.name}
-                                                </Link>
-                                                {index < artists.length - 1 && (
-                                                  <span className="text-tGray ">
-                                                    |
-                                                  </span>
-                                                )}
-                                              </div>
-                                            </React.Fragment>
-                                          ))}
-                                        </>
-                                      )}
-                                    </span>
-                                  </div>
-                                </span>
-                              </span>
-                              <span className="  px-4  py-2 h-full flex gap-3 w-[30%] items-center ellipsis-container text-xs  font-bold text-tGray">
-                                <Link
-                                  to={`/album/${albumId}`}
-                                  className="text-xs w-full text-left font-bold text-tGray z-5 hover:underline track_link ellipsis-container relative"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  {" "}
-                                  {albumName}
-                                </Link>
-                              </span>
-                              <span className="  px-4 py-2 h-full  w-[15%] items-center  flex justify-start   text-lg  gap-2">
-                                <p className="flex items-center">
-                                  {Object.keys(durationState).length > 0 && (
-                                    <>
-                                      {durationState &&
-                                        !durationState.hours <= 0 && (
-                                          <>
-                                            <span className="text-xs font-bold w-full text-tGray z-5">
-                                              {durationState.hours}:
-                                            </span>
-                                          </>
-                                        )}
-                                      {durationState &&
-                                        durationState.minutes && (
-                                          <>
-                                            <span className="text-xs font-bold w-full text-tGray z-5">
-                                              {/* {durationState.minutes === 0 ? "00" : durationState.minutes} */}
-                                              {durationState.minutes}:
-                                            </span>
-                                          </>
-                                        )}
-                                      {durationState &&
-                                        durationState.seconds && (
-                                          <>
-                                            <span className="text-xs w-full font-bold text-tGray z-5">
-                                              {durationState.seconds}
-                                            </span>
-                                          </>
-                                        )}
-                                    </>
-                                  )}
-                                </p>
-                                <span className="flex text-tGray ">
-                                  <DestopOptions
-                                    artistsData={artists}
-                                    albumId={albumId}
-                                    trackUri={trackUri}
-                                  />
-                                </span>
-                              </span>
-                            </button>
+                            <TrackTableBtns
+                              id={id}
+                              albumId={albumId}
+                              albumName={albumName}
+                              imgUrl={imgUrl}
+                              trackName={trackName}
+                              trackUri={trackUri}
+                              explicit={explicit}
+                              artists={artists}
+                              durationState={durationState}
+                              tracksHandler={tracksHandler}
+                              index={index}
+                            />
                           </li>
                         );
                       })}
@@ -287,6 +178,14 @@ const LibraryDesktopView = forwardRef(
                   <h2 className="w-full font-[900] text-2xl text-white pb-2">
                     Playlists
                   </h2>
+                  {/* <span className="home-wrapper   border ellipsis-container ">
+                    <button className="skeleton-wrapper-btn aspect-[1/1.18] p-2  max-h-[285px] skw">
+                       
+                <FontAwesomeIcon icon={faPen} className="text-4xl" />
+                      <p className="text-base text-center w-full ">New playlist </p>
+             
+                    </button>
+                  </span> */}
                   {authUserPlaylistData.map((playlist_d) => {
                     const imgUrl =
                       playlist_d.images && playlist_d.images.length > 0

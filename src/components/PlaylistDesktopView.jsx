@@ -29,7 +29,7 @@ const PlaylistDesktopView = forwardRef(
       playlistTracks,
       userAuth,
       editPlaylistActiveHandler,
-      editPlaylistActive
+      getPlaylist,
     },
     ref
   ) => {
@@ -176,6 +176,8 @@ const PlaylistDesktopView = forwardRef(
                     navHeight={navHeight}
                     type={playlistData.type}
                     mainData={playlistData}
+                    playlistOwner={userAuth}
+                    getPlaylist={getPlaylist}
                   />
                 ) : (
                   <span className="w-full flex flex-col gap-2  px-[2.5%]">

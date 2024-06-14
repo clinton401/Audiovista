@@ -46,6 +46,8 @@ function MobileTracksCard({
   setRecentSearches,
   mainData,
   trackUri,
+  getPlaylist,
+  playlistOwner
 }) {
   const [showOptions, setShowOptions] = useState(false);
   const { recentSearchesHandler } = useContext(myContext);
@@ -65,7 +67,6 @@ function MobileTracksCard({
     //   ...prevState.filter((recent) => idNo !== recent.id),
     // ]);
   }
-
   function showOptionsHandler() {
     setShowOptions(true);
   }
@@ -219,6 +220,9 @@ function MobileTracksCard({
               trackUri={trackUri && trackUri}
               hideOptionsHandler={hideOptionsHandler}
               mainTypeVerify={mainTypeVerify && mainTypeVerify}
+               playlistOwner={playlistOwner}
+  playlistId={mainData && mainData.id}
+  getPlaylist={getPlaylist}
             />
           </motion.div>
         )}

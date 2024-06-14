@@ -277,6 +277,7 @@ border: 1px solid rgba(0,0,0,0.25);
   padding: 0;
   margin: 0;
   border-radius: 6px;
+  min-width: 150px;
   position: relative;
   /* display: flex; */
   transition: all 0.3s ease-in-out;
@@ -285,6 +286,7 @@ border: 1px solid rgba(0,0,0,0.25);
 .skeleton-wrapper-btn {
   width: 100%;
   padding: 8px;
+  min-width: 150px;
   /* padding-bottom: 30px; */
   overflow: hidden;
   /* padding-top: 0; */
@@ -338,7 +340,12 @@ border: 1px solid rgba(0,0,0,0.25);
   /* padding: 0.7em 1.8em; */
   /* border-radius: 50px; */
 }
-
+.tooltip-container.track {
+  background: none;
+}
+.tooltip-container.track .tooltip {
+  min-width: 200px;
+}
 .tooltip {
   background-color: #36454f;
   position: absolute;
@@ -374,7 +381,7 @@ border: 1px solid rgba(0,0,0,0.25);
 }
 
 .tooltip-container:hover .tooltip {
-  top: -150%;
+  top: -50px;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -421,10 +428,10 @@ border: 1px solid rgba(0,0,0,0.25);
 .track_card:focus .t_card_play {
   display: flex;
 }
-/* .t_card_play {
-  top: 50%;
-  transform: translateY(-50%);
-} */
+
+.t_card_play {
+  display: none;
+}
 .track_link:focus {
   outline: none;
   text-decoration: underline;
@@ -439,9 +446,10 @@ border: 1px solid rgba(0,0,0,0.25);
 .filter_btn {
   --hover-shadows: 16px 16px 33px #121212, -16px -16px 33px #303030;
   --accent: #fff;
-  font-weight: bold;
+  font-weight: 500;
   letter-spacing: 0.1em;
   border: none;
+  font-size: 14px;
   border-radius: 1.1em;
   background-color: #333333;
   cursor: pointer;
@@ -455,7 +463,7 @@ border: 1px solid rgba(0,0,0,0.25);
 .filter_btn2 {
   --hover-shadows: 16px 16px 33px #121212, -16px -16px 33px #303030;
   --accent: #fff;
-  font-weight: bold;
+  font-weight: 500;
   letter-spacing: 0.1em;
   border: none;
   border-radius: 15px;

@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         primary: '#111111',
-        tGray: '#A1AAA1 '
+        tGray: '#A1AAA1 ',
+        spotify: "#1ed760"
       },
       screens: {
         watch: '270px',
