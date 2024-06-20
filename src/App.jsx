@@ -191,7 +191,7 @@ function App() {
   //   },
   //   body: JSON.stringify(bodyData),
   // };
-  const expireTime = 3600;
+  const expireTime = 15;
 //  console.log(elapsedTime, authAccessToken, expiredToken, loggedIn);
   useEffect(() => {
     let intervalId;
@@ -251,11 +251,11 @@ function App() {
   }, [loggedIn, expiredToken]);
   useEffect(() => {
     if (elapsedTime === expireTime) {
-      setAuthAccessToken(null)
+      setAuthAccessToken(null);
+       getTokenHandler();
     } 
   }, [elapsedTime]);
 
-  // console.log({elapsedTime, loggedIn});
   useEffect(() => {
     window.localStorage.setItem(
       "recent_searches",
