@@ -6,6 +6,7 @@ import Modals from "../components/Modals";
 import NotFoundView from "../components/NotFoundView";
 import UserDesktopView from "../components/UserDesktopView";
 import UserMobileView from "../components/UserMobileView";
+import useHandleScroll from "../hooks/useHandleScroll";
 function User() {
   const [isLoading, setIsLoading] = useState(true);
   const [playlistLoading, setPlaylistLoading] = useState(true);
@@ -37,25 +38,14 @@ function User() {
   const parentRef = useRef(null);
   const childRef = useRef(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!isLoading && !dataError) {
-        const { top } = childRef.current.getBoundingClientRect();
-        setNavContentsActive(top <= 20);
-      }
-    };
-
-    const element = parentRef.current;
-    if (element) {
-      element.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isLoading, dataError]);
+useHandleScroll(
+  isLoading,
+  dataError,
+  childRef,
+  setNavContentsActive,
+  parentRef
+  );
+  
 
   async function getUserProfile() {
     setDocumentTitle("Audiovista");

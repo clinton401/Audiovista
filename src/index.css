@@ -121,6 +121,7 @@ border: 1px solid rgba(0,0,0,0.25);
   border: 2px solid #252525;
   overflow: hidden;
   border-radius: 30px;
+  outline: none;
   color: #fff;
   transition: all 0.5s ease-in-out;
 }
@@ -145,7 +146,7 @@ border: 1px solid rgba(0,0,0,0.25);
   z-index: -1;
 }
 
-.button2:hover {
+.button2:hover, .button2:focus {
   box-shadow: 1px 1px 200px #252525;
   color: #fff;
   border: none;

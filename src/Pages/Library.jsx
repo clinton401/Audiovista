@@ -6,6 +6,7 @@ import LoginBtn from "../components/LoginBtn";
 import NotFoundView from "../components/NotFoundView";
 import LibraryDesktopView from "../components/LibraryDesktopView";
 import LibraryMobileView from "../components/LibraryMobileView";
+import useHandleScroll from "../hooks/useHandleScroll";
 function Library() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -81,25 +82,13 @@ function Library() {
       console.log(error);
     }
   }
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!isLoading && !dataError) {
-        const { top } = childRef.current.getBoundingClientRect();
-        setNavContentsActive(top <= 20);
-      }
-    };
-
-    const element = parentRef.current;
-    if (element) {
-      element.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isLoading, dataError]);
+ useHandleScroll(
+   isLoading,
+   dataError,
+   childRef,
+   setNavContentsActive,
+   parentRef
+ );
   useEffect(() => {
     setDocumentTitle('Audiovista') 
     if (loggedIn && userData) {

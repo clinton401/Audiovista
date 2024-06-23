@@ -6,6 +6,7 @@ import PlaylistDesktopView from "../components/PlaylistDesktopView";
 import NotFoundView from "../components/NotFoundView";
 import PlaylistMobileView from "../components/PlaylistMobileView";
 import { msToHMS } from "../lib/utils";
+import useHandleScroll from "../hooks/useHandleScroll";
 function Album() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -61,25 +62,13 @@ https://api.spotify.com/v1/albums/${encodeURIComponent(id)}`;
       getAlbum();
     }
   }, [accessToken, id]);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!isLoading && !dataError) {
-        const { top } = childRef.current.getBoundingClientRect();
-        setNavContentsActive(top <= 20);
-      }
-    };
-
-    const element = parentRef.current;
-    if (element) {
-      element.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isLoading, dataError]);
+useHandleScroll(
+  isLoading,
+  dataError,
+  childRef,
+  setNavContentsActive,
+  parentRef
+);
   const BackHandler = () => {
     navigate(-1);
   };
@@ -107,7 +96,6 @@ https://api.spotify.com/v1/albums/${encodeURIComponent(id)}`;
       setDurationState(msToHMS(totalDuration));
     }
   }, [totalDuration]);
-console.log(albumData);
   return (
     <ParentLayouts ref={parentRef}>
       {!dataError ? (

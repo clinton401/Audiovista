@@ -6,6 +6,7 @@ import NotFoundView from "../components/NotFoundView";
 import TrackDestopView from "../components/TrackDestopView";
 import TrackMobileView from "../components/TrackMobileView";
 import { msToHMS } from "../lib/utils";
+import useHandleScroll from "../hooks/useHandleScroll";
 function Track() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -102,25 +103,13 @@ function Track() {
       setDataError(true)
     }
   }, [artistsError, trackDataError])
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!isLoading && !dataError) {
-        const { top } = childRef.current.getBoundingClientRect();
-        setNavContentsActive(top <= 20);
-      }
-    };
-
-    const element = parentRef.current;
-    if (element) {
-      element.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isLoading, dataError]);
+ useHandleScroll(
+   isLoading,
+   dataError,
+   childRef,
+   setNavContentsActive,
+   parentRef
+ );
   const BackHandler = () => {
     navigate(-1);
   };

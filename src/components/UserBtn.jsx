@@ -78,15 +78,14 @@ function UserBtn() {
                 exit="exit"
                 key="modal"
               >
-                {/* <li className="ipad:w-full w-auto "> */}
+
                 <Link
                   to={`/library`}
                   className=" flex w-full p-2 links ipad:p-4"
                 >
                   Profile
                 </Link>
-                {/* </li> */}
-                {/* <li className="ipad:w-full w-auto "> */}
+           
                 <button
                   // to={`user/${userData.id}`}
                   className="w-full flex justify-start links p-2 ipad:p-4"
@@ -94,7 +93,7 @@ function UserBtn() {
                 >
                   Logout
                 </button>
-                {/* </li> */}
+          
                 <div className=" px-[2.5%] pt-10 flex  ipad:p-0 ipad:hidden justify-center items-center  ">
                   <button
                     //   variants={containerVariant5}

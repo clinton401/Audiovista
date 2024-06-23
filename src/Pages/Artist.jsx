@@ -7,6 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import { useNavigate } from "react-router-dom";
 import ArtistMobileView from "../components/ArtistMobileView";
 import Modals from "../components/Modals";
+import useHandleScroll from "../hooks/useHandleScroll";
 function Artist() {
   const [isLoading, setIsLoading] = useState(true);
   const [artistLoading, setArtistLoading] = useState(true);
@@ -365,25 +366,13 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       setFollowersWithComma(totalFollowers);
     }
   }, [artistData]);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!isLoading && !dataError) {
-        const { top } = childRef.current.getBoundingClientRect();
-        setNavContentsActive(top <= 20);
-      }
-    };
-
-    const element = parentRef.current;
-    if (element) {
-      element.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isLoading, dataError]);
+  useHandleScroll(
+    isLoading,
+    dataError,
+    childRef,
+    setNavContentsActive,
+    parentRef
+  );
   useEffect(() => {
     setArtistChange(isArtistFollowed);
   }, [isArtistFollowed]);

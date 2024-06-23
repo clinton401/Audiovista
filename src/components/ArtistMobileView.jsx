@@ -3,6 +3,8 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 import MobileTracksCard from "./MobileTracksCard";
 import Loader from "./Loader";
 import avatar from "../assets/user (1).png";
@@ -10,6 +12,9 @@ import Card from "./PlaylistCard";
 import ArtisrtCard from "./ArtisrtCard";
 import TrackPlayBtn from "./TrackPlayBtn";
 import LoaderMini from "./LoaderMini";
+import UserBtn from "./UserBtn";
+import LoginBtn from "./LoginBtn";
+import NavLayoutMobile from "./NavLayoutMobile";
 function ArtistMobileView({
   artistData,
   isLoading,
@@ -30,18 +35,7 @@ function ArtistMobileView({
     <>
       {!isLoading && !dataError && (
         <>
-          <nav className="fixed  px-[2.5%] py-4 z-40  top-0 left-0">
-            <button
-              className={` w-[45px] aspect-square bg-black
-                  } relative rounded-full flex justify-center items-center go_back_btn`}
-              onClick={BackHandler}
-            >
-              <FontAwesomeIcon
-                icon={faChevronLeft}
-                className="text-xl  text-white"
-              />
-            </button>
-          </nav>
+          <NavLayoutMobile />
 
           <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 bg-[#333333]">
             <img
@@ -81,8 +75,7 @@ function ArtistMobileView({
                 >
                   <span className="btn-txt flex gap-1 items-center">
                     {" "}
-                      {isArtistFollowed ? "Following" : "Follow"}
-                      
+                    {isArtistFollowed ? "Following" : "Follow"}
                     {followLoading && <LoaderMini />}
                   </span>
                 </button>
@@ -212,6 +205,27 @@ function ArtistMobileView({
                 </section>
               </section>
             )}
+            {artistData &&
+              artistData.external_urls &&
+              artistData.external_urls.spotify && (
+                <section className="w-full pt-12 flex items-center justify-center">
+                  <a
+                    href={artistData.external_urls.spotify}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button2 flex items-center justify-center text-base type1"
+                    // onClick={clearRecentSearches}
+                  >
+                    <span className="btn-txt text-center ">
+                      View more on spotify{" "}
+                      <FontAwesomeIcon
+                        icon={faSpotify}
+                        style={{ color: "#1ed760" }}
+                      />
+                    </span>
+                  </a>
+                </section>
+              )}
           </section>
         </>
       )}

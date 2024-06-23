@@ -13,6 +13,7 @@ import TrackPlayBtn from "./TrackPlayBtn";
 import LoaderMini from "./LoaderMini";
 import { msToHMS } from "../lib/utils";
 import TrackTableBtns from "./TrackTableBtns";
+import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 const ArtistDesktopView = forwardRef(
   (
     {
@@ -258,6 +259,27 @@ const ArtistDesktopView = forwardRef(
                   </span>
                 </section>
               )}
+              {artistData &&
+                artistData.external_urls &&
+                artistData.external_urls.spotify && (
+                  <section className="w-full pt-12 flex items-center justify-center">
+                    <a
+                      href={artistData.external_urls.spotify}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button2 flex items-center justify-center text-base type1"
+                      // onClick={clearRecentSearches}
+                    >
+                      <span className="btn-txt text-center ">
+                        View more on spotify{" "}
+                        <FontAwesomeIcon
+                          icon={faSpotify}
+                          style={{ color: "#1ed760" }}
+                        />
+                      </span>
+                    </a>
+                  </section>
+                )}
               <SocilaMedia />
             </div>
           </>

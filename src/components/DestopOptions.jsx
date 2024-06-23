@@ -144,7 +144,6 @@ function DestopOptions({
     }
   }
   function onBlurHandler(param) {
-    console.log(param);
     setShowHidden({
       ...showHidden,
       [param]: false,

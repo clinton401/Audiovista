@@ -61,6 +61,7 @@ function App() {
     const [elapsedTime, setElapsedTime] = useState(0);
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
+  const redirectURI = "https://audiovista.netlify.app/";
 
   function getRandomArtistName() {
     const randomNumber = Math.floor(Math.random() * artists.length);
@@ -165,8 +166,8 @@ function App() {
       console.log(error);
     }
   }
-    const hash = window.location.hash;
-
+  
+  const hash = window.location.hash;
   useEffect(() => {
     if (hash) {
       const hashedToken = hash.substring(1).split("&")[0].split("=")[1];
@@ -175,10 +176,12 @@ function App() {
       //   .find((elem) => elem.startsWith("access_token"))
       //   .split("=")[1];
       // // console.log(hashedToken);
+      // fetchAccessToken(hashedToken)
       setCpModalText(
         "Login succesful. You have one hour before your session expires"
       );
-      window.location.hash = "";
+        window.history.replaceState({}, document.title, "/");
+      // window.location.hash = "";
       setAuthAccessToken(hashedToken);
 
     }
@@ -192,7 +195,6 @@ function App() {
   //   body: JSON.stringify(bodyData),
   // };
   const expireTime = 3600;
-//  console.log(elapsedTime, authAccessToken, expiredToken, loggedIn);
   useEffect(() => {
     let intervalId;
 
@@ -636,6 +638,7 @@ function App() {
     setCpModalText,
     cpModalText,
     getTokenHandler,
+    redirectURI,
     // createPlaylist,
     // createPlaylistData,
     // createPlaylistError,
