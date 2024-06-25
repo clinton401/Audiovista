@@ -38,6 +38,11 @@ function App() {
     }
   });
   const [unAuthAccessToken, setUnAuthAccessToken] = useState(null);
+  const [refreshToken, setRefreshToken] = useState(() => {
+    const authRefresh = window.localStorage.getItem("refresh_token");
+    return authRefresh ? authRefresh : null;
+   
+  })
   const [expiredToken, setExpiredToken] = useState(false);
   const [userData, setUserData] = useState(null);
   const [userDataLoading, setUserDataLoading] = useState(true);
@@ -62,6 +67,7 @@ function App() {
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
   const redirectURI = "https://audiovista.netlify.app/";
+  // const redirectURI = "http://localhost:5173/";
 
   function getRandomArtistName() {
     const randomNumber = Math.floor(Math.random() * artists.length);
@@ -167,33 +173,127 @@ function App() {
     }
   }
   
-  const hash = window.location.hash;
-  useEffect(() => {
-    if (hash) {
-      const hashedToken = hash.substring(1).split("&")[0].split("=")[1];
-      //   .substring(1)
-      //   .split("&")
-      //   .find((elem) => elem.startsWith("access_token"))
-      //   .split("=")[1];
-      // // console.log(hashedToken);
-      // fetchAccessToken(hashedToken)
-      setCpModalText(
-        "Login succesful. You have one hour before your session expires"
-      );
-        window.history.replaceState({}, document.title, "/");
-      // window.location.hash = "";
-      setAuthAccessToken(hashedToken);
+  // const hash = window.location.hash;
+  // useEffect(() => {
+  //   if (hash) {
+  //     const hashedToken = hash.substring(1).split("&")[0].split("=")[1];
+  //     //   .substring(1)
+  //     //   .split("&")
+  //     //   .find((elem) => elem.startsWith("access_token"))
+  //     //   .split("=")[1];
+  //     // // console.log(hashedToken);
+  //     // fetchAccessToken(hashedToken)
+  //     setCpModalText(
+  //       "Login succesful. You have one hour before your session expires"
+  //     );
+  //       window.history.replaceState({}, document.title, "/");
+  //     // window.location.hash = "";
+  //     setAuthAccessToken(hashedToken);
 
+  //   }
+  // }, [hash]);
+  
+ const urlParams = new URLSearchParams(window.location.search);
+  let code = urlParams.get('code');
+  let authError = urlParams.get('error');
+  const getAuthToken = async (code) => {
+  const codeVerifier = localStorage.getItem('code_verifier');
+  
+  if (!codeVerifier) {
+    console.error('Code verifier not found in localStorage');
+    return;
+  }
+
+  try {
+    const authUrl = 'https://accounts.spotify.com/api/token';
+    const authBody = new URLSearchParams({
+      client_id: CLIENT_ID,
+      grant_type: "authorization_code",
+      code,
+      redirect_uri: redirectURI,
+      code_verifier: codeVerifier,
+    });
+
+    const authPayload = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: authBody,
+    };
+ 
+    const response = await fetch(authUrl, authPayload);
+
+    if (response.ok) {
+      const data = await response.json();
+      
+      setRefreshToken(data.refresh_token);
+      setAuthAccessToken(data.access_token);
+      window.history.replaceState({}, document.title, "/");
+    } else {
+      console.error('Failed to fetch access token', response.statusText);
     }
-  }, [hash]);
-  // const SEARCH_PARAM_DELETE = {
-  //   method: "DELETE",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${accessToken}`,
-  //   },
-  //   body: JSON.stringify(bodyData),
-  // };
+  } catch (error) {
+     setCpModalText(
+        "Login Unsuccessful "
+      );
+      setAuthAccessToken(null);
+      setRefreshToken(null)
+    console.error('Error fetching access token:', error);
+    
+  }
+};
+let startTime;
+  const getRefreshTokenHandler = async () => {
+    try {
+      const refreshUrl = "https://accounts.spotify.com/api/token";
+      const refreshPayload = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+          client_id: CLIENT_ID
+        }),
+      }
+      const response = await fetch(refreshUrl, refreshPayload)
+      if (response.ok) {
+        const data = await response.json();
+        startTime = Date.now()
+        localStorage.setItem("startTime", startTime);
+        setElapsedTime(1)
+        setRefreshToken(data.refresh_token);
+        setAuthAccessToken(data.access_token);
+      } else {
+        console.error('Failed to fetch refresh token', response.statusText);
+      }
+    } catch (error) {
+     
+      setAuthAccessToken(null);
+      setRefreshToken(null)
+      console.error('Error fetching refresh token:', error);
+    
+    }
+  };
+
+  useEffect(() => {
+window.localStorage.setItem("refresh_token", refreshToken);
+  }, [refreshToken])
+  // console.log({ accessToken, unAuthAccessToken, authAccessToken, refreshToken, elapsedTime });
+useEffect(() => {
+  if(authError) {
+     setCpModalText(
+        "Login Unsuccessful "
+      );
+  }
+}, [authError])
+  useEffect(() => {
+    if (code) {
+      getAuthToken(code);
+}
+  }, [code]);
   const expireTime = 3600;
   useEffect(() => {
     let intervalId;
@@ -216,7 +316,7 @@ function App() {
           }
         }, 1000);
       } else {
-        let startTime = localStorage.getItem("startTime");
+        startTime = localStorage.getItem("startTime");
 
         if (!startTime) {
           // If there's no start time in localStorage, set it to the current time
@@ -232,7 +332,7 @@ function App() {
           if (timeElapsed >= expireTime) {
             clearInterval(intervalId);
             setElapsedTime(expireTime);
-              // localStorage.removeItem("startTime");
+            // localStorage.removeItem("startTime");
             // setAuthAccessToken(null);
           } else {
             setElapsedTime(timeElapsed);
@@ -243,19 +343,21 @@ function App() {
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
-  }, [accessToken, expireTime, loggedIn]);
+  }, [accessToken, expireTime, loggedIn, startTime]);
+  // useEffect(() => {
+  //   if (loggedIn && expiredToken) {
+  //     setAuthAccessToken(null);
+  //   } else if (!loggedIn && expiredToken) {
+  //     getTokenHandler();
+  //   }
+  // }, [loggedIn, expiredToken]);
   useEffect(() => {
-    if (loggedIn && expiredToken) {
-      setAuthAccessToken(null);
-    } else if (!loggedIn && expiredToken) {
-      getTokenHandler();
-    }
-  }, [loggedIn, expiredToken]);
-  useEffect(() => {
-    if (elapsedTime === expireTime) {
-      setAuthAccessToken(null);
+    if (loggedIn && elapsedTime === expireTime) {
+      getRefreshTokenHandler()
        getTokenHandler();
-    } 
+    }  else if(!loggedIn && elapsedTime === expireTime) {
+      getTokenHandler()
+    }
   }, [elapsedTime]);
 
   useEffect(() => {
@@ -483,7 +585,7 @@ function App() {
      
     if (!authAccessToken) {
       getRandomArtistName();
-
+      setRefreshToken(null);
       setLoggedIn(false);
     } else {
       setAccessToken(authAccessToken);

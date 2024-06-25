@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 import { myContext } from "../App";
+import { generateRandomString, sha256, base64encode } from "../lib/utils";
+
 function LoginBtn() {
   const { CLIENT_ID, CLIENT_SECRET, redirectURI } = useContext(myContext);
   const scopes = [
@@ -19,14 +21,24 @@ function LoginBtn() {
     "user-read-email",
     "user-read-private",
   ];
-  const accessUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=token&scope=${scopes.join(
-    " "
-  )}&redirect_uri=${redirectURI}&show_daialog=true`;
+   const authorizeUser = async () => {
+    const codeVerifier = generateRandomString(64);
+     localStorage.setItem('code_verifier', codeVerifier);
+      const hashed = await sha256(codeVerifier);
+       const codeChallenge = base64encode(hashed);
+
+    const accessUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&code_challenge_method=S256&code_challenge=${codeChallenge}&response_type=code&scope=${encodeURIComponent(
+      scopes.join(" ")
+    )}&redirect_uri=${encodeURIComponent(redirectURI)}`;
+    window.location.href = accessUrl;
+  };
+ 
+
   return (
-    <a className="button" href={accessUrl}>
+    <button className="button" onClick={authorizeUser}>
       Login
       <FontAwesomeIcon icon={faSpotify} style={{ color: "#1ed760" }} />
-    </a>
+    </button>
   );
 }
 
