@@ -14,7 +14,7 @@ function NavLayoutMobile() {
     navigate(-1);
   };
   return (
-    <nav className="fixed  px-[2.5%] py-4 z-40  flex  w-full  justify-between items-center gap-2 flex-wrap top-0 left-0">
+    <nav className="fixed  px-[2.5%] py-4 z-40  flex  w-full bg-[#333333] justify-between items-center gap-2 flex-wrap top-0 left-0">
       <button
         className={` w-[45px] aspect-square bg-black
                   } relative rounded-full flex justify-center items-center go_back_btn`}

@@ -19,6 +19,9 @@ function Home() {
   const [featuredPlaylistData, setFeaturedPlaylistData] = useState([]);
   const [searchError, setSearchError] = useState(false);
   const [featuredPlaylistError, setFeaturedPlaylistError] = useState(false);
+  const [newReleasesData, setNewReleasesData] = useState([]);
+  const [newReleasesLoading, setNewReleasesLoading] = useState(false);
+  const [newReleasesError, setNewReleasesError] = useState(false);
   const {
     loggedIn,
     accessToken,
@@ -78,6 +81,25 @@ function Home() {
       setSearchLoading(false);
     }
   }
+  async function getNewReleases() {
+    try {
+      setNewReleasesLoading(true)
+const SEARCH_URL = 'https://api.spotify.com/v1/browse/new-releases?limit=10';
+const response = await fetch(SEARCH_URL, SEARCH_PARAM); 
+if(response.ok) {
+const data = await response.json();
+  setNewReleasesData(data.albums.items);
+    setNewReleasesError(false)
+} else{
+throw new Error("Failed to fetch new releases")
+}
+    } catch (error) {
+      setNewReleasesError(true)
+console.error(error)
+    } finally {
+            setNewReleasesLoading(false)
+    }
+  }
 
   const numbers = Array.from({ length: 20 }, (_, index) => index + 1);
   // Get the current hour
@@ -100,23 +122,24 @@ function Home() {
     scrollToTop();
   }, []);
   useEffect(() => {
-    if (!searchLoading && !featuredPlaylistLoading) {
+    if (!searchLoading && !featuredPlaylistLoading && !newReleasesLoading) {
       setIsLoading(false);
     } else {
       setIsLoading(true);
     }
-  }, [searchLoading, featuredPlaylistLoading]);
+  }, [searchLoading, featuredPlaylistLoading, newReleasesLoading]);
   useEffect(() => {
-    if (!searchError && !featuredPlaylistError) {
+    if (!searchError && !featuredPlaylistError && !newReleasesError) {
       setError(false);
     } else {
       setError(true);
     }
-  }, [searchError, featuredPlaylistError]);
+  }, [searchError, featuredPlaylistError, newReleasesError]);
 
   useEffect(() => {
     if (accessToken && loggedIn) {
       getFeaturedPlaylists();
+      getNewReleases();
     }
   }, [accessToken, loggedIn]);
   useEffect(() => {
@@ -143,7 +166,7 @@ function Home() {
 
         {!loggedIn ? <LoginBtn /> : <UserBtn />}
       </nav>
-      {!error && (
+      {!error && !loggedIn && (
         <section className="px-[2.5%] w-full pb-4 items-center justify-start">
           <h2 className="font-[900] text-3xl text-white ellipsis-container">
             Good {timeOfDay}
@@ -151,9 +174,34 @@ function Home() {
         </section>
       )}
 
+      {loggedIn && !isLoading && !error && newReleasesData.length > 0 && (
+        <section className="px-[2.5%] flex flex-wrap flex-col pb-6">
+          <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
+            New Releases
+          </h2>
+          <div className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
+            {newReleasesData.map((hdata) => {
+              const releaseDate = hdata.release_date.slice(0, 4);
+              return (
+                <Card
+                  key={hdata.id}
+                  image={hdata.images[0].url}
+                  title={hdata.name}
+                  artists={hdata.artists[0].name}
+                  artistsId={hdata.artists[0].id}
+                  path={hdata.type}
+                  idNo={hdata.id}
+                  releaseDate={releaseDate}
+                  artistDetails={hdata}
+                />
+              );
+            })}
+          </div>
+        </section>
+      )}
       {loggedIn && !isLoading && !error && featuredPlaylistData.length > 0 && (
-        <section className="px-[2.5%] flex flex-wrap flex-col pb-8">
-          <h2 className="w-full font-[900] text-2xl text-center text-white pb-2 ">
+        <section className="px-[2.5%] flex flex-wrap flex-col pb-6">
+          <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
             Featured playlists
           </h2>
           <div className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
@@ -162,9 +210,7 @@ function Home() {
                 playlist_d.images && playlist_d.images.length > 0
                   ? playlist_d.images[0].url
                   : avatar;
-              // const creatorName = playlist_d.owner.display_name || "Unknown";
-              // const newCreatorName =
-              //   creatorName.charAt(0).toUpperCase() + creatorName.slice(1);
+
               return (
                 <Card
                   key={playlist_d.id}
@@ -183,7 +229,7 @@ function Home() {
       {isLoading && !error && (
         <section className="px-[2.5%]">
           {loggedIn && (
-            <span className="w-full justify-center flex pb-4">
+            <span className="w-full justify-start flex pb-4">
               <Skeleton type="home_btns" />
             </span>
           )}
@@ -198,7 +244,7 @@ function Home() {
       {!isLoading && !error && homeData.length >= 1 && (
         <section className="px-[2.5%] flex flex-wrap flex-col ">
           {loggedIn && (
-            <h2 className="w-full font-[900] text-2xl text-center text-white pb-2 ">
+            <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
               Random albums
             </h2>
           )}
