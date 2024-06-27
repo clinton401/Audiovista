@@ -15,6 +15,7 @@ function Playlist() {
   const [playlistData, setPlaylistData] = useState({});
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [navContentsActive, setNavContentsActive] = useState(false);
+  const [navContentsMobileActive, setNavContentsMobileActive] = useState(false);
   const [durationState, setDurationState] = useState({});
   const [duration, setDuration] = useState([]);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -34,6 +35,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
   const navigate = useNavigate();
   const  parentRef = useRef(null);
   const childRef = useRef(null);
+  const childRefMobile = useRef(null);
   async function getPlaylist() {
     setDocumentTitle("Audiovista");
     try {
@@ -87,6 +89,13 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
     setNavContentsActive,
     parentRef
   );
+  useHandleScroll(
+    isLoading,
+    dataError,
+    childRefMobile,
+    setNavContentsMobileActive,
+    parentRef
+  );
   const BackHandler = () => {
     navigate(-1);
   };
@@ -127,6 +136,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
   function editPlaylistActiveHandler() {
     setEditPlaylistActive(!editPlaylistActive)
   }
+  // console.log(navContentsActive);
   // console.log(playlistTracks)
   // console.log({
   //   totalDuration,
@@ -180,13 +190,15 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
               playlistTracks={playlistTracks}
               dataError={dataError}
               loggedIn={loggedIn}
-              navContentsActive={navContentsActive}
+              navContentsActive={navContentsMobileActive}
               durationState={durationState}
               BackHandler={BackHandler}
               userAuth={userAuth}
               editPlaylistActiveHandler={editPlaylistActiveHandler}
               editPlaylistActive={editPlaylistActive}
               getPlaylist={getPlaylist}
+              setNavContentsActive={setNavContentsMobileActive}
+              ref={childRefMobile}
             />
           </section>
         </>

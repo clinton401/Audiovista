@@ -1,4 +1,4 @@
-import React from "react";
+import {forwardRef} from "react";
 import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +15,7 @@ import LoaderMini from "./LoaderMini";
 import UserBtn from "./UserBtn";
 import LoginBtn from "./LoginBtn";
 import NavLayoutMobile from "./NavLayoutMobile";
-function ArtistMobileView({
+const ArtistMobileView = forwardRef(({
   artistData,
   isLoading,
   loggedIn,
@@ -30,12 +30,19 @@ function ArtistMobileView({
   buttonFollowHandler,
   followLoading,
   unAuthModalHandler,
-}) {
+  navContentsActive,
+  setNavContentsActive
+}, ref) => {
   return (
     <>
       {!isLoading && !dataError && (
         <>
-          <NavLayoutMobile />
+          <NavLayoutMobile
+            navContentsActive={navContentsActive}
+            isLoading={isLoading}
+            name={artistData.name}
+            setNavContentsActive={setNavContentsActive}
+          />
 
           <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 bg-[#333333]">
             <img
@@ -83,7 +90,7 @@ function ArtistMobileView({
               <TrackPlayBtn />
             </div>
           </section>
-          <section className="pb-[120px]">
+          <section className="pb-[120px]" ref={ref}>
             {artistTracks.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
                 <h2 className="w-full font-[900] text-2xl text-white pb-2">
@@ -236,6 +243,6 @@ function ArtistMobileView({
       )}
     </>
   );
-}
+})
 
 export default ArtistMobileView;

@@ -11,12 +11,16 @@ function ArtisrtCard({
   artistDetails,
   setRecentSearches,
   recentSearches,
+  searchPage
 }) {
   const { recentSearchesHandler } = useContext(myContext);
   const navigate = useNavigate();
 
   const routeHandler = () => {
-    recentSearchesHandler(artistDetails);
+    if (searchPage && artistDetails) {
+      recentSearchesHandler(artistDetails);
+    }
+   
     navigate(`/artist/${idNo}`);
   };
   function removeRecentHandler() {

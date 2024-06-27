@@ -16,6 +16,7 @@ function Track() {
   const [trackDataError, setTrackDataError] = useState(false);
   // const [trackTracks, settrackTracks] = useState([]);
   const [navContentsActive, setNavContentsActive] = useState(false);
+     const [navContentsMobileActive, setNavContentsMobileActive] = useState(false);
   const [durationState, setDurationState] = useState({});
   const [artistsId, setArtistsId] = useState([]);
   const [artistsData, setArtistsData] = useState([])
@@ -35,6 +36,7 @@ function Track() {
   const navigate = useNavigate();
   const parentRef = useRef(null);
   const childRef = useRef(null);
+  const childRefMobile = useRef(null);
   async function getTracks() {
     setDocumentTitle('Audiovista')
     try {
@@ -110,6 +112,13 @@ function Track() {
    setNavContentsActive,
    parentRef
  );
+ useHandleScroll(
+   isLoading,
+   dataError,
+   childRefMobile,
+   setNavContentsMobileActive,
+   parentRef
+ );
   const BackHandler = () => {
     navigate(-1);
   };
@@ -161,6 +170,9 @@ function Track() {
               durationState={durationState}
               trackData={trackData}
               artistsData={artistsData}
+              setNavContentsActive={setNavContentsMobileActive}
+              navContentsActive={navContentsMobileActive}
+              ref={childRefMobile}
             />
           </section>
         </>

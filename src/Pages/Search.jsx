@@ -152,11 +152,13 @@ function Search() {
   };
 
   function inputHandler({ target }) {
+    scrollToTop();
     const value = target.value;
     setInputValue(value);
   }
 
   function clearInputHandler() {
+    scrollToTop();
     setInputFocused(false);
     setInputValue("");
     inputRef.current.focus();
@@ -167,6 +169,7 @@ function Search() {
     inputRef.current.focus();
   }
   function clearInputHandlerMobile() {
+    scrollToTop();
     setInputFocused(false);
     setInputValue("");
     inputRef.current.focus();
@@ -218,6 +221,7 @@ function Search() {
     }
   }, [topResultData]);
   function genreHandler(param) {
+    scrollToTop();
     clearDatas();
     setInputValue(param);
   }
@@ -295,6 +299,7 @@ function Search() {
   }, [filters]);
   //  useEffect(() )
   const filtersHandler = (param) => {
+    scrollToTop();
     const existingParams = new URLSearchParams(searchParams);
 
     // Update the filters parameter

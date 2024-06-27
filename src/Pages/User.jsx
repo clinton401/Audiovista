@@ -23,6 +23,8 @@ function User() {
   const [unAuthModal, setUnAuthModal] = useState(false);
   const [modalText, setModalText] = useState(null);
   const [navContentsActive, setNavContentsActive] = useState(false);
+     const [navContentsMobileActive, setNavContentsMobileActive] =
+       useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const {
     SEARCH_PARAM,
@@ -37,6 +39,7 @@ function User() {
   const { id } = useParams();
   const parentRef = useRef(null);
   const childRef = useRef(null);
+  const childRefMobile = useRef(null);
   const navigate = useNavigate();
 useHandleScroll(
   isLoading,
@@ -45,6 +48,13 @@ useHandleScroll(
   setNavContentsActive,
   parentRef
   );
+useHandleScroll(
+  isLoading,
+  dataError,
+  childRefMobile,
+  setNavContentsMobileActive,
+  parentRef
+);
   
 
   async function getUserProfile() {
@@ -311,6 +321,9 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
               userAuth={userAuth}
               followLoading={followLoading}
               usersPlaylist={usersPlaylist}
+                setNavContentsActive={setNavContentsMobileActive}
+              ref={childRefMobile}
+               navContentsActive={navContentsMobileActive}
             />
           </section>
         </>

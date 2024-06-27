@@ -13,6 +13,7 @@ function Album() {
   const [albumData, setAlbumData] = useState({});
   const [albumTracks, setalbumTracks] = useState([]);
   const [navContentsActive, setNavContentsActive] = useState(false);
+  const [navContentsMobileActive, setNavContentsMobileActive] = useState(false);
   const [durationState, setDurationState] = useState({});
   const [duration, setDuration] = useState([]);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -29,6 +30,7 @@ function Album() {
   const navigate = useNavigate();
   const parentRef = useRef(null);
   const childRef = useRef(null);
+  const childRefMobile = useRef(null);
   async function getAlbum() {
     setDocumentTitle("Audiovista");
     try {
@@ -67,6 +69,13 @@ useHandleScroll(
   dataError,
   childRef,
   setNavContentsActive,
+  parentRef
+);
+useHandleScroll(
+  isLoading,
+  dataError,
+  childRefMobile,
+  setNavContentsMobileActive,
   parentRef
 );
   const BackHandler = () => {
@@ -120,9 +129,11 @@ useHandleScroll(
               playlistTracks={albumTracks}
               dataError={dataError}
               loggedIn={loggedIn}
-              navContentsActive={navContentsActive}
+              navContentsActive={navContentsMobileActive}
               durationState={durationState}
               BackHandler={BackHandler}
+              setNavContentsActive={setNavContentsMobileActive}
+              ref={childRefMobile}
             />
           </section>
         </>

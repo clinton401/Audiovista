@@ -47,8 +47,6 @@ const ArtistDesktopView = forwardRef(
       navigate(`/track/${idNo}`);
     }
 
-    
-
     return (
       <>
         {!isLoading && !dataError && (

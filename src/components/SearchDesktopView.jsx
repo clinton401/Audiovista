@@ -53,6 +53,7 @@ const DesktopView = forwardRef(
       playlistVerify,
       imgLocation,
       genreHandler,
+      
     },
     ref
   ) => {
@@ -228,6 +229,7 @@ const DesktopView = forwardRef(
                           idNo={recent.id}
                           setRecentSearches={setRecentSearches}
                           recentSearches={recentSearches}
+                          searchPage={true}
                         />
                       );
                     } else if (recent.type === "playlist") {
@@ -242,6 +244,7 @@ const DesktopView = forwardRef(
                           artistDetails={recent}
                           setRecentSearches={setRecentSearches}
                           recentSearches={recentSearches}
+                          searchPage={true}
                         />
                       );
                     } else {
@@ -258,6 +261,7 @@ const DesktopView = forwardRef(
                           setRecentSearches={setRecentSearches}
                           recentSearches={recentSearches}
                           artistDetails={recent}
+                          searchPage={true}
                         />
                       );
                     }
@@ -278,7 +282,7 @@ const DesktopView = forwardRef(
                     return (
                       <button
                         onClick={() => genreHandler(new_genre)}
-                        className={` genre_width aspect-square rounded-md font-[900] text-xl text-center p-2 text-white flex justify-center items-center`}
+                        className={` genre_width aspect-square rounded-md font-[900] text-2xl text-center p-2 text-white flex justify-center items-center`}
                         style={{ backgroundColor: pinkShades[index] }}
                         key={index}
                       >
@@ -409,6 +413,7 @@ const DesktopView = forwardRef(
                                   artistName={artists_d.name}
                                   image={imgUrl}
                                   idNo={artists_d.id}
+                                     searchPage={true}
                                 />
                               );
                             })}
@@ -461,6 +466,7 @@ const DesktopView = forwardRef(
                                   path={albums_d.type}
                                   idNo={albums_d.id}
                                   releaseDate={releaseDate}
+                                  searchPage={true}
                                 />
                               );
                             })}
@@ -512,6 +518,7 @@ const DesktopView = forwardRef(
                                   path={playlist_d.type}
                                   idNo={playlist_d.id}
                                   playlistCreator={newCreatorName}
+                                  searchPage={true}
                                 />
                               );
                             })}
@@ -589,6 +596,7 @@ const DesktopView = forwardRef(
                             artistName={artists_d.name}
                             image={imgUrl}
                             idNo={artists_d.id}
+                            searchPage={true}
                           />
                         );
                       })}
@@ -621,6 +629,7 @@ const DesktopView = forwardRef(
                             path={albums_d.type}
                             idNo={albums_d.id}
                             releaseDate={releaseDate}
+                            searchPage={true}
                           />
                         );
                       })}
@@ -661,6 +670,7 @@ const DesktopView = forwardRef(
                             path={playlist_d.type}
                             idNo={playlist_d.id}
                             playlistCreator={newCreatorName}
+                            searchPage={true}
                           />
                         );
                       })}

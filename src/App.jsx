@@ -354,7 +354,6 @@ useEffect(() => {
   useEffect(() => {
     if (loggedIn && elapsedTime === expireTime) {
       getRefreshTokenHandler()
-       getTokenHandler();
     }  else if(!loggedIn && elapsedTime === expireTime) {
       getTokenHandler()
     }
@@ -581,7 +580,7 @@ useEffect(() => {
     }
   }, [authAccessToken, unAuthAccessToken]);
   useEffect(() => {
-    let startTime = localStorage.getItem("startTime");
+ 
      
     if (!authAccessToken) {
       getRandomArtistName();
@@ -624,20 +623,20 @@ useEffect(() => {
         setUserDataError(false);
         //  setExpiredToken(false)
       } else {
-        setUserData(null);
-        // setAuthAccessToken(null);
-        setUserDataError(true);
-        setUserDataLoading(false);
-        //  setExpiredToken(true)
-        console.error("Failed to fetch user data:", response.status);
+       
+        throw new Error("Failed to fetch user data:", response.status);
       }
     } catch (error) {
       setUserData(null);
       setUserDataLoading(false);
       setUserDataError(true);
+      console.error("Error fetching user data:", error);
+      // if(refreshToken) {
+      //   getRefreshTokenHandler()
+      // } 
       // setAuthAccessToken(null);
       //  setExpiredToken(true);
-      console.error("Error fetching user data:", error);
+      
     }
   }
   useEffect(() => {
@@ -703,7 +702,7 @@ useEffect(() => {
     return Number(number).toLocaleString();
   };
   // console.log(isOnline);
-  // console.log({  unAuthAccessToken });
+  // console.log({  unAuthAccessToken, accessToken, authAccessToken, refreshToken, elapsedTime });
 
   const values = {
     loggedIn,

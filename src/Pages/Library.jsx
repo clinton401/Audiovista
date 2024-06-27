@@ -17,6 +17,7 @@ function Library() {
   const [topTrackByMonthError, setTopTrackByMonthError] = useState(false);
   const [topTrackByMonth, setTopTrackByMonth] = useState([]);
     const [navContentsActive, setNavContentsActive] = useState(false);
+     const [navContentsMobileActive, setNavContentsMobileActive] = useState(false);
   const {
     SEARCH_PARAM,
     loggedIn,
@@ -35,6 +36,7 @@ function Library() {
   } = useContext(myContext);
   const parentRef = useRef(null);
   const childRef = useRef(null);
+  const childRefMobile = useRef(null);
   const navigate = useNavigate();
   async function getTopArtistsByMonth() {
     try {
@@ -87,6 +89,13 @@ function Library() {
    dataError,
    childRef,
    setNavContentsActive,
+   parentRef
+ );
+ useHandleScroll(
+   isLoading,
+   dataError,
+   childRefMobile,
+   setNavContentsMobileActive,
    parentRef
  );
   useEffect(() => {
@@ -171,6 +180,9 @@ function Library() {
                   authUserPlaylistData={authUserPlaylistData}
                   topArtistByMonth={topArtistByMonth}
                   topTrackByMonth={topTrackByMonth}
+                   navContentsActive={navContentsMobileActive}
+                   setNavContentsActive={setNavContentsMobileActive}
+                    ref={childRefMobile}
                 />
               </section>
             </>

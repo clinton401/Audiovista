@@ -17,6 +17,7 @@ function Card({
   playlistCreator,
   artistDetails,
   alb,
+  searchPage
 }) {
   const { recentSearchesHandler } = useContext(myContext);
   const navigate = useNavigate();
@@ -24,19 +25,21 @@ function Card({
   // console.log(artistDetails);
   const trackVerify = path === "playlist";
   function routeHandler() {
-    if (artistDetails) {
+    if (artistDetails && searchPage) {
+
       recentSearchesHandler(artistDetails);
     }
     navigate(`/${path}/${idNo}`);
   }
   function removeRecentHandler() {
-    const newArr = recentSearches.filter((recent) => {
+    
+  const newArr = recentSearches.filter((recent) => {
       return recent.id !== idNo;
     });
     setRecentSearches(newArr);
-    // setRecentSearches((prevState) => [
-    //   ...prevState.filter((recent) => idNo !== recent.id),
-    // ]);
+  
+  
+  
   }
   return (
     <span className="home-wrapper  ellipsis-container">

@@ -31,10 +31,13 @@ function Artist() {
   const [searchParamDelete, setSearchParamDelete] = useState({});
   const [searchParamGet, setSearchParamGet] = useState({});
   const [navContentsActive, setNavContentsActive] = useState(false);
+  
+  const [navContentsMobileActive, setNavContentsMobileActive] = useState(false);
   const [modalText, setModalText] = useState(null);
   const navigate = useNavigate();
   const parentRef = useRef(null);
   const childRef = useRef(null);
+  const childRefMobile = useRef(null);
   const {
     SEARCH_PARAM,
     loggedIn,
@@ -373,6 +376,13 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
     setNavContentsActive,
     parentRef
   );
+  useHandleScroll(
+    isLoading,
+    dataError,
+    childRefMobile,
+    setNavContentsMobileActive,
+    parentRef
+  );
   useEffect(() => {
     setArtistChange(isArtistFollowed);
   }, [isArtistFollowed]);
@@ -424,7 +434,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
               dataError={dataError}
               loggedIn={loggedIn}
               numberWithCommas={numberWithCommas}
-              navContentsActive={navContentsActive}
+              navContentsActive={navContentsMobileActive}
               BackHandler={BackHandler}
               artistTracks={artistTracks}
               artistAlbum={artistAlbum}
@@ -435,6 +445,8 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
               buttonFollowHandler={buttonFollowHandler}
               unAuthModalHandler={unAuthModalHandler}
               followLoading={followLoading}
+               ref={childRefMobile}
+                 setNavContentsActive={setNavContentsMobileActive}
             />
           </section>
         </>

@@ -1,4 +1,4 @@
-import React from "react";
+import {forwardRef} from "react";
 import Loader from "./Loader";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,7 +7,7 @@ import MobileTracksCard from "./MobileTracksCard";
 import ArtisrtCard from "./ArtisrtCard";
 import Card from "./PlaylistCard";
 import NavLayoutMobile from "./NavLayoutMobile";
-function LibraryMobileView({
+const LibraryMobileView = forwardRef(({
   dataError,
   loggedIn,
   isLoading,
@@ -18,12 +18,17 @@ function LibraryMobileView({
   authUserPlaylistData,
   topArtistByMonth,
   topTrackByMonth,
-}) {
+  setNavContentsActive
+}, ref) =>  {
   return (
     <>
       {!isLoading && !dataError && (
         <>
-        <NavLayoutMobile />
+          <NavLayoutMobile
+            navContentsActive={navContentsActive}
+            isLoading={isLoading}
+               name={userData.display_name}
+            setNavContentsActive={setNavContentsActive}/>
           <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 bg-[#333333]">
             <img
               src={
@@ -44,7 +49,7 @@ function LibraryMobileView({
               </p>
             </div>
           </section>
-          <section className="w-full flex flex-col pb-[120px]">
+          <section className="w-full flex flex-col pb-[120px]" ref={ref}>
             {topTrackByMonth.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
                 <h2 className="w-full font-[900] text-2xl text-white pb-2">
@@ -158,6 +163,6 @@ function LibraryMobileView({
       )}
     </>
   );
-}
+})
 
 export default LibraryMobileView;

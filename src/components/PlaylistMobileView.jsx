@@ -1,4 +1,4 @@
-import React from "react";
+import React, {forwardRef} from "react";
 import {
   faChevronLeft,
   faPlay,
@@ -13,7 +13,8 @@ import { Link } from "react-router-dom";
 import TrackPlayBtn from "./TrackPlayBtn";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import NavLayoutMobile from "./NavLayoutMobile";
-function PlaylistMobileView({
+const PlaylistMobileView = forwardRef((
+  {
   playlistData,
   isLoading,
   loggedIn,
@@ -25,12 +26,18 @@ function PlaylistMobileView({
   userAuth,
   editPlaylistActiveHandler,
   getPlaylist,
-}) {
+  setNavContentsActive,
+}, ref) => {
   return (
     <>
       {!isLoading && !dataError && (
         <>
-          <NavLayoutMobile />
+          <NavLayoutMobile
+            navContentsActive={navContentsActive}
+            isLoading={isLoading}
+            name={playlistData.name}
+            setNavContentsActive={setNavContentsActive}
+          />
           <section className="flex flex-col px-[2.5%] justify-center items-center gap-2 pt-20 pb-6 bg-[#333333]">
             <img
               src={
@@ -142,7 +149,7 @@ function PlaylistMobileView({
             </div>
           </section>
           {playlistTracks.length > 0 ? (
-            <section className="w-full pt-2 pb-[120px] ">
+            <section className="w-full pt-2 pb-[120px]" ref={ref}>
               <div className="w-full  flex  flex-wrap justify-between  items-center ">
                 {playlistData.type === "playlist" && (
                   <>
@@ -218,6 +225,6 @@ function PlaylistMobileView({
       )}
     </>
   );
-}
+})
 
 export default PlaylistMobileView;

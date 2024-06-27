@@ -1,4 +1,4 @@
-import React from "react";
+import {forwardRef} from "react";
 import Loader from "./Loader";
 import { Link } from "react-router-dom";
 import {
@@ -11,7 +11,7 @@ import MobileTracksCard from "./MobileTracksCard";
 import avatar from "../assets/user (1).png";
 import TrackPlayBtn from "./TrackPlayBtn";
 import NavLayoutMobile from "./NavLayoutMobile";
-function TrackMobileView({
+const TrackMobileView = forwardRef(({
   isLoading,
   loggedIn,
   dataError,
@@ -19,12 +19,17 @@ artistsData,
   BackHandler,
   durationState,
   trackData,
-}) {
+  setNavContentsActive,
+  navContentsActive
+}, ref) =>  {
   return (
     <>
       {!isLoading && !dataError && (
         <>
-         <NavLayoutMobile />
+         <NavLayoutMobile   navContentsActive={navContentsActive}
+            isLoading={isLoading}
+            name={trackData.name}
+            setNavContentsActive={setNavContentsActive}/>
           <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 pt-20 pb-6 bg-[#333333]">
             <img
               src={
@@ -95,11 +100,11 @@ artistsData,
             </div>
 
             <div className="flex justify-start items-center gap-6 w-full">
-              {" "}
+         
               <TrackPlayBtn />
             </div>
           </section>
-          <section className="w-full pt-8 px-[2.5%] pb-[120px]">
+          <section className="w-full pt-8 px-[2.5%] pb-[120px]" ref={ref}>
             <ul className="w-full ">
               {artistsData.length > 0 && (
                 <>
@@ -149,6 +154,6 @@ artistsData,
       )}
     </>
   );
-}
+})
 
 export default TrackMobileView;
