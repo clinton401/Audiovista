@@ -229,7 +229,7 @@ console.error(error)
       {isLoading && !error && (
         <section className="px-[2.5%]">
           {loggedIn && (
-            <span className="w-full justify-start flex pb-4">
+            <span className="w-full justify-center ipad:justify-start flex pb-4">
               <Skeleton type="home_btns" />
             </span>
           )}
