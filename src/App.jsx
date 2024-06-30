@@ -594,7 +594,7 @@ useEffect(() => {
     }
   }, [authAccessToken]);
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && accessToken) {
       getTopArtists();
       getAuthUserPlaylist();
       getFollowingArtists();
@@ -603,7 +603,7 @@ useEffect(() => {
       setFollowingArtists([]);
       setAuthUserPlaylistData([]);
     }
-  }, [loggedIn, artistChange]);
+  }, [loggedIn, artistChange, accessToken]);
 
   async function getCurrentUser() {
     try {

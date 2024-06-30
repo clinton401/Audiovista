@@ -105,11 +105,11 @@ function Library() {
     }
   }, [loggedIn, userData])
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && accessToken) {
       getTopArtistsByMonth();
       getTopTracksByMonth();
     }
-  }, [loggedIn]);
+  }, [loggedIn, accessToken]);
   useEffect(() => {
     if (
       !topArtistLoading &&
