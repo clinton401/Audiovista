@@ -287,6 +287,7 @@ useEffect(() => {
      setCpModalText(
         "Login Unsuccessful "
       );
+        window.history.replaceState({}, document.title, "/");
   }
 }, [authError])
   useEffect(() => {
