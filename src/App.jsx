@@ -67,8 +67,8 @@ function App() {
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
   const redirectURI = "https://audiovista.netlify.app/";
-  // const redirectURI = "http://localhost:5173/";
 
+  // const redirectURI = "http://localhost:5173/";
   function getRandomArtistName() {
     const randomNumber = Math.floor(Math.random() * artists.length);
     setRandomArtistName(artists[randomNumber]);
@@ -246,6 +246,7 @@ function App() {
 let startTime;
   const getRefreshTokenHandler = async () => {
     try {
+      setAccessToken(null)
       const refreshUrl = "https://accounts.spotify.com/api/token";
       const refreshPayload = {
         method: 'POST',
@@ -295,7 +296,8 @@ useEffect(() => {
       getAuthToken(code);
 }
   }, [code]);
-  const expireTime = 3600;
+  const expireTime = 60;
+  console.log({elapsedTime, refreshToken, accessToken})
   useEffect(() => {
     let intervalId;
 
@@ -595,10 +597,15 @@ useEffect(() => {
     }
   }, [authAccessToken]);
   useEffect(() => {
-    if (loggedIn && accessToken) {
-      getTopArtists();
-      getAuthUserPlaylist();
-      getFollowingArtists();
+    if (loggedIn) {
+      if(accessToken) {
+        getTopArtists();
+        getAuthUserPlaylist();
+        getFollowingArtists();
+      } else {
+        setTopArtistLoading(true)
+      }
+     
     } else {
       setTopArtistData([]);
       setFollowingArtists([]);

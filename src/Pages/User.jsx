@@ -204,6 +204,8 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
     if (accessToken) {
       getUserProfile();
       getUserPlaylist();
+    } else {
+      setIsLoading(true)
     }
   }, [accessToken, id]);
   useEffect(() => {
@@ -261,9 +263,14 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
     }
   }, [usersData, userData, loggedIn]);
   useEffect(() => {
-    if (accessToken && loggedIn && !userAuth) {
-      isFollowed();
+    if(accessToken) {
+if(loggedIn && !userAuth) {
+  isFollowed();
+}
+    } else {
+      setIsLoading(true)
     }
+   
   }, [accessToken, id, loggedIn, userAuth]);
 
   function unAuthModalHandler() {

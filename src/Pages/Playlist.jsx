@@ -73,6 +73,8 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
     if (accessToken) {
       getPlaylist();
       scrollToTop();
+    } else {
+      setIsLoading(true)
     }
   }, [accessToken, id]);
   useEffect(() => {

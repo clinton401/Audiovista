@@ -136,18 +136,24 @@ console.error(error)
     }
   }, [searchError, featuredPlaylistError, newReleasesError]);
 
-  useEffect(() => {
-    if (accessToken && loggedIn) {
-      getFeaturedPlaylists();
-      getNewReleases();
-    }
-  }, [accessToken, loggedIn]);
+  // useEffect(() => {
+  //   if (accessToken && loggedIn) {
+  //     getFeaturedPlaylists();
+  //     getNewReleases();
+  //   }
+  // }, [accessToken, loggedIn]);
   useEffect(() => {
     if (randomArtistName && accessToken) {
-      // Only make the API call if homeData has no items
+
       searchRandomArtistAlbum(randomArtistName);
+      if(loggedIn) {
+        getFeaturedPlaylists();
+        getNewReleases();
+      }
+    }  else {
+      setIsLoading(true);
     }
-  }, [randomArtistName, accessToken]);
+  }, [randomArtistName, accessToken, loggedIn]);
   function refreshHandler() {
     window.location.reload();
   }

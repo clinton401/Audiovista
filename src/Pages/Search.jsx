@@ -320,6 +320,8 @@ function Search() {
         setInputValue(queryRefreshed);
         debouncedFetchData(queryRefreshed);
       }
+    } else {
+      setIsLoading(true);
     }
   }, [accessToken]);
 
@@ -403,10 +405,15 @@ function Search() {
     }
   }, [inputValue]);
   useEffect(() => {
-    if (inputValue.length > 0) {
-      // setSearchParams({query: inputValue, filter: filters})
-      debouncedFetchData(inputValue);
+    if( accessToken) {
+      if (inputValue.length > 0 ) {
+        // setSearchParams({query: inputValue, filter: filters})
+        debouncedFetchData(inputValue);
+      }
+    } else {
+setIsLoading(true);
     }
+    
   }, [inputValue]);
   function clearDatas() {
     setAlbumsData([]);

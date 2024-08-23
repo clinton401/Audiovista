@@ -336,14 +336,15 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
     },
   
       })
+      if(loggedIn) {
+        isFollowed();
+      }
+    } else {
+      setIsLoading(true);
     }
     
-  }, [accessToken, id]);
-  useEffect(() => {
-    if (accessToken && loggedIn) {
-      isFollowed();
-    }
   }, [accessToken, id, loggedIn]);
+  
   useEffect(() => {
     if (
       artistLoading &&

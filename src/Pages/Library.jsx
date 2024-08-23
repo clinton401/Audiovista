@@ -108,6 +108,8 @@ function Library() {
     if (loggedIn && accessToken) {
       getTopArtistsByMonth();
       getTopTracksByMonth();
+    } else {
+      setIsLoading(true)
     }
   }, [loggedIn, accessToken]);
   useEffect(() => {

@@ -89,6 +89,8 @@ function Track() {
     if (accessToken) {
       getTracks();
       scrollToTop()
+    } else {
+      setIsLoading(true)
     }
   }, [accessToken, id]);
   useEffect(() => {

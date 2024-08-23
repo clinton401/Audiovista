@@ -62,6 +62,8 @@ https://api.spotify.com/v1/albums/${encodeURIComponent(id)}`;
   useEffect(() => {
     if (accessToken) {
       getAlbum();
+    } else {
+      setIsLoading(true)
     }
   }, [accessToken, id]);
 useHandleScroll(
