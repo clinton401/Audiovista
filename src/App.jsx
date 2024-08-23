@@ -296,7 +296,7 @@ useEffect(() => {
       getAuthToken(code);
 }
   }, [code]);
-  const expireTime = 60;
+  const expireTime = 3600;
   console.log({elapsedTime, refreshToken, accessToken})
   useEffect(() => {
     let intervalId;
