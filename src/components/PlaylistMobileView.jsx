@@ -218,9 +218,9 @@ const PlaylistMobileView = forwardRef((
               </h2>
             </span>
           )}
-          <div className="w-full pb-[120px]">
+         {playlistData.type === "album" && <div className="w-full pb-[120px]">
           <CopyrightsAndDate release_date={playlistData.release_date} copyrights={playlistData.copyrights}/>
-          </div>
+          </div>}
           
 
         </>

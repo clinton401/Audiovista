@@ -185,7 +185,8 @@ const PlaylistDesktopView = forwardRef(
                   </span>
                 )}
               </section>
-              <CopyrightsAndDate release_date={playlistData.release_date} copyrights={playlistData.copyrights}/>
+              {playlistData.type === "album" && <CopyrightsAndDate release_date={playlistData.release_date} copyrights={playlistData.copyrights}/>}
+              
             </div>
             
           </>
