@@ -3,6 +3,7 @@ import Loader from "./Loader";
 import NavLayout from "./NavLayout";
 import avatar from "../assets/user (1).png";
 import { Link, useNavigate } from "react-router-dom";
+import CopyrightsAndDate from "./CopyrightsAndDate";
 import TrackPlayBtn from "./TrackPlayBtn";
 const TrackDestopView = forwardRef(
   (
