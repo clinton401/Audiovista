@@ -69,6 +69,7 @@ function Navbar() {
     accessToken,
     userData,
     setCpModalText,
+    setCpModalTextError
   } = useContext(myContext);
   function filtersHandler(param) {
     setFilters(param);
@@ -101,12 +102,12 @@ function Navbar() {
       } else {
         setCreatePlaylistData(null);
         setCreatePlaylistError(true);
-         setCpModalText("Something went wrong");
+         setCpModalTextError("Something went wrong");
       }
     } catch (error) {
       setCreatePlaylistData(null);
       setCreatePlaylistError(true);
-      setCpModalText("Something went wrong");
+      setCpModalTextError("Something went wrong");
       console.log(error);
     } finally {
       setArtistChange(!artistChange);

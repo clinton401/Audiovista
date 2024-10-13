@@ -1,8 +1,11 @@
 import { createContext, useState, useEffect } from "react";
 import Navbar from "./Layout/Navbar";
-import ExpiredSession from "./Layout/ExpiredSession";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import CheckEmailReg from "./components/CheckEmailReg";
+import "react-toastify/dist/ReactToastify.css";
 import Routess from "./Routess";
 import Modals from "./components/Modals";
+import { generateRandomString, sha256, base64encode } from "./lib/utils";
 export const myContext = createContext();
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -41,8 +44,7 @@ function App() {
   const [refreshToken, setRefreshToken] = useState(() => {
     const authRefresh = window.localStorage.getItem("refresh_token");
     return authRefresh ? authRefresh : null;
-   
-  })
+  });
   const [expiredToken, setExpiredToken] = useState(false);
   const [userData, setUserData] = useState(null);
   const [userDataLoading, setUserDataLoading] = useState(true);
@@ -63,12 +65,19 @@ function App() {
   const [randomArtistName, setRandomArtistName] = useState("");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [cpModalText, setCpModalText] = useState(null);
-    const [elapsedTime, setElapsedTime] = useState(0);
+  const [cpModalTextError, setCpModalTextError] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
-  const redirectURI = "https://audiovista.netlify.app/";
+  const [isUserEmailRegistered, setIsUserEmailRegistered] = useState(() => {
+    const isRegistered = window.localStorage.getItem("isEmailRegistered");
 
-  // const redirectURI = "http://localhost:5173/";
+    return isRegistered === "true";
+  });
+  const [isHandleClicked, setIsHandleClicked] = useState(false);
+  // const redirectURI = "https://audiovista.netlify.app/";
+
+  const redirectURI = import.meta.env.VITE_REACT_REDIRECT_URI;
   function getRandomArtistName() {
     const randomNumber = Math.floor(Math.random() * artists.length);
     setRandomArtistName(artists[randomNumber]);
@@ -136,10 +145,11 @@ function App() {
   useEffect(() => {
     let timeoutId;
 
-    if (showPlayModal || cpModalText !== null) {
+    if (showPlayModal || cpModalText !== null || cpModalTextError !== null) {
       timeoutId = setTimeout(() => {
         setShowPlayModal(false);
         setCpModalText(null);
+        setCpModalTextError(null);
       }, 3000);
     }
 
@@ -149,7 +159,7 @@ function App() {
         clearTimeout(timeoutId);
       }
     };
-  }, [showPlayModal, cpModalText]);
+  }, [showPlayModal, cpModalText, cpModalTextError]);
   async function getFollowingArtists() {
     try {
       setLoading1(true);
@@ -172,129 +182,102 @@ function App() {
       console.log(error);
     }
   }
-  
-  // const hash = window.location.hash;
-  // useEffect(() => {
-  //   if (hash) {
-  //     const hashedToken = hash.substring(1).split("&")[0].split("=")[1];
-  //     //   .substring(1)
-  //     //   .split("&")
-  //     //   .find((elem) => elem.startsWith("access_token"))
-  //     //   .split("=")[1];
-  //     // // console.log(hashedToken);
-  //     // fetchAccessToken(hashedToken)
-  //     setCpModalText(
-  //       "Login succesful. You have one hour before your session expires"
-  //     );
-  //       window.history.replaceState({}, document.title, "/");
-  //     // window.location.hash = "";
-  //     setAuthAccessToken(hashedToken);
 
-  //   }
-  // }, [hash]);
-  
- const urlParams = new URLSearchParams(window.location.search);
-  let code = urlParams.get('code');
-  let authError = urlParams.get('error');
+  const urlParams = new URLSearchParams(window.location.search);
+  let code = urlParams.get("code");
+  let authError = urlParams.get("error");
   const getAuthToken = async (code) => {
-  const codeVerifier = localStorage.getItem('code_verifier');
-  
-  if (!codeVerifier) {
-    console.error('Code verifier not found in localStorage');
-    return;
-  }
+    const codeVerifier = localStorage.getItem("code_verifier");
 
-  try {
-    const authUrl = 'https://accounts.spotify.com/api/token';
-    const authBody = new URLSearchParams({
-      client_id: CLIENT_ID,
-      grant_type: "authorization_code",
-      code,
-      redirect_uri: redirectURI,
-      code_verifier: codeVerifier,
-    });
-
-    const authPayload = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: authBody,
-    };
- 
-    const response = await fetch(authUrl, authPayload);
-
-    if (response.ok) {
-      const data = await response.json();
-      
-      setRefreshToken(data.refresh_token);
-      setAuthAccessToken(data.access_token);
-      window.history.replaceState({}, document.title, "/");
-    } else {
-      console.error('Failed to fetch access token', response.statusText);
+    if (!codeVerifier) {
+      console.error("Code verifier not found in localStorage");
+      return;
     }
-  } catch (error) {
-     setCpModalText(
-        "Login Unsuccessful "
-      );
-      setAuthAccessToken(null);
-      setRefreshToken(null)
-    console.error('Error fetching access token:', error);
-    
-  }
-};
-let startTime;
-  const getRefreshTokenHandler = async () => {
+
     try {
-      setAccessToken(null)
-      const refreshUrl = "https://accounts.spotify.com/api/token";
-      const refreshPayload = {
-        method: 'POST',
+      const authUrl = "https://accounts.spotify.com/api/token";
+      const authBody = new URLSearchParams({
+        client_id: CLIENT_ID,
+        grant_type: "authorization_code",
+        code,
+        redirect_uri: redirectURI,
+        code_verifier: codeVerifier,
+      });
+
+      const authPayload = {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: new URLSearchParams({
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken,
-          client_id: CLIENT_ID
-        }),
-      }
-      const response = await fetch(refreshUrl, refreshPayload)
+        body: authBody,
+      };
+
+      const response = await fetch(authUrl, authPayload);
+
       if (response.ok) {
         const data = await response.json();
-        startTime = Date.now()
+
+        setRefreshToken(data.refresh_token);
+        setAuthAccessToken(data.access_token);
+        window.history.replaceState({}, document.title, "/");
+      } else {
+        console.error("Failed to fetch access token", response.statusText);
+      }
+    } catch (error) {
+      setCpModalTextError("Login Unsuccessful ");
+      setAuthAccessToken(null);
+      setRefreshToken(null);
+      console.error("Error fetching access token:", error);
+    }
+  };
+  let startTime;
+  const getRefreshTokenHandler = async () => {
+    try {
+      setAccessToken(null);
+      const refreshUrl = "https://accounts.spotify.com/api/token";
+      const refreshPayload = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "refresh_token",
+          refresh_token: refreshToken,
+          client_id: CLIENT_ID,
+        }),
+      };
+      const response = await fetch(refreshUrl, refreshPayload);
+      if (response.ok) {
+        const data = await response.json();
+        startTime = Date.now();
         localStorage.setItem("startTime", startTime);
-        setElapsedTime(1)
+        setElapsedTime(1);
         setRefreshToken(data.refresh_token);
         setAuthAccessToken(data.access_token);
       } else {
-        console.error('Failed to fetch refresh token', response.statusText);
+        console.error("Failed to fetch refresh token", response.statusText);
       }
     } catch (error) {
-     
       setAuthAccessToken(null);
-      setRefreshToken(null)
-      console.error('Error fetching refresh token:', error);
-    
+      setRefreshToken(null);
+      console.error("Error fetching refresh token:", error);
     }
   };
 
   useEffect(() => {
-window.localStorage.setItem("refresh_token", refreshToken);
-  }, [refreshToken])
+    window.localStorage.setItem("refresh_token", refreshToken);
+  }, [refreshToken]);
   // console.log({ accessToken, unAuthAccessToken, authAccessToken, refreshToken, elapsedTime });
-useEffect(() => {
-  if(authError) {
-     setCpModalText(
-        "Login Unsuccessful "
-      );
-        window.history.replaceState({}, document.title, "/");
-  }
-}, [authError])
+  useEffect(() => {
+    if (authError) {
+      setCpModalTextError("Login Unsuccessful ");
+      window.history.replaceState({}, document.title, "/");
+    }
+  }, [authError]);
   useEffect(() => {
     if (code) {
       getAuthToken(code);
-}
+    }
   }, [code]);
   const expireTime = 3600;
   useEffect(() => {
@@ -355,9 +338,9 @@ useEffect(() => {
   // }, [loggedIn, expiredToken]);
   useEffect(() => {
     if (loggedIn && elapsedTime === expireTime) {
-      getRefreshTokenHandler()
-    }  else if(!loggedIn && elapsedTime === expireTime) {
-      getTokenHandler()
+      getRefreshTokenHandler();
+    } else if (!loggedIn && elapsedTime === expireTime) {
+      getTokenHandler();
     }
   }, [elapsedTime]);
 
@@ -582,8 +565,6 @@ useEffect(() => {
     }
   }, [authAccessToken, unAuthAccessToken]);
   useEffect(() => {
- 
-     
     if (!authAccessToken) {
       getRandomArtistName();
       setRefreshToken(null);
@@ -597,21 +578,55 @@ useEffect(() => {
   }, [authAccessToken]);
   useEffect(() => {
     if (loggedIn) {
-      if(accessToken) {
+      if (accessToken) {
         getTopArtists();
         getAuthUserPlaylist();
         getFollowingArtists();
       } else {
-        setTopArtistLoading(true)
+        setTopArtistLoading(true);
       }
-     
     } else {
       setTopArtistData([]);
       setFollowingArtists([]);
       setAuthUserPlaylistData([]);
     }
   }, [loggedIn, artistChange, accessToken]);
-
+  const createToast = (text, type) => {
+    if (type) {
+      toast[type](text, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+    toast(text, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  };
+  useEffect(() => {
+    if (showPlayModal) {
+      createToast("Feature currently unavailable", "warn");
+    } else if (cpModalText) {
+      createToast(cpModalText, "success");
+    } else if (cpModalTextError) {
+      createToast(cpModalTextError, "error");
+    }
+  }, [showPlayModal, cpModalText, cpModalTextError]);
   async function getCurrentUser() {
     try {
       setUserDataLoading(true);
@@ -630,7 +645,6 @@ useEffect(() => {
         setUserDataError(false);
         //  setExpiredToken(false)
       } else {
-       
         throw new Error("Failed to fetch user data:", response.status);
       }
     } catch (error) {
@@ -640,10 +654,9 @@ useEffect(() => {
       console.error("Error fetching user data:", error);
       // if(refreshToken) {
       //   getRefreshTokenHandler()
-      // } 
+      // }
       // setAuthAccessToken(null);
       //  setExpiredToken(true);
-      
     }
   }
   useEffect(() => {
@@ -657,7 +670,7 @@ useEffect(() => {
     if (authAccessToken) {
       getCurrentUser();
       // setExpiredToken(false);
-    } 
+    }
   }, [authAccessToken]);
 
   const logOut = () => {
@@ -689,6 +702,32 @@ useEffect(() => {
       },
     },
   };
+  const handlePage = (param) => {
+    setIsHandleClicked(param);
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape" || event.keyCode === 27) {
+      handlePage(false);
+    }
+  };
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      "isEmailRegistered",
+      isUserEmailRegistered.toString()
+    );
+  }, [isUserEmailRegistered]);
+  useEffect(() => {
+    if (isHandleClicked) {
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isHandleClicked]);
   useEffect(() => {
     function shuffleArray(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -707,6 +746,32 @@ useEffect(() => {
   }, []);
   const numberWithCommas = (number) => {
     return Number(number).toLocaleString();
+  };
+  const scopes = [
+    "ugc-image-upload",
+    "playlist-read-private",
+    "playlist-read-collaborative",
+    "playlist-modify-private",
+    "playlist-modify-public",
+    "user-follow-modify",
+    "user-follow-read",
+    "user-top-read",
+    "user-read-recently-played",
+    "user-library-modify",
+    "user-library-read",
+    "user-read-email",
+    "user-read-private",
+  ];
+  const authorizeUser = async () => {
+    const codeVerifier = generateRandomString(64);
+    localStorage.setItem("code_verifier", codeVerifier);
+    const hashed = await sha256(codeVerifier);
+    const codeChallenge = base64encode(hashed);
+
+    const accessUrl = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&code_challenge_method=S256&code_challenge=${codeChallenge}&response_type=code&scope=${encodeURIComponent(
+      scopes.join(" ")
+    )}&redirect_uri=${encodeURIComponent(redirectURI)}`;
+    window.location.href = accessUrl;
   };
   // console.log(isOnline);
   // console.log({  unAuthAccessToken, accessToken, authAccessToken, refreshToken, elapsedTime });
@@ -745,8 +810,17 @@ useEffect(() => {
     userDataError,
     setCpModalText,
     cpModalText,
+    setCpModalTextError,
+    cpModalTextError,
     getTokenHandler,
     redirectURI,
+    createToast,
+    handlePage,
+    isUserEmailRegistered,
+    setIsUserEmailRegistered,
+    isHandleClicked,
+    setIsHandleClicked,
+    authorizeUser,
     // createPlaylist,
     // createPlaylistData,
     // createPlaylistError,
@@ -774,20 +848,22 @@ useEffect(() => {
             playlistPage={expiredToken ? true : false}
           />
         )}
-        {showPlayModal && (
-          <Modals
-            text="Feature currently unavailable"
-            playlistPage={expiredToken ? true : false}
-          />
-        )}
-        {cpModalText !== null && (
-          <Modals
-            text={cpModalText}
-            playlistPage={expiredToken ? true : false}
-          />
-        )}
+
+        {isHandleClicked && <CheckEmailReg />}
         <Routess />
       </myContext.Provider>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

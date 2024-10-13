@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 import { Link } from "react-router-dom";
 import DestopOptions from "./DestopOptions";
-import Modals from "./Modals";
 import { myContext } from "../App";
 import LoaderMini from "./LoaderMini";
 function TrackTableBtns({
@@ -32,7 +31,7 @@ function TrackTableBtns({
   const [likedLoading, setLikedLoading] = useState(false);
   const [buttonClickNotLoggedIn, setButtonClickNotLoggedIn] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { loggedIn, SEARCH_PARAM, accessToken } = useContext(myContext);
+  const { loggedIn, SEARCH_PARAM, accessToken, createToast } = useContext(myContext);
   const [successMessage, setSuccessMessage] = useState(null);
   async function checkifAddedToLiked() {
     try {
@@ -104,6 +103,15 @@ function TrackTableBtns({
     }
     () => clearTimeout(timeoutId);
   }, [buttonClickNotLoggedIn, isLikedError, successMessage]);
+  useEffect(() => {
+    if ((buttonClickNotLoggedIn )) {
+      createToast("You need to be logged in first", "warn")
+    } else if (isLikedError) {
+      createToast("Something went wrong. Please try again later", "error")
+    } else if(successMessage) {
+      createToast(successMessage, "success")
+    }
+  }, [buttonClickNotLoggedIn, isLikedError, successMessage]);
   function addToOrRemoveFromLikedSongs() {
     if (!loggedIn) {
       setButtonClickNotLoggedIn(true);
@@ -115,13 +123,7 @@ function TrackTableBtns({
   }
   return (
     <>
-      {buttonClickNotLoggedIn && (
-        <Modals text="You need to be logged in first" />
-      )}
-      {isLikedError && (
-        <Modals text="Something went wrong. Please try again later" />
-      )}
-      {successMessage && <Modals text={successMessage} />}
+      
       <button
         className=" w-full h-[61px] flex  items-center rounded-md outline-none focus:bg-[#2A2A2A] hover:bg-[#2A2A2A] transition-all ease-in duration-300  justify-between  cursor-pointer  relative track_card"
         onClick={() => tracksHandler(id)}

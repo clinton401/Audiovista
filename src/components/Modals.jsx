@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
-import LoginBtn from "./LoginBtn";
-
+import { CiWifiOff } from "react-icons/ci";
 function Modals({ text, playlistPage }) {
   const containerVariant = {
     hidden: {
@@ -16,7 +15,7 @@ function Modals({ text, playlistPage }) {
         // delay: 0.5,
         // mass: 0.4,
         // damping: 8,
-        // when: "beforeChildren"
+        // when: "beforeChildren",
         ease: "easeInOut",
       },
     },
@@ -29,8 +28,9 @@ function Modals({ text, playlistPage }) {
       },
     },
   };
-  const textVerify = text === "You need to be logged in first";
+  // const textVerify = text === "You need to be logged in first";
   const onlineVerify = text === "No internet connection";
+  
   // console.log(textVerify)
   return (
     <>
@@ -54,8 +54,8 @@ function Modals({ text, playlistPage }) {
           className={`flex items-center transition-all ease-in duration-300  ipad:right-5 justify-center px-[2%] z-[1000]  top-[7%]   fixed w-full  ${!playlistPage ? "artist_fixed_width" : ""} `}
         >
           <span className="w-full ipad:w-[40%] max-w-[350px] flex-col gap-2  shadow-lg rounded-md bg-white flex items-center justify-center font-bold p-3">
-            <h2 className="text-sm ipad:text-base text-center text-primary ">{text}</h2>
-            {textVerify && <LoginBtn />}
+            <h2 className="text-sm ipad:text-base flex items-center justify-center  text-primary "><CiWifiOff className="mr-2 text-primary"/> {text}</h2>
+            
           </span>
         </motion.div>
       )}

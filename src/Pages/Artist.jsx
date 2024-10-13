@@ -6,7 +6,6 @@ import ArtistDesktopView from "../components/ArtistDesktopView";
 import NotFoundView from "../components/NotFoundView";
 import { useNavigate } from "react-router-dom";
 import ArtistMobileView from "../components/ArtistMobileView";
-import Modals from "../components/Modals";
 import useHandleScroll from "../hooks/useHandleScroll";
 function Artist() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,6 +33,7 @@ function Artist() {
   
   const [navContentsMobileActive, setNavContentsMobileActive] = useState(false);
   const [modalText, setModalText] = useState(null);
+  const [modalTextError, setModalTextError] = useState(null);
   const navigate = useNavigate();
   const parentRef = useRef(null);
   const childRef = useRef(null);
@@ -46,6 +46,7 @@ function Artist() {
     scrollToTop,
     setDocumentTitle,
     setArtistChange,
+    createToast
     // SEARCH_PARAM_PUT,
   } = useContext(myContext);
   const { id } = useParams();
@@ -205,7 +206,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
   }, [followHandle, unFollowHandle, unAuthModal]);
   function unAuthModalHandler() {
     setUnAuthModal(true);
-    setModalText("You need to be logged in first");
+    createToast("You need to be logged in first", "warn");
   }
 
   async function getArtist() {
@@ -268,13 +269,13 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       } else {
         setFollowHandle(false);
           setFollowLoading(false);
-        setModalText("Unable to add To Your Library");
+        setModalTextError("Unable to add To Your Library");
         setIsArtistFollowed(false);
       }
     } catch (error) {
         setFollowLoading(false);
       setFollowHandle(false);
-      setModalText("Unable to add To Your Library");
+      setModalTextError("Unable to add To Your Library");
       setIsArtistFollowed(false);
     }
   }
@@ -293,16 +294,25 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       } else {
         setUnFollowHandle(false);
           setFollowLoading(false);
-        setModalText("Unable to remove from Your Library");
+        setModalTextError("Unable to remove from Your Library");
         //  setIsArtistFollowed(false);
       }
     } catch (error) {
       setUnFollowHandle(false);
         setFollowLoading(false);
-      setModalText("Unable to remove from Your Library");
+      setModalTextError("Unable to remove from Your Library");
       //  setIsArtistFollowed(false);
     }
   }
+  useEffect(() => {
+    if(followHandle || unFollowHandle || unAuthModal){
+      if(modalText) {
+        createToast(modalText, "success")
+      }else if(modalTextError){
+        createToast(modalTextError, "error")
+      }
+    }
+  }, [modalTextError, modalText])
   useEffect(() => {
     if (accessToken) {
       scrollToTop();
@@ -400,9 +410,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
 
   return (
     <ParentLayouts ref={parentRef}>
-      {(followHandle || unFollowHandle || unAuthModal) && (
-        <Modals text={modalText} />
-      )}
+      
       {/* {unFollowHandle && <Modals text={modalText} />}
       {unAuthModal && <Modals text={modalText} />} */}
       {!dataError ? (

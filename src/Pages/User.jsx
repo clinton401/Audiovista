@@ -22,6 +22,7 @@ function User() {
   const [unFollowHandle, setUnFollowHandle] = useState(false);
   const [unAuthModal, setUnAuthModal] = useState(false);
   const [modalText, setModalText] = useState(null);
+  const [modalTextError, setModalTextError] = useState(null);
   const [navContentsActive, setNavContentsActive] = useState(false);
      const [navContentsMobileActive, setNavContentsMobileActive] =
        useState(false);
@@ -32,6 +33,7 @@ function User() {
     accessToken,
     numberWithCommas,
     scrollToTop,
+    createToast,
     setDocumentTitle,
     setArtistChange,
     userData,
@@ -165,13 +167,13 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
       } else {
         setFollowHandle(false);
         setFollowLoading(false);
-        setModalText("Unable to add To Your Library");
+        setModalTextError("Unable to add To Your Library");
         setIsArtistFollowed(false);
       }
     } catch (error) {
       setFollowHandle(false);
       setFollowLoading(false);
-      setModalText("Unable to add To Your Library");
+      setModalTextError("Unable to add To Your Library");
       setIsArtistFollowed(false);
     }
   }
@@ -190,13 +192,13 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
       } else {
         setUnFollowHandle(false);
         setFollowLoading(false);
-        setModalText("Unable to remove from Your Library");
+        setModalTextError("Unable to remove from Your Library");
         //  setIsArtistFollowed(false);
       }
     } catch (error) {
       setUnFollowHandle(false);
       setFollowLoading(false);
-      setModalText("Unable to remove from Your Library");
+      setModalTextError("Unable to remove from Your Library");
       //  setIsArtistFollowed(false);
     }
   }
@@ -220,6 +222,15 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
       setUnFollowHandle(false);
     }
   }, [followHandle, unFollowHandle, unAuthModal]);
+  useEffect(() => {
+    if(followHandle || unFollowHandle || unAuthModal){
+      if(modalText) {
+        createToast(modalText, "success")
+      }else if(modalTextError){
+        createToast(modalTextError, "error")
+      }
+    }
+  }, [modalTextError, modalText])
   useEffect(() => {
     if (!dataLoading && !playlistLoading && !publicLoading) {
       setIsLoading(false);
@@ -275,7 +286,7 @@ if(loggedIn && !userAuth) {
 
   function unAuthModalHandler() {
     setUnAuthModal(true);
-    setModalText("You need to be logged in first");
+    createToast("You need to be logged in first", "warn");
   }
   function buttonFollowHandler() {
     if (isArtistFollowed) {
@@ -290,9 +301,7 @@ if(loggedIn && !userAuth) {
 
   return (
     <ParentLayouts ref={parentRef}>
-      {(followHandle || unFollowHandle || unAuthModal) && (
-        <Modals text={modalText} />
-      )}
+    
 
       {!dataError ? (
         <>

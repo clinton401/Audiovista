@@ -2,7 +2,7 @@ import { faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import avatar from "../assets/user (1).png";
 import { useRef, useState, useEffect, useContext } from "react";
-import Modals from "./Modals";
+// import Modals from "./Modals";
 import LoaderMini from "./LoaderMini";
 import { myContext } from "../App";
 function EditPlaylistDetails({
@@ -30,7 +30,7 @@ function EditPlaylistDetails({
   // const [textFocus]
   const fileInputRef = useRef(null);
   const inputRef = useRef(null);
-  const { accessToken, artistChange, setArtistChange } = useContext(myContext);
+  const { accessToken, artistChange, setArtistChange, createToast } = useContext(myContext);
   const { playlistImageFile, playlistImageError, playlistImageLoading } =
     fileData;
   const {
@@ -258,6 +258,13 @@ function EditPlaylistDetails({
       }
     };
   }, [playlistImageError, formDataError]);
+  useEffect(() => {
+if(playlistImageError) {
+  createToast(playlistImageError, "error")
+} else if(formDataError) {
+  createToast(formDataError, "error")
+}
+  }, [playlistImageError, formDataError])
 
   function submitHandler(e) {
     e.preventDefault();
@@ -275,10 +282,7 @@ function EditPlaylistDetails({
       className="flex items-center transition-all ease-in duration-300 py-10  ipad:right-5 justify-center px-[2.5%] z-[100]  top-0   fixed w-full h-dvh blurred overflow-x-hidden ipad:max-h-[900px] "
       onClick={closePage}
     >
-      {playlistImageError && (
-        <Modals text={playlistImageError} playlistPage={true} />
-      )}
-      {formDataError && <Modals text={formDataError} playlistPage={true} />}
+      
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-[500px] bg-[#333333] flex flex-col gap-2 p-4 rounded-md"

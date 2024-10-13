@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { myContext } from "../App";
 import LoginBtn from "./LoginBtn";
-import Modals from "./Modals";
 import LoaderMini from "./LoaderMini";
 function DestopOptions({
   artistsData,
@@ -47,7 +46,7 @@ function DestopOptions({
     loggedIn,
     userData,
     setCpModalText,
-
+    setCpModalTextError,
     artistChange,
     setArtistChange,
   } = useContext(myContext);
@@ -83,12 +82,12 @@ function DestopOptions({
       } else {
         setCreatePlaylistData(null);
         setCreatePlaylistError(true);
-        setCpModalText("Something went wrong");
+        setCpModalTextError("Something went wrong");
       }
     } catch (error) {
       setCreatePlaylistData(null);
       setCreatePlaylistError(true);
-      setCpModalText("Something went wrong");
+      setCpModalTextError("Something went wrong");
       console.log(error);
     } finally {
       setArtistChange(!artistChange);
@@ -209,7 +208,7 @@ function DestopOptions({
         }
       } catch (error) {
         console.error(error);
-        setCpModalText("Failed to delete song");
+        setCpModalTextError("Failed to delete song");
       } finally {
         setRemoveLoading(false);
         setShowOptions(false);
@@ -235,12 +234,12 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
         } else {
           setAddTracksData(null);
           setAddTracksError(true);
-          setCpModalText("Something went wrong");
+          setCpModalTextError("Something went wrong");
         }
       } catch (error) {
         setAddTracksData(null);
         setAddTracksError(true);
-        setCpModalText("Something went wrong");
+        setCpModalTextError("Something went wrong");
       } finally {
         setAddTracksLoading(false);
         setShowHidden(false);

@@ -15,7 +15,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { myContext } from "../App";
 import LoginBtn from "./LoginBtn";
 import LoaderMini from "./LoaderMini";
-import Modals from "./Modals";
 const containerVariant = {
   hidden: {
     opacity: 0,
@@ -221,10 +220,11 @@ function MobileOptions({
     accessToken,
     loggedIn,
     userData,
-    setCpModalText,
+    setCpModalText,setCpModalTextError,
     SEARCH_PARAM,
     artistChange,
     setArtistChange,
+    createToast
   } = useContext(myContext);
 
   const inputRef = useRef();
@@ -311,12 +311,12 @@ function MobileOptions({
       } else {
         setCreatePlaylistData(null);
         setCreatePlaylistError(true);
-        setCpModalText("Something went wrong");
+        setCpModalTextError("Something went wrong");
       }
     } catch (error) {
       setCreatePlaylistData(null);
       setCreatePlaylistError(true);
-      setCpModalText("Something went wrong");
+      setCpModalTextError("Something went wrong");
       console.log(error);
     } finally {
       setArtistChange(!artistChange);
@@ -354,7 +354,7 @@ async function removeTracks() {
       }
     } catch (error) {
       console.error(error);
-      setCpModalText("Failed to delete song");
+      setCpModalTextError("Failed to delete song");
     } finally {
       setRemoveLoading(false);
       setShowOptions(false);
@@ -377,6 +377,15 @@ async function removeTracks() {
       }, 3000);
     }
     () => clearTimeout(timeoutId);
+  }, [buttonClickNotLoggedIn, isLikedError, successMessage]);
+  useEffect(() => {
+    if ((buttonClickNotLoggedIn )) {
+      createToast("You need to be logged in first", "warn")
+    } else if (isLikedError) {
+      createToast("Something went wrong. Please try again later", "error")
+    } else if(successMessage) {
+      createToast(successMessage, "success")
+    }
   }, [buttonClickNotLoggedIn, isLikedError, successMessage]);
   function addToOrRemoveFromLikedSongs() {
     if (!loggedIn) {
@@ -458,12 +467,12 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
         } else {
           setAddTracksData(null);
           setAddTracksError(true);
-          setCpModalText("Something went wrong");
+          setCpModalTextError("Something went wrong");
         }
       } catch (error) {
         setAddTracksData(null);
         setAddTracksError(true);
-        setCpModalText("Something went wrong");
+        setCpModalTextError("Something went wrong");
       } finally {
         setAddTracksLoading(false);
         setShowOptions(false);
@@ -489,13 +498,7 @@ https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
   //   console.log({ artistId, image, trackName, artists, albumId });
   return (
     <>
-      {buttonClickNotLoggedIn && (
-        <Modals text="You need to be logged in first" />
-      )}
-      {isLikedError && (
-        <Modals text="Something went wrong. Please try again later" />
-      )}
-      {successMessage && <Modals text={successMessage} />}
+      
       <div className="relative  h-full w-full">
         <motion.section
           variants={containerVariant}
