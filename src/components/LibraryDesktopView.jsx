@@ -206,7 +206,6 @@ const LibraryDesktopView = forwardRef(
                 </section>
               )}
 
-              <SocilaMedia />
             </div>
           </>
         )}

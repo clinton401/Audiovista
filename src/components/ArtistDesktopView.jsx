@@ -278,7 +278,6 @@ const ArtistDesktopView = forwardRef(
                     </a>
                   </section>
                 )}
-              <SocilaMedia />
             </div>
           </>
         )}

@@ -1,13 +1,8 @@
 import {forwardRef} from "react";
 import Loader from "./Loader";
-import { Link } from "react-router-dom";
-import {
-  faChevronLeft,
-  faPlay,
-  faCircleCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import MobileTracksCard from "./MobileTracksCard";
+import { Link, useNavigate } from "react-router-dom";
+
+import CopyrightsAndDate from "./CopyrightsAndDate";
 import avatar from "../assets/user (1).png";
 import TrackPlayBtn from "./TrackPlayBtn";
 import NavLayoutMobile from "./NavLayoutMobile";
@@ -22,6 +17,7 @@ artistsData,
   setNavContentsActive,
   navContentsActive
 }, ref) =>  {
+  const navigate = useNavigate();
   return (
     <>
       {!isLoading && !dataError && (
@@ -104,7 +100,7 @@ artistsData,
               <TrackPlayBtn />
             </div>
           </section>
-          <section className="w-full pt-8 px-[2.5%] pb-[120px]" ref={ref}>
+          <section className="w-full pt-8 px-[2.5%] " ref={ref}>
             <ul className="w-full ">
               {artistsData.length > 0 && (
                 <>
@@ -145,6 +141,9 @@ artistsData,
               )}
             </ul>
           </section>
+          <div className="w-full pb-[120px]">
+          <CopyrightsAndDate release_date={trackData.album.release_date} copyrights={[]}/>
+          </div>
         </>
       )}
       {isLoading && !dataError && (

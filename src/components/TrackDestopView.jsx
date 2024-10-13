@@ -3,9 +3,6 @@ import Loader from "./Loader";
 import NavLayout from "./NavLayout";
 import avatar from "../assets/user (1).png";
 import { Link, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
-import SocilaMedia from "./SocilaMedia";
 import TrackPlayBtn from "./TrackPlayBtn";
 const TrackDestopView = forwardRef(
   (
@@ -149,7 +146,7 @@ const TrackDestopView = forwardRef(
                   </>
                 )}
               </ul>
-              <SocilaMedia />
+              <CopyrightsAndDate release_date={trackData.album.release_date} copyrights={[]}/>
             </div>
           </>
         )}

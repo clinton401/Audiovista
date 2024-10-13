@@ -107,6 +107,7 @@ useHandleScroll(
       setDurationState(msToHMS(totalDuration));
     }
   }, [totalDuration]);
+  // console.log(albumData)
   return (
     <ParentLayouts ref={parentRef}>
       {!dataError ? (

@@ -8,15 +8,13 @@ import React, {
 import Loader from "./Loader";
 import NavLayout from "./NavLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import avatar from "../assets/user (1).png";
 import TrackTableView from "./TrackTableView";
-import SocilaMedia from "./SocilaMedia";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import TrackPlayBtn from "./TrackPlayBtn";
 import { myContext } from "../App";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
- 
+ import CopyrightsAndDate from "./CopyrightsAndDate";
 const PlaylistDesktopView = forwardRef(
   (
     {
@@ -37,7 +35,6 @@ const PlaylistDesktopView = forwardRef(
     const { userData } = useContext(myContext);
     const navRef = useRef(null);
     const [navHeight, setNavHeight] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
       if (!dataError && !isLoading && navRef.current) {
@@ -188,8 +185,9 @@ const PlaylistDesktopView = forwardRef(
                   </span>
                 )}
               </section>
-              <SocilaMedia />
+              <CopyrightsAndDate release_date={playlistData.release_date} copyrights={playlistData.copyrights}/>
             </div>
+            
           </>
         )}
         {isLoading && !dataError && (

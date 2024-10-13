@@ -698,7 +698,6 @@ const DesktopView = forwardRef(
             </p>
           </section>
         )}
-        <SocilaMedia />
       </>
     );
   }

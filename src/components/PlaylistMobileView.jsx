@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import TrackPlayBtn from "./TrackPlayBtn";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import NavLayoutMobile from "./NavLayoutMobile";
+
+import CopyrightsAndDate from "./CopyrightsAndDate";
 const PlaylistMobileView = forwardRef((
   {
   playlistData,
@@ -149,7 +151,7 @@ const PlaylistMobileView = forwardRef((
             </div>
           </section>
           {playlistTracks.length > 0 ? (
-            <section className="w-full pt-2 pb-[120px]" ref={ref}>
+            <section className="w-full pt-2 " ref={ref}>
               <div className="w-full  flex  flex-wrap justify-between  items-center ">
                 {playlistData.type === "playlist" && (
                   <>
@@ -210,12 +212,17 @@ const PlaylistMobileView = forwardRef((
               </div>
             </section>
           ) : (
-            <span className="w-full  pt-8 pb-[120px] flex flex-col gap-2 px-[2.5%]">
+            <span className="w-full  pt-8  flex flex-col gap-2 px-[2.5%]">
               <h2 className="w-full font-[900] text-center text-2xl">
                 Empty {playlistData.type}
               </h2>
             </span>
           )}
+          <div className="w-full pb-[120px]">
+          <CopyrightsAndDate release_date={playlistData.release_date} copyrights={playlistData.copyrights}/>
+          </div>
+          
+
         </>
       )}
       {isLoading && !dataError && (

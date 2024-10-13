@@ -272,7 +272,6 @@ console.error(error)
               );
             })}
 
-            <SocilaMedia />
           </div>
         </section>
       )}

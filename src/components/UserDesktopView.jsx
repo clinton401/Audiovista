@@ -135,7 +135,6 @@ const UserDesktopView = forwardRef(
                 </section>
               )}
 
-              <SocilaMedia />
             </div>
           </>
         )}
