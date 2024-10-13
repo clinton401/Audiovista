@@ -34,6 +34,7 @@ function CheckEmailReg() {
     "junnywrld999@gmail.com",
     "clintonphil2000@gmail.com",
     "clintonphillips464@gmail.com",
+    "aleinxkk@gmail.com"
   ];
 
   const handleFormData = (content, type) => {
