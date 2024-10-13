@@ -436,22 +436,22 @@ function Navbar() {
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/"
         >
-          <FontAwesomeIcon icon={faHouse} className="text-lg" />
-          <h2 className="text-ssm">Home</h2>
+          <FontAwesomeIcon icon={faHouse} className="text-2xl" />
+          {/* <h2 className="text-ssm">Home</h2> */}
         </NavLink>
         <NavLink
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/search"
         >
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-lg" />
-          <h2 className="text-ssm">Search</h2>
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-2xl" />
+          {/* <h2 className="text-ssm">Search</h2> */}
         </NavLink>
         <NavLink
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/library"
         >
-          <FontAwesomeIcon icon={faBookBookmark} className="text-lg" />
-          <h2 className="text-ssm">Library</h2>
+          <FontAwesomeIcon icon={faBookBookmark} className="text-2xl" />
+          {/* <h2 className="text-ssm">Library</h2> */}
         </NavLink>
       </header>
     </>
