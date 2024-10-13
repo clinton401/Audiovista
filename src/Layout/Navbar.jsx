@@ -431,26 +431,26 @@ function Navbar() {
           )}
         </nav>
       </header>
-      <header className="flex w-full left-0 fixed bottom-0 h-[70px] z-[2000] justify-evenly bg-white blurred ipad:hidden">
+      <header className="flex w-full left-0 fixed bottom-0 h-[50px] z-[2000] justify-evenly bg-white blurred ipad:hidden">
         <NavLink
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/"
         >
-          <FontAwesomeIcon icon={faHouse} className="text-2xl" />
+          <FontAwesomeIcon icon={faHouse} className="text-xl" />
           {/* <h2 className="text-ssm">Home</h2> */}
         </NavLink>
         <NavLink
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/search"
         >
-          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-2xl" />
+          <FontAwesomeIcon icon={faMagnifyingGlass} className="text-xl" />
           {/* <h2 className="text-ssm">Search</h2> */}
         </NavLink>
         <NavLink
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/library"
         >
-          <FontAwesomeIcon icon={faBookBookmark} className="text-2xl" />
+          <FontAwesomeIcon icon={faBookBookmark} className="text-xl" />
           {/* <h2 className="text-ssm">Library</h2> */}
         </NavLink>
       </header>
