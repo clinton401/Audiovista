@@ -213,7 +213,7 @@ const DesktopView = forwardRef(
                         ? recent.images[0].url
                         : avatar;
                     const creatorName = playlistVerify
-                      ? recent.owner.display_name
+                      ? recent.owner?.display_name
                       : "";
                     const newCreatorName = playlistVerify
                       ? creatorName.charAt(0).toUpperCase() +
@@ -323,7 +323,7 @@ const DesktopView = forwardRef(
                               image={imgLocation}
                               playlistCreator={
                                 playlistVerify
-                                  ? topResultData.owner.display_name
+                                  ? topResultData.owner?.display_name
                                   : null
                               }
                               userId={
@@ -505,7 +505,7 @@ const DesktopView = forwardRef(
                                   ? playlist_d.images[0].url
                                   : avatar;
                               const creatorName =
-                                playlist_d.owner.display_name || "Unknown";
+                                playlist_d?.owner?.display_name || "Unknown";
                               const newCreatorName =
                                 creatorName.charAt(0).toUpperCase() +
                                 creatorName.slice(1);
@@ -657,7 +657,7 @@ const DesktopView = forwardRef(
                             ? playlist_d.images[0].url
                             : avatar;
                         const creatorName =
-                          playlist_d.owner.display_name || "Unknown";
+                          playlist_d?.owner?.display_name || "Unknown";
                         const newCreatorName =
                           creatorName.charAt(0).toUpperCase() +
                           creatorName.slice(1);
