@@ -136,7 +136,7 @@ function App() {
   useEffect(() => {
     let timeoutId;
     if (isPageMounted) {
-      const delay = loggedIn ? 4000 : 1500;
+      const delay = loggedIn ? 5000 : 1500;
       timeoutId = setTimeout(() => {
         setIsPageMounted(false);
       }, delay);
