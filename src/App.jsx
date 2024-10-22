@@ -63,7 +63,6 @@ function App() {
   const [artistChange, setArtistChange] = useState(false);
   const [followingArtists, setFollowingArtists] = useState([]);
   const [accessToken, setAccessToken] = useState(null);
-  const [randomArtistName, setRandomArtistName] = useState("");
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [cpModalText, setCpModalText] = useState(null);
   const [cpModalTextError, setCpModalTextError] = useState(null);
@@ -80,10 +79,7 @@ function App() {
   // const redirectURI = "https://audiovista.netlify.app/";
 
   const redirectURI = import.meta.env.VITE_REACT_REDIRECT_URI;
-  function getRandomArtistName() {
-    const randomNumber = Math.floor(Math.random() * artists.length);
-    setRandomArtistName(artists[randomNumber]);
-  }
+
   // console.log({ CLIENT_ID, CLIENT_SECRET });
   // function to get spotify token
   async function getTokenHandler() {
@@ -476,7 +472,7 @@ function App() {
     "Green Day",
     "A-ha",
   ];
-  const artists = genresArray;
+  // const artists = genresArray;
 
   useEffect(() => {
     function handleResize() {
@@ -583,13 +579,11 @@ function App() {
   }, [authAccessToken, unAuthAccessToken]);
   useEffect(() => {
     if (!authAccessToken) {
-      getRandomArtistName();
       setRefreshToken(null);
       setLoggedIn(false);
     } else {
       setAccessToken(authAccessToken);
       //  localStorage.removeItem("startTime");
-      getRandomArtistName();
       setLoggedIn(true);
     }
   }, [authAccessToken]);
@@ -797,7 +791,6 @@ function App() {
     loggedIn,
     setLoggedIn,
     accessToken,
-    randomArtistName,
     searchHandler,
     SEARCH_PARAM,
     newGenresArray,

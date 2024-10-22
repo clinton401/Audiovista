@@ -6,39 +6,36 @@ import logo from "../assets/logo.png";
 import ParentLayouts from "../components/ParentLayouts";
 import LoginBtn from "../components/LoginBtn";
 import UserBtn from "../components/UserBtn";
-import SocilaMedia from "../components/SocilaMedia";
 import Skeleton from "../components/Skeleton";
 import avatar from "../assets/user (1).png";
 function Home() {
-  const [timeOfDay, setTimeOfDay] = useState("");
-  const [homeData, setHomeData] = useState([]);
-  const [searchLoading, setSearchLoading] = useState(true);
-  const [featuredPlaylistLoading, setFeaturedPlaylistLoading] = useState(false);
+  const [featuredPlaylistLoading, setFeaturedPlaylistLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [featuredPlaylistData, setFeaturedPlaylistData] = useState([]);
-  const [searchError, setSearchError] = useState(false);
   const [featuredPlaylistError, setFeaturedPlaylistError] = useState(false);
   const [newReleasesData, setNewReleasesData] = useState([]);
-  const [newReleasesLoading, setNewReleasesLoading] = useState(false);
+  const [newReleasesLoading, setNewReleasesLoading] = useState(true);
   const [newReleasesError, setNewReleasesError] = useState(false);
   const {
     loggedIn,
     accessToken,
-    randomArtistName,
-    searchHandler,
+
     SEARCH_PARAM,
     scrollToTop,
     setDocumentTitle,
-    userData,
     getTokenHandler,
     logOut,
   } = useContext(myContext);
+  function getUserLocale() {
+    const locale = navigator.language || navigator.languages[0];
+    return locale.replace("-", "_") || "en_US";
+  }
   async function getFeaturedPlaylists() {
     try {
       setFeaturedPlaylistLoading(true);
-      const SEARCH_URL =
-        "https://api.spotify.com/v1/browse/featured-playlists?limit=20";
+      const locale = getUserLocale();
+      const SEARCH_URL = `https://api.spotify.com/v1/browse/featured-playlists?limit=20&locale=${locale}`;
       const response = await fetch(SEARCH_URL, SEARCH_PARAM);
       if (response.ok) {
         const data = await response.json();
@@ -57,84 +54,72 @@ function Home() {
     }
   }
 
-  async function searchRandomArtistAlbum(artist) {
-    try {
-      setSearchLoading(true);
-      const artistNo = await searchHandler(artist);
-      const SEARCH_URL = `https://api.spotify.com/v1/artists/${artistNo}/albums?include_groups=album,appears_on&market=US&limit=50`;
-      const response = await fetch(SEARCH_URL, SEARCH_PARAM);
+  // async function searchRandomArtistAlbum(artist) {
+  //   try {
+  //     setSearchLoading(true);
+  //     const artistNo = await searchHandler(artist);
+  //     const SEARCH_URL = `https://api.spotify.com/v1/artists/${artistNo}/albums?include_groups=album,appears_on&market=US&limit=50`;
+  //     const response = await fetch(SEARCH_URL, SEARCH_PARAM);
 
-      if (response.ok) {
-        const data = await response.json();
-        const dataArray = Array.isArray(data.items) ? data.items : [data.items];
-        setHomeData(dataArray);
-        setSearchError(false);
-      } else {
-        setHomeData([]);
-        setSearchError(true);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setHomeData([]);
-      setSearchError(true);
-    } finally {
-      setSearchLoading(false);
-    }
-  }
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       const dataArray = Array.isArray(data.items) ? data.items : [data.items];
+  //       setHomeData(dataArray);
+  //       setSearchError(false);
+  //     } else {
+  //       setHomeData([]);
+  //       setSearchError(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     setHomeData([]);
+  //     setSearchError(true);
+  //   } finally {
+  //     setSearchLoading(false);
+  //   }
+  // }
   async function getNewReleases() {
     try {
-      setNewReleasesLoading(true)
-const SEARCH_URL = 'https://api.spotify.com/v1/browse/new-releases?limit=10';
-const response = await fetch(SEARCH_URL, SEARCH_PARAM); 
-if(response.ok) {
-const data = await response.json();
-  setNewReleasesData(data.albums.items);
-    setNewReleasesError(false)
-} else{
-throw new Error("Failed to fetch new releases")
-}
+      setNewReleasesLoading(true);
+      const SEARCH_URL =
+        "https://api.spotify.com/v1/browse/new-releases?limit=30";
+      const response = await fetch(SEARCH_URL, SEARCH_PARAM);
+      if (response.ok) {
+        const data = await response.json();
+        setNewReleasesData(data.albums.items);
+        setNewReleasesError(false);
+      } else {
+        throw new Error("Failed to fetch new releases");
+      }
     } catch (error) {
-      setNewReleasesError(true)
-console.error(error)
+      setNewReleasesError(true);
+      console.error(error);
     } finally {
-            setNewReleasesLoading(false)
+      setNewReleasesLoading(false);
     }
   }
 
   const numbers = Array.from({ length: 20 }, (_, index) => index + 1);
-  // Get the current hour
-  function getTime() {
-    const currentHour = new Date().getHours();
-    if (currentHour >= 5 && currentHour < 12) {
-      setTimeOfDay("morning");
-    } else if (currentHour >= 12 && currentHour < 18) {
-      setTimeOfDay("afternoon");
-    } else if (currentHour >= 18 && currentHour < 21) {
-      setTimeOfDay("evening");
-    } else {
-      setTimeOfDay("night");
-    }
-  }
 
   useEffect(() => {
     setDocumentTitle("Audiovista");
-    getTime();
+
     scrollToTop();
   }, []);
   useEffect(() => {
-    if (!searchLoading && !featuredPlaylistLoading && !newReleasesLoading) {
+    if (!featuredPlaylistLoading && !newReleasesLoading) {
       setIsLoading(false);
     } else {
       setIsLoading(true);
     }
-  }, [searchLoading, featuredPlaylistLoading, newReleasesLoading]);
+  }, [featuredPlaylistLoading, newReleasesLoading]);
   useEffect(() => {
-    if (!searchError && !featuredPlaylistError && !newReleasesError) {
+    if (!featuredPlaylistError && !newReleasesError) {
       setError(false);
     } else {
       setError(true);
     }
-  }, [searchError, featuredPlaylistError, newReleasesError]);
+  }, [featuredPlaylistError, newReleasesError]);
 
   // useEffect(() => {
   //   if (accessToken && loggedIn) {
@@ -143,17 +128,16 @@ console.error(error)
   //   }
   // }, [accessToken, loggedIn]);
   useEffect(() => {
-    if (randomArtistName && accessToken) {
-
-      searchRandomArtistAlbum(randomArtistName);
-      if(loggedIn) {
-        getFeaturedPlaylists();
-        getNewReleases();
-      }
-    }  else {
+    if (accessToken) {
+      // searchRandomArtistAlbum(randomArtistName);
+      // if(loggedIn) {
+      getFeaturedPlaylists();
+      getNewReleases();
+      // }
+    } else {
       setIsLoading(true);
     }
-  }, [randomArtistName, accessToken, loggedIn]);
+  }, [accessToken]);
   function refreshHandler() {
     window.location.reload();
   }
@@ -180,7 +164,7 @@ console.error(error)
         </section>
       )} */}
 
-      {loggedIn && !isLoading && !error && newReleasesData.length > 0 && (
+      {!isLoading && !error && newReleasesData.length > 0 && (
         <section className="px-[2.5%] flex flex-wrap flex-col pb-6">
           <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
             New Releases
@@ -205,8 +189,8 @@ console.error(error)
           </div>
         </section>
       )}
-      {loggedIn && !isLoading && !error && featuredPlaylistData.length > 0 && (
-        <section className="px-[2.5%] flex flex-wrap flex-col pb-6">
+      {!isLoading && !error && featuredPlaylistData.length > 0 && (
+        <section className="px-[2.5%] flex flex-wrap flex-col">
           <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
             Featured playlists
           </h2>
@@ -246,7 +230,7 @@ console.error(error)
           </div>
         </section>
       )}
-      {/* {isLoading && !error && <LoaderComp />} */}
+      {/* {isLoading && !error && <LoaderComp />}
       {!isLoading && !error && homeData.length >= 1 && (
         <section className="px-[2.5%] flex flex-wrap flex-col ">
           {loggedIn && (
@@ -274,7 +258,7 @@ console.error(error)
 
           </div>
         </section>
-      )}
+      )} */}
       {error && (
         <section className="flex flex-col h-[70dvh] max-h-[700px] items-center justify-center gap-4">
           <h1 className="text-2xl font-[900] text-center w-full px-[2.5%] pt-8 text-white sm:text-4xl">
