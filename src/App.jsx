@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Routess from "./Routess";
 import Modals from "./components/Modals";
 import { generateRandomString, sha256, base64encode } from "./lib/utils";
+import PageMountLoader from "./components/PageMountLoader";
 export const myContext = createContext();
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -67,6 +68,7 @@ function App() {
   const [cpModalText, setCpModalText] = useState(null);
   const [cpModalTextError, setCpModalTextError] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [isPageMounted, setIsPageMounted] = useState(true);
   const CLIENT_ID = import.meta.env.VITE_REACT_CLIENT_ID;
   const CLIENT_SECRET = import.meta.env.VITE_REACT_CLIENT_SECRET;
   const [isUserEmailRegistered, setIsUserEmailRegistered] = useState(() => {
@@ -128,6 +130,21 @@ function App() {
   useEffect(() => {
     document.title = documentTitle;
   }, [documentTitle]);
+  useEffect(() => {
+    setIsPageMounted(true);
+  }, []);
+  useEffect(() => {
+    let timeoutId;
+    if (isPageMounted) {
+      const delay = loggedIn ? 4000 : 1500;
+      timeoutId = setTimeout(() => {
+        setIsPageMounted(false);
+      }, delay);
+    }
+  
+    return () => clearTimeout(timeoutId);
+  }, [isPageMounted]);
+  
 
   useEffect(() => {
     const updateOnlineStatus = () => {
@@ -833,26 +850,22 @@ function App() {
       className=" min-h-dvh w-full max-w-[1800px]  bg-black flex  justify-between font-nunito"
       id="app"
     >
-      <myContext.Provider value={values}>
-        <Navbar />
-        {/* {expiredToken && (
-          <ExpiredSession
-            setExpiredToken={setExpiredToken}
-            getTokenHandler={getTokenHandler}
-            logOut={logOut}
-          />
-        )} */}
-        {!isOnline && (
-          <Modals
-            text="No internet connection"
-            playlistPage={expiredToken ? true : false}
-          />
-        )}
+      {isPageMounted ? <PageMountLoader/> : (
+        <>
+        <myContext.Provider value={values}>
+          <Navbar />
+         
+          {!isOnline && (
+            <Modals
+              text="No internet connection"
+              playlistPage={expiredToken ? true : false}
+            />
+          )}
 
-        {isHandleClicked && <CheckEmailReg />}
-        <Routess />
-      </myContext.Provider>
-      <ToastContainer
+          {isHandleClicked && <CheckEmailReg />}
+          <Routess />
+        </myContext.Provider>
+        <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
@@ -864,6 +877,10 @@ function App() {
         pauseOnHover
         theme="light"
       />
+        </>
+      )}
+
+  
     </div>
   );
 }
