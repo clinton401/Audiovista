@@ -9,6 +9,7 @@ import EditPlaylistDetails from "../components/EditPlaylistDetails";
 import Modals from "../components/Modals";
 import { msToHMS } from "../lib/utils";
 import useHandleScroll from "../hooks/useHandleScroll";
+import useRandomNavColor from "../hooks/useRandomNavColor";
 function Playlist() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -36,6 +37,8 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
   const  parentRef = useRef(null);
   const childRef = useRef(null);
   const childRefMobile = useRef(null);
+  
+  const chosenNavColor = useRandomNavColor(id);
   async function getPlaylist() {
     setDocumentTitle("Audiovista");
     try {
@@ -73,9 +76,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
     if (accessToken) {
       getPlaylist();
       scrollToTop();
-    } else {
-      setIsLoading(true)
-    }
+    } 
   }, [accessToken, id]);
   useEffect(() => {
     if (editSuccessOrFail) {
@@ -183,6 +184,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
               editPlaylistActiveHandler={editPlaylistActiveHandler}
               editPlaylistActive={editPlaylistActive}
               getPlaylist={getPlaylist}
+              chosenNavColor={chosenNavColor}
             />
           </section>
           <section className="block    h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -201,6 +203,7 @@ const [editSuccessOrFail,  setEditSuccessOrFail] = useState(null)
               getPlaylist={getPlaylist}
               setNavContentsActive={setNavContentsMobileActive}
               ref={childRefMobile}
+              chosenNavColor={chosenNavColor}
             />
           </section>
         </>

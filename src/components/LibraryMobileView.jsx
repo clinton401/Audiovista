@@ -18,7 +18,8 @@ const LibraryMobileView = forwardRef(({
   authUserPlaylistData,
   topArtistByMonth,
   topTrackByMonth,
-  setNavContentsActive
+  setNavContentsActive,
+  chosenNavColor
 }, ref) =>  {
   return (
     <>
@@ -28,8 +29,10 @@ const LibraryMobileView = forwardRef(({
             navContentsActive={navContentsActive}
             isLoading={isLoading}
                name={userData.display_name}
-            setNavContentsActive={setNavContentsActive}/>
-          <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 bg-[#333333]">
+            setNavContentsActive={setNavContentsActive}
+            chosenNavColor={chosenNavColor}
+            />
+          <section className={`flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 ${chosenNavColor.normal}`}>
             <img
               src={
                 userData && userData.images && userData.images.length > 1
@@ -41,7 +44,7 @@ const LibraryMobileView = forwardRef(({
               className="aspect-square h-[150px] shadow-xl rounded-full object-cover"
             />
             <div className="flex flex-col items-start w-full gap-2">
-              <h1 className="font-bold text-2xl text-left  text-white">
+              <h1 className="font-bold text-2xl font-erica text-left  text-white">
                 {userData.display_name}
               </h1>
               <p className="text-xs text-tGray font-bold">
@@ -52,7 +55,7 @@ const LibraryMobileView = forwardRef(({
           <section className="w-full flex flex-col pb-[120px]" ref={ref}>
             {topTrackByMonth.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                   Top tracks this month
                 </h2>
                 <div className="w-full flex  flex-wrap justify-between  items-center ">
@@ -80,7 +83,7 @@ const LibraryMobileView = forwardRef(({
             )}
             {topArtistByMonth.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                   Top artists this month
                 </h2>
                 <span className="w-full overflow-x-auto mobile_filter justify-start flex ">
@@ -105,7 +108,7 @@ const LibraryMobileView = forwardRef(({
 
             {authUserPlaylistData.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                   Playlists{" "}
                 </h2>
                 <span className="w-full overflow-x-auto mobile_filter justify-start flex ">
@@ -131,7 +134,7 @@ const LibraryMobileView = forwardRef(({
             )}
             {followingArtists.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                   Following
                 </h2>
                 <span className="w-full overflow-x-auto mobile_filter justify-start flex ">

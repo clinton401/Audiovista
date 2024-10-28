@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import LoaderMini from "./LoaderMini";
 import { msToHMS } from "../lib/utils";
 import TrackTableBtns from "./TrackTableBtns";
 import { faSpotify } from "@fortawesome/free-brands-svg-icons";
+import { myContext } from "../App";
 const ArtistDesktopView = forwardRef(
   (
     {
@@ -32,6 +33,7 @@ const ArtistDesktopView = forwardRef(
       buttonFollowHandler,
       unAuthModalHandler,
       followLoading,
+      chosenNavColor
     },
     ref
   ) => {
@@ -57,8 +59,9 @@ const ArtistDesktopView = forwardRef(
               isLoading={isLoading}
               name={artistData.name}
               loggedIn={loggedIn}
+              chosenNavColor={chosenNavColor}
             />
-            <section className="w-full min-h-[250px] bg-[#333333] relative p-2">
+            <section className={`w-full min-h-[250px] ${chosenNavColor.normal} relative p-2`}>
               <span className=" absolute z-[1] top-0 rounded-full  overflow-hidden  right-[10%] w-auto h-full ">
                 <img
                   src={
@@ -86,7 +89,7 @@ const ArtistDesktopView = forwardRef(
                   />{" "}
                   Verified Artist
                 </p>
-                <h1 className="font-[900] text-5xl text-left  text-white">
+                <h1 className="font-[900] font-erica text-5xl text-left  text-white">
                   {artistData.name}
                 </h1>
                 {Object.keys(artistData).length > 0 && (
@@ -125,7 +128,7 @@ const ArtistDesktopView = forwardRef(
               </section>
               {artistTracks.length > 0 && (
                 <section className="w-full pt-6">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className="w-full font-[900] font-erica text-2xl text-white pb-2">
                     Popular
                   </h2>
                   <div className="w-full pt-4  flex  flex-wrap justify-between gap-y-4 items-center ">
@@ -170,7 +173,7 @@ const ArtistDesktopView = forwardRef(
               )}
               {artistAlbum.length > 0 && (
                 <section className="w-full pt-6">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className="w-full font-[900] text-2xl font-erica text-white pb-2">
                     Albums
                   </h2>
                   <span className="w-full justify-start flex ">
@@ -201,7 +204,7 @@ const ArtistDesktopView = forwardRef(
               )}
               {relatedArtists.length > 0 && (
                 <section className="w-full pt-6">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className="w-full font-[900] font-erica text-2xl text-white pb-2">
                     Fans also like
                   </h2>
                   <span className="w-full justify-start flex ">
@@ -228,7 +231,7 @@ const ArtistDesktopView = forwardRef(
               )}
               {artistAppearsOn.length > 0 && (
                 <section className="w-full pt-6">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className="w-full font-[900] font-erica text-2xl text-white pb-2">
                     Appears on
                   </h2>
                   <span className="w-full justify-start flex ">

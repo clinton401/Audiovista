@@ -7,6 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import { useNavigate } from "react-router-dom";
 import ArtistMobileView from "../components/ArtistMobileView";
 import useHandleScroll from "../hooks/useHandleScroll";
+import useRandomNavColor from "../hooks/useRandomNavColor";
 function Artist() {
   const [isLoading, setIsLoading] = useState(true);
   const [artistLoading, setArtistLoading] = useState(true);
@@ -46,10 +47,13 @@ function Artist() {
     scrollToTop,
     setDocumentTitle,
     setArtistChange,
-    createToast
+    createToast,
+    navColors
     // SEARCH_PARAM_PUT,
   } = useContext(myContext);
   const { id } = useParams();
+  
+  const chosenNavColor = useRandomNavColor(id);
   // console.log({ dataError, isLoading, artistData });
 
   async function getRelatedArtists() {
@@ -304,6 +308,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       //  setIsArtistFollowed(false);
     }
   }
+  
   useEffect(() => {
     if(followHandle || unFollowHandle || unAuthModal){
       if(modalText) {
@@ -349,9 +354,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       if(loggedIn) {
         isFollowed();
       }
-    } else {
-      setIsLoading(true);
-    }
+    } 
     
   }, [accessToken, id, loggedIn]);
   
@@ -434,6 +437,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
               buttonFollowHandler={buttonFollowHandler}
               unAuthModalHandler={unAuthModalHandler}
               followLoading={followLoading}
+              chosenNavColor={chosenNavColor}
             />
           </section>
           <section className="block   h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -456,6 +460,8 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
               followLoading={followLoading}
                ref={childRefMobile}
                  setNavContentsActive={setNavContentsMobileActive}
+                 
+              chosenNavColor={chosenNavColor}
             />
           </section>
         </>

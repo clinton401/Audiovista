@@ -9,17 +9,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoginBtn from "./LoginBtn";
 import UserBtn from "./UserBtn";
 import TrackPlayBtn from "./TrackPlayBtn";
+
+import { AnimatePresence, motion } from "framer-motion";
+const navAnimation = {
+  hidden: {
+    y: -200,
+    opacity: 0
+  }, 
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      ease: "easeIn",
+      type: "spring",
+      duration: 0.3
+    }
+  }, 
+  exit: {
+    y: -200,
+    opacity: 0,
+    transition: {
+      ease: "easeIn",
+      type: "spring",
+      duration: 0.3
+
+    }
+  }
+}
 const NavLayout = forwardRef(
-  ({ navContentsActive, BackHandler, isLoading, name, loggedIn }, ref) => {
+  ({ navContentsActive, BackHandler, isLoading, name, loggedIn, chosenNavColor }, ref) => {
+    
     return (
-      <nav
-        className={`flex items-center max-w-[1350px] transition-all ease-in duration-300  justify-between px-[2%] z-50  top-2 rounded-tl-md  fixed artist_fixed_width    bg-${
-          navContentsActive ? "[#333333]" : "transparent"
-        } gap-2   py-2`}
+
+      <>
+      <AnimatePresence >
+        {navContentsActive && <motion.nav variants={navAnimation}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+       key="nav_modal"
+        className={` items-center top-[65px] max-w-[1350px]  justify-between px-[2%] z-50   rounded-tl-md  fixed artist_fixed_width    flex   gap-2 ${chosenNavColor.normal }  py-2`}
         ref={ref && ref}
       >
-        <div className=" flex items-center justify-start w-[70%] gap-3">
-          <button
+        {/* <div className=" flex items-center justify-start w-[70%] gap-3"> */}
+          {/* <button
             className={` h-[35px] aspect-square bg-black
                   } relative rounded-full flex justify-center items-center go_back_btn`}
             onClick={BackHandler}
@@ -28,18 +61,22 @@ const NavLayout = forwardRef(
               icon={faChevronLeft}
               className="text-lg  text-white"
             />
-          </button>
-          {navContentsActive && !isLoading && (
-            <span className="flex items-center gap-2 w-[100%] ">
+          </button> */}
+          {!isLoading && (
+            <div className="flex items-center  gap-2 w-[100%] ">
+
               <TrackPlayBtn />
-              <h2 className="font-[900] w-[100%] ellipsis-container text-2xl text-white">
+              <h2 className="font-[900] font-erica w-[100%] ellipsis-container text-2xl text-white">
                 {name}
               </h2>
-            </span>
+            </div>
           )}
-        </div>
-        <div>{!loggedIn ? <LoginBtn /> : <UserBtn />}</div>
-      </nav>
+        {/* </div> */}
+        {/* <div>{!loggedIn ? <LoginBtn /> : <UserBtn />}</div> */}
+      </motion.nav>}
+      </AnimatePresence>
+      
+      </>
     );
   }
 );

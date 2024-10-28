@@ -24,6 +24,7 @@ const LibraryDesktopView = forwardRef(
       authUserPlaylistData,
       topArtistByMonth,
       topTrackByMonth,
+      chosenNavColor
     },
     ref
   ) => {
@@ -42,8 +43,10 @@ const LibraryDesktopView = forwardRef(
               isLoading={isLoading}
               name={userData.display_name}
               loggedIn={loggedIn}
+              
+              chosenNavColor={chosenNavColor}
             />
-            <section className="w-full min-h-[250px] flex items-end  bg-[#333333] gap-4 relative pt-4 pb-8 px-[2.5%] ">
+            <section className={`w-full min-h-[250px] flex items-end ${chosenNavColor.normal} gap-4 relative pt-4 pb-8 px-[2.5%] `}>
               <div className="min-w-[130px] hover:scale-105 transition-all duration-300 ease-in   w-[15%] rounded-md">
                 <img
                   src={
@@ -66,7 +69,7 @@ const LibraryDesktopView = forwardRef(
                   />
                   Profile
                 </h6>
-                <h1 className="text-5xl font-[900]">{userData.display_name}</h1>
+                <h1 className="text-5xl font-[900] font-erica">{userData.display_name}</h1>
 
                 <div className="flex text-base w-full flex-wrap  font-[400] gap-1">
                   <p>{authUserPlaylistData.length} Playlists</p>
@@ -79,7 +82,7 @@ const LibraryDesktopView = forwardRef(
             >
               {topArtistByMonth.length > 0 && (
                 <section className="w-full pt-8  flex  flex-wrap justify-center gap-y-4 items-center">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                     Top artists this month
                   </h2>
                   <span className="w-full justify-start flex ">
@@ -104,7 +107,7 @@ const LibraryDesktopView = forwardRef(
 
               {topTrackByMonth.length > 0 && (
                 <section className="w-full pt-8  flex  flex-wrap justify-center gap-y-4 items-center">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                     Top tracks this month
                   </h2>
                   <div className="w-full   flex  flex-wrap justify-between gap-y-4 items-center ">
@@ -150,7 +153,7 @@ const LibraryDesktopView = forwardRef(
 
               {followingArtists.length > 0 && (
                 <section className="w-full pt-8  flex  flex-wrap justify-center gap-y-4 items-center">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                     Following
                   </h2>
                   <span className="w-full justify-start flex ">
@@ -175,7 +178,7 @@ const LibraryDesktopView = forwardRef(
 
               {authUserPlaylistData.length > 0 && (
                 <section className="w-full pt-8  flex  flex-wrap justify-center gap-y-4 items-center">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className=" font-erica w-full font-[900] text-2xl text-white pb-2">
                     Playlists
                   </h2>
                   {/* <span className="home-wrapper   border ellipsis-container ">

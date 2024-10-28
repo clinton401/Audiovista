@@ -42,7 +42,7 @@ function TopResultCard({
           className="shadow-xl w-[100px] aspect-square rounded-lg"
         />
       )}
-      <h2 className="text-2xl w-full font-bold text-start  ellipsis-container">
+      <h2 className="font-erica text-2xl w-full font-bold text-start  ellipsis-container">
         {resultName}
       </h2>
       {type === "track" && artists !== undefined && (
@@ -57,16 +57,18 @@ function TopResultCard({
             </>
           )}
           Song -
-          <strong className="flex items-center font-[800] ellipsis-container gap-2 ml-1 relative">
-            {artists.map((art) => {
+          <strong className="flex items-center font-[800] ellipsis-container  ml-1 relative">
+            {artists.map((art, index) => {
               return (
                 <Link
                   to={`/artist/${art.id}`}
                   key={art.id}
-                  className="text-[14px] text-white z-10 hover:underline track_link relative"
+                  className="text-[14px] text-white z-10 hover:underline flex items-center  track_link relative"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {art.name},
+                  {art.name}
+                  
+                  {artists.length !== index + 1 && <span className="px-1 font-normal"> | </span>}
                 </Link>
               );
             })}

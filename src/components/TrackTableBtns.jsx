@@ -130,7 +130,7 @@ function TrackTableBtns({
         onMouseEnter={() => setIsHovered(true)}
       >
         <span className="px-4 py-2 h-full flex gap-1 w-[55%] items-center ellipsis-container">
-          <span className="w-[46px]">{index + 1}</span>
+          <span className="w-[46px]  flex items-center justify-left">{index + 1}</span>
           <span className="flex gap-x-3 items-center w-full ellipsis-container h-full">
             <img
               src={imgUrl}

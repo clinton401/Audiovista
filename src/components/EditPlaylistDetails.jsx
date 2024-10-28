@@ -288,7 +288,7 @@ if(playlistImageError) {
         className="w-full max-w-[500px] bg-[#333333] flex flex-col gap-2 p-4 rounded-md"
       >
         <span className="flex justify-between gap-x-2 gap-y-4 items-center">
-          <h2 className="text-xl font-bold ">Edit details</h2>
+          <h2 className="text-xl font-bold font-erica ">Edit details</h2>
           <button
             className="w-[35px] aspect-square text-2xl rounded-md flex items-center justify-center "
             onClick={closePage}

@@ -1,33 +1,58 @@
 import {useContext, forwardRef, useEffect} from "react"
-import {
-  faChevronLeft,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from 'react-router-dom';
 import UserBtn from "./UserBtn";
 import LoginBtn from "./LoginBtn";
 import { myContext } from "../App";
 import TrackPlayBtn from "./TrackPlayBtn";
+import { motion, AnimatePresence } from "framer-motion";
+const navAnimation = {
+  hidden: {
+    y: -200,
+    opacity: 0
+  }, 
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      ease: "easeIn",
+      type: "spring",
+      duration: 0.3
+    }
+  }, 
+  exit: {
+    y: -200,
+    opacity: 0,
+    transition: {
+      ease: "easeIn",
+      type: "spring",
+      duration: 0.3
+
+    }
+  }
+}
 const NavLayoutMobile = forwardRef(
-  ({ navContentsActive, isLoading, name, setNavContentsActive }, ref) => {
+  ({ navContentsActive, isLoading, name, setNavContentsActive, 
+    chosenNavColor }, ref) => {
     const { loggedIn } = useContext(myContext);
-    const navigate = useNavigate();
     useEffect(() => {
       setNavContentsActive(false);
     }, []);
-    const BackHandler = () => {
-      navigate(-1);
-    };
+    
     return (
-      <nav
-        className={`fixed  px-[2.5%] py-4 z-40  flex  w-full bg-${
-          navContentsActive ? "[#333333]" : "transparent"
-        } justify-between items-center gap-2 flex-wrap top-0 left-0`}
+      <>
+      <AnimatePresence>
+        {navContentsActive && <motion.nav
+        variants={navAnimation}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+         key="nav_mobile_modal"
+        className={`fixed  px-[2.5%] py-4 z-40 top-0 flex ${chosenNavColor.normal } w-full  justify-between items-center  gap-2 flex-wrap left-0`}
         ref={ref && ref}
       >
         <div className="flex-grow flex .ellipsis-container w-[60%] items-center gap-2">
-          <button
-            className={` w-[45px] aspect-square bg-black
+          <TrackPlayBtn/>
+          {/* <button
+            className={`  aspect-square 
                   } relative rounded-full flex justify-center items-center go_back_btn`}
             onClick={BackHandler}
           >
@@ -35,9 +60,9 @@ const NavLayoutMobile = forwardRef(
               icon={faChevronLeft}
               className="text-xl  text-white"
             />
-          </button>
-          {navContentsActive && !isLoading && (
-            <h2 className="font-[900] w-full truncate text-2xl text-white">
+          </button> */}
+          { !isLoading && (
+            <h2 className="font-[900] font-erica w-full truncate text-2xl text-white">
               {name}
             </h2>
             // </span>
@@ -45,7 +70,10 @@ const NavLayoutMobile = forwardRef(
         </div>
 
         {!loggedIn ? <LoginBtn /> : <UserBtn />}
-      </nav>
+      </motion.nav>}
+      </AnimatePresence>
+      
+      </>
     );
   }
 );

@@ -10,7 +10,7 @@ function NotFoundView() {
         alt="logo"
         className="w-1/4 min-w-40 max-w-[400px] aspect-square "
       /> */}
-      <h2 className="font-[900] text-2xl text-center w-full">
+      <h2 className="font-[900] font-erica text-2xl text-center w-full">
         404 - PAGE NOT FOUND
       </h2>
       <p className="w-full ipad:w-3/4 text-center">

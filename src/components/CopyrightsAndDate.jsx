@@ -15,8 +15,8 @@ function CopyrightsAndDate({ release_date, copyrights }) {
       <section className="w-full text-gray-300 pt-6  px-[2.5%] flex gap-2 flex-col">
         <p className="font-semibold text-base">{` ${monthText} ${day || "Unknown Day"}, ${year || "Unknown Year"}`}</p>
         {copyrights.length > 0 && <>
-        {copyrights.map(copyright => {
-            return <p key={copyright?.text} className="text-xs">&copy; {copyright?.text}</p>
+        {copyrights.map((copyright, index) => {
+            return <p key={index} className="text-xs">&copy; {copyright?.text}</p>
         })}
         </>}
       </section>

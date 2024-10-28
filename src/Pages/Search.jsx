@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ParentLayouts from "../components/ParentLayouts";
@@ -8,32 +8,7 @@ import SearchMobileView from "../components/SearchMobileView";
 import { useDebouncedCallback } from "use-debounce";
 function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputFocused, setInputFocused] = useState(false);
-  const [inputValue, setInputValue] = useState(() => {
-    try {
-      // setInputFocused(true);
-      const refreshedParam = searchParams.get("query");
-      // const storedValue = window.localStorage.getItem("input_value");
-      // const parsedValue = JSON.parse(storedValue);
-      if (refreshedParam) {
-        setInputFocused(true);
-        return refreshedParam;
-      }
-      // else if (!refreshedParam && parsedValue !== null) {
-      //   setInputFocused(true);
-      //   return parsedValue;
-      // }
-      else {
-        setInputFocused(false);
-        return "";
-      }
-      //  return parsedValue !== null ? parsedValue : "";
-    } catch (error) {
-      console.error("Error parsing JSON from localStorage:", error);
-      setInputFocused(false);
-      return "";
-    }
-  });
+ 
 
   const [filters, setFilters] = useState(
     "all"
@@ -68,9 +43,15 @@ function Search() {
     accessToken,
     scrollToTop,
     setDocumentTitle,
+    inputHandler,
+    inputValue, setInputValue,
+    inputFocused, setInputFocused,
+    refScrollToTop
+
   } = useContext(myContext);
   const navigate = useNavigate();
-  const inputRef = createRef();
+  const inputRef = useRef();
+  const parentRef = useRef();
 
   const pinkShades = [
     "#FF0000",
@@ -145,34 +126,41 @@ function Search() {
     if (inputValue.length > 0) {
       navigate("/search");
       setInputValue("");
+      
       setSearchParams({}, { replace: true });
     } else {
       navigate(-3);
     }
   };
 
-  function inputHandler({ target }) {
-    scrollToTop();
-    const value = target.value;
-    setInputValue(value);
-  }
+  // function inputHandler({ target }) {
+  //   scrollToTop();
+  //   const value = target.value;
+  //   setInputValue(value);
+  // }
 
   function clearInputHandler() {
-    scrollToTop();
+    refScrollToTop(parentRef);
     setInputFocused(false);
     setInputValue("");
-    inputRef.current.focus();
+    if (inputRef) {
+      inputRef?.current?.focus();
+    }
   }
   const [firstInputFocus, setFirstInputFocus] = useState(false);
   function inputFocusfunction() {
     setFirstInputFocus(true);
-    inputRef.current.focus();
+    if (inputRef) {
+      inputRef?.current?.focus();
+    }
   }
   function clearInputHandlerMobile() {
-    scrollToTop();
+    refScrollToTop(parentRef);
     setInputFocused(false);
     setInputValue("");
-    inputRef.current.focus();
+    if (inputRef) {
+      inputRef?.current?.focus();
+    }
   }
   const backHandlerMobile = () => {
     if (inputValue.length > 0) {
@@ -186,6 +174,7 @@ function Search() {
   const debouncedFetchData = useDebouncedCallback(totalSearchHandler, 500);
   function submitHandler(e) {
     e.preventDefault();
+    
     //  if(inputValue.length > 0) {
     //   debouncedFetchData(inputValue)
     //  }
@@ -193,13 +182,17 @@ function Search() {
 
   const [playlistVerify, setPlaylistVerify] = useState(false);
   useEffect(() => {
-    inputRef.current.focus();
+    
     scrollToTop();
+    refScrollToTop(parentRef);
     setDocumentTitle("Audiovista - Search");
+    // if (inputRef) {
+    //   inputRef?.current?.focus();
+    // }
   }, []);
   useEffect(() => {
-    if (firstInputFocus) {
-      inputRef.current.focus();
+    if (firstInputFocus && inputRef) {
+      inputRef?.current?.focus();
     }
   }, [firstInputFocus]);
   useEffect(() => {
@@ -222,6 +215,7 @@ function Search() {
   }, [topResultData]);
   function genreHandler(param) {
     scrollToTop();
+    refScrollToTop(parentRef);
     clearDatas();
     setInputValue(param);
   }
@@ -265,6 +259,8 @@ function Search() {
       setQueryRefreshed(refreshedQuery);
     }
   }, [accessToken, refreshedQuery]);
+
+ 
   useEffect(() => {
     // Perform actions that need to happen when filters state changes
 
@@ -300,6 +296,7 @@ function Search() {
   //  useEffect(() )
   const filtersHandler = (param) => {
     scrollToTop();
+    refScrollToTop(parentRef);
     const existingParams = new URLSearchParams(searchParams);
 
     // Update the filters parameter
@@ -392,6 +389,7 @@ function Search() {
     if (inputValue.length > 0) {
       setInputFocused(true);
       setFirstInputFocus(true);
+      refScrollToTop(parentRef);
       // debouncedFetchData(inputValue);
     } else {
       setInputFocused(false);
@@ -405,15 +403,14 @@ function Search() {
     }
   }, [inputValue]);
   useEffect(() => {
-    if( accessToken) {
-      if (inputValue.length > 0 ) {
+    if (accessToken) {
+      if (inputValue.length > 0) {
         // setSearchParams({query: inputValue, filter: filters})
         debouncedFetchData(inputValue);
       }
     } else {
-setIsLoading(true);
+      setIsLoading(true);
     }
-    
   }, [inputValue]);
   function clearDatas() {
     setAlbumsData([]);
@@ -461,7 +458,7 @@ setIsLoading(true);
   // }, []);
   useEffect(() => {
     function removeFocus(event) {
-      const isElementInFocus = document.activeElement === inputRef.current;
+      const isElementInFocus = inputRef ? document.activeElement === inputRef.current : false;
 
       if (event.key === "Escape" && isElementInFocus) {
         inputRef.current.blur();
@@ -503,7 +500,7 @@ setIsLoading(true);
     }
   }, [inputValue, filters]);
   return (
-    <ParentLayouts>
+    <ParentLayouts ref={parentRef}>
       <section className="hidden relative px-[2.5%]  ipad:block w-full">
         <DesktopView
           backHandler={backHandler}

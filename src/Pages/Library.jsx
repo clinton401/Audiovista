@@ -7,6 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import LibraryDesktopView from "../components/LibraryDesktopView";
 import LibraryMobileView from "../components/LibraryMobileView";
 import useHandleScroll from "../hooks/useHandleScroll";
+import useRandomNavColor from "../hooks/useRandomNavColor";
 function Library() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -38,6 +39,8 @@ function Library() {
   const childRef = useRef(null);
   const childRefMobile = useRef(null);
   const navigate = useNavigate();
+  
+  const chosenNavColor = useRandomNavColor();
   async function getTopArtistsByMonth() {
     try {
       setTopArtistByMonthLoading(true);
@@ -108,8 +111,7 @@ function Library() {
     if (loggedIn && accessToken) {
       getTopArtistsByMonth();
       getTopTracksByMonth();
-    } else {
-      setIsLoading(true)
+      scrollToTop()
     }
   }, [loggedIn, accessToken]);
   useEffect(() => {
@@ -169,6 +171,8 @@ function Library() {
                   topArtistByMonth={topArtistByMonth}
                   topTrackByMonth={topTrackByMonth}
                   navContentsActive={navContentsActive}
+                  
+                chosenNavColor={chosenNavColor}
                 />
               </section>
               <section className="block   h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -185,6 +189,7 @@ function Library() {
                    navContentsActive={navContentsMobileActive}
                    setNavContentsActive={setNavContentsMobileActive}
                     ref={childRefMobile}
+                                    chosenNavColor={chosenNavColor}
                 />
               </section>
             </>
@@ -196,7 +201,7 @@ function Library() {
         </>
       ) : (
         <section className="w-full h-dvh min-h-[400px] max-h-[900px] flex flex-col px-[2.5%] py-4 items-center justify-center gap-4 ">
-          <h2 className="text-2xl text-center font-[900]  ">
+          <h2 className="text-2xl text-center font-[900] font-erica ">
             {" "}
             You need to be logged in to view your library
           </h2>

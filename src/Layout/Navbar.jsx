@@ -1,5 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+} from "react";
+import { NavLink, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
@@ -7,18 +13,22 @@ import {
   faBookBookmark,
   faPlus,
   faThumbtack,
-  faSearch,
+  faChevronLeft,
   faCheck,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { myContext } from "../App";
 import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 import LoginBtn from "../components/LoginBtn";
 import Loader from "../components/Loader";
 import avatar from "../assets/user (1).png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import LoaderMini from "../components/LoaderMini";
-import Modals from "../components/Modals";
+
+import UserBtn from "../components/UserBtn";
+
+import logo from "../assets/logo.png";
 const containerVariant = {
   hidden: {
     // opacity: 0,
@@ -45,7 +55,7 @@ const containerVariant = {
     },
   },
 };
-function Navbar() {
+const Navbar = forwardRef(({}, ref) => {
   const [filters, setFilters] = useState("artists");
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -60,17 +70,19 @@ function Navbar() {
     topArtistLoading,
     topArtistError,
     authUserPlaylistData,
-    setTopArtistError,
-    setTopArtistLoading,
-    SEARCH_PARAM,
+    inputValue: navInputValue,
+    inputFocused,
+    clearInputHandler,
+    inputHandler,
     followingArtists,
     artistChange,
     setArtistChange,
     accessToken,
     userData,
     setCpModalText,
-    setCpModalTextError
+    setCpModalTextError,
   } = useContext(myContext);
+  const { pathname } = useLocation();
   function filtersHandler(param) {
     setFilters(param);
   }
@@ -98,11 +110,11 @@ function Navbar() {
         setCreatePlaylistData(data);
         setCreatePlaylistError(false);
         navigate(`/playlist/${data.id}`);
-        setCpModalText('Playlist created successfully')
+        setCpModalText("Playlist created successfully");
       } else {
         setCreatePlaylistData(null);
         setCreatePlaylistError(true);
-         setCpModalTextError("Something went wrong");
+        setCpModalTextError("Something went wrong");
       }
     } catch (error) {
       setCreatePlaylistData(null);
@@ -125,40 +137,6 @@ function Navbar() {
   }
   const navigate = useNavigate();
 
-
-  // useEffect(() => {
-  //   let timeoutId;
-
-  //   if (modalText) {
-  //     timeoutId = setTimeout(() => {
-  //       setModalText(null);
-  //     }, 3000);
-  //   }
-
-  //   // Clean up the timeout to avoid memory leaks
-  //   return () => {
-  //     if (timeoutId) {
-  //       clearTimeout(timeoutId);
-  //     }
-  //   };
-  // }, [modalText]);
-  // useEffect(() => {
-  //   if (createPlaylistData !== null) {
-  //     setModalText("Playlist created succesfully");
-  //   }
-  // }, [createPlaylistData]);
-
-  // useEffect(() => {
-  //   function showInputHandler() {
-  //     if (showInput) {
-  //       setShowInput(false);
-  //     }
-  //   }
-  //   window.addEventListener("mousedown", showInputHandler);
-
-  //   return () => window.removeEventListener("mousedown", showInputHandler);
-  // }, [showInput]);
-
   useEffect(() => {
     if (showInput && inputRef.current) {
       inputRef.current.focus();
@@ -170,13 +148,71 @@ function Navbar() {
   //   createPlaylistError,
   //   createPlaylistData,
   // });
+  function submitNavHandler(e) {
+    e.preventDefault();
+    //  if(inputValue.length > 0) {
+    //   debouncedFetchData(inputValue)
+    //  }
+  }
 
   return (
     <>
-      <header className="hidden w-[25%] max-w-[440px] ipad:min-h-[400px]  overflow-y-auto fixed top-0 left-0 ipad:max-h-[900px] h-dvh py-2 px-4 overflow-x-hidden ipad:flex flex-col gap-2">
-      
+      <header className="w-full h-[65px] py-2 fixed z-[1000] hidden ipad:flex px-[2.5%] justify-between items-center gap-2">
+        <Link className="flex justify-center  items-center gap-2">
+          <img src={logo} alt="logo" className="aspect-square w-[30px]" />
+          {/* <h2 className=" hidden miniScreen:flex font-[700] text-xl text-white font-erica ">
+            Audiovista
+          </h2> */}
+        </Link>
+
+        <span className=" flex items-center text-white justify-start gap-3" >
+          <button
+            className=" w-[44px] aspect-square bg-primary relative rounded-full flex justify-center items-center go_back_btn"
+            onClick={()=> navigate('/')}
+          >
+            <FontAwesomeIcon
+              icon={faHouse}
+              className={`text-lg ${pathname === "/" ? "text-white" : "text-tGray"} `}
+            />
+          </button>
+
+          <form className="relative" onSubmit={submitNavHandler}>
+            <input
+              type="text"
+              className="bg-primary placeholder:italic placeholder:text-sm placeholder:font-normal rounded-full font-medium  outline-transparent w-96 py-3 px-[42px] text-sm "
+              value={navInputValue}
+              onChange={inputHandler}
+              onClick={() => {
+                if (pathname !== "/search") {
+                  navigate("/search");
+                }
+              }}
+              ref={ref}
+              spellCheck="false"
+              placeholder="What do you want to play?"
+            />
+            <button className="absolute h-full w-[40px]  left-0 top-0 rounded-tl-full rounded-bl-full flex items-center justify-center outline-transparent">
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </button>
+            {navInputValue.length > 0 && (
+              <button
+                className="absolute h-full w-[40px]  right-0 top-0 rounded-tr-full rounded-br-full flex items-center justify-center outline-transparent"
+                onClick={clearInputHandler}
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            )}
+          </form>
+        </span>
+
+        {!loggedIn ? <LoginBtn /> : <UserBtn />}
+      </header>
+      <aside
+        className="hidden w-[25%] max-w-[440px] pt-[65px] ipad:min-h-[400px]  overflow-y-auto fixed top-0 left-0 ipad:max-h-[900px] h-dvh py-2 px-4 overflow-x-hidden ipad:flex flex-col gap-2"
+        id="header_aside"
+      >
         {/* {(createPlaylistError || createPlaylistData !== null) && <Modals />} */}
-        <nav
+        {/* <nav
           aria-label="home and search"
           className="w-full bg-primary rounded-md px-[5%]  flex flex-col justify-center gap-4 min-h-[120px] "
         >
@@ -185,19 +221,19 @@ function Navbar() {
             to="/"
           >
             <FontAwesomeIcon icon={faHouse} />
-            <h2>Home</h2>
+            <h2 className="font-erica">Home</h2>
           </NavLink>
           <NavLink
             className="flex gap-4 outline-transparent  items-center  text-tGray text-lg transition-all duration-300	font-bold  hover:text-white"
             to="/search"
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
-            <h2>Search</h2>
+            <h2 className="font-erica">Search</h2>
           </NavLink>
-        </nav>
+        </nav> */}
         <nav
           aria-label="Library"
-          className="text-tGray w-full relative min-h-[280px]  bg-primary calc px-[5%] pb-4 rounded-md"
+          className="text-tGray w-full relative min-h-[280px]  bg-primary h-full  px-[5%] pb-4 rounded-md"
         >
           <div className="w-full sticky z-[5] bg-primary py-4 shadow-lg top-0 left-0 flex flex-wrap gap-2 text-xl items-center justify-between font-bold">
             <NavLink
@@ -205,12 +241,14 @@ function Navbar() {
               className="flex gap-4 outline-transparent  items-center text-tGray text-lg	font-bold transition-all duration-300 hover:text-white"
             >
               <FontAwesomeIcon icon={faBookBookmark} />
-              <h2>Library</h2>
+              <h2 className="font-erica">Library</h2>
             </NavLink>
             {loggedIn && (
               <span className="" onClick={(e) => e.stopPropagation()}>
-                <div className="tooltip-container">
-                  <span className="tooltip text-sm font-[500]">Create playlist</span>
+                <div className="tooltip-container ">
+                  <span className="tooltip text-sm font-[500]">
+                    Create playlist
+                  </span>
                   <button
                     className={`bg-transparent border-none ${
                       showInput ? "rotate-45" : ""
@@ -422,7 +460,7 @@ function Navbar() {
               )}
               {topArtistError && (
                 <div className="w-full calcHeight3  flex items-center justify-center  py-4">
-                  <h2 className="text-2xl flex items-center justify-center text-white font-[900]">
+                  <h2 className="text-2xl flex font-erica items-center justify-center text-white font-[900]">
                     Details not found
                   </h2>
                 </div>
@@ -430,8 +468,11 @@ function Navbar() {
             </>
           )}
         </nav>
-      </header>
-      <header className="flex w-full left-0 fixed bottom-0 h-[50px] z-[2000] justify-evenly bg-white blurred ipad:hidden">
+      </aside>
+      <footer
+        className="flex w-full left-0 fixed bottom-0 h-[50px] z-[2000] justify-evenly bg-white blurred ipad:hidden"
+        id="header_aside"
+      >
         <NavLink
           className="flex gap-2 flex-col justify-center items-center text-tGray 	font-bold transition-all duration-300 hover:text-white"
           to="/"
@@ -453,9 +494,9 @@ function Navbar() {
           <FontAwesomeIcon icon={faBookBookmark} className="text-xl" />
           {/* <h2 className="text-ssm">Library</h2> */}
         </NavLink>
-      </header>
+      </footer>
     </>
   );
-}
+});
 
 export default Navbar;

@@ -24,6 +24,8 @@ const UserDesktopView = forwardRef(
       usersPlaylist,
       navContentsActive,
       followLoading,
+      chosenNavColor
+
     },
     ref
   ) => {
@@ -38,8 +40,9 @@ const UserDesktopView = forwardRef(
               isLoading={isLoading}
               name={usersData.display_name}
               loggedIn={loggedIn}
+              chosenNavColor={chosenNavColor}
             />
-            <section className="w-full min-h-[250px] flex items-end  bg-[#333333] gap-4 relative pt-4 pb-8 px-[2.5%] ">
+            <section className={`w-full min-h-[250px] flex items-end  ${chosenNavColor.normal} gap-4 relative pt-4 pb-8 px-[2.5%] `}>
               <div className="min-w-[130px] hover:scale-105 transition-all duration-300 ease-in   w-[15%] rounded-md">
                 <img
                   src={
@@ -62,7 +65,7 @@ const UserDesktopView = forwardRef(
                   />
                   Profile
                 </h6>
-                <h1 className="text-5xl font-[900]">
+                <h1 className="text-5xl font-erica font-[900]">
                   {usersData.display_name}
                 </h1>
 
@@ -112,7 +115,7 @@ const UserDesktopView = forwardRef(
               </section>
               {usersPublicPlaylist.length > 0 && (
                 <section className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className="w-full font-[900] font-erica text-2xl text-white pb-2">
                     Playlists
                   </h2>
                   {usersPublicPlaylist.slice(0, 20).map((playlist_d) => {

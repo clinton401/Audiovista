@@ -7,6 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import UserDesktopView from "../components/UserDesktopView";
 import UserMobileView from "../components/UserMobileView";
 import useHandleScroll from "../hooks/useHandleScroll";
+import useRandomNavColor from "../hooks/useRandomNavColor";
 function User() {
   const [isLoading, setIsLoading] = useState(true);
   const [playlistLoading, setPlaylistLoading] = useState(true);
@@ -43,6 +44,8 @@ function User() {
   const childRef = useRef(null);
   const childRefMobile = useRef(null);
   const navigate = useNavigate();
+  
+  const chosenNavColor = useRandomNavColor(id);
 useHandleScroll(
   isLoading,
   dataError,
@@ -206,6 +209,7 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
     if (accessToken) {
       getUserProfile();
       getUserPlaylist();
+      scrollToTop();
     } else {
       setIsLoading(true)
     }
@@ -278,9 +282,7 @@ https://api.spotify.com/v1/me/following/contains?type=user&ids=${encodeURICompon
 if(loggedIn && !userAuth) {
   isFollowed();
 }
-    } else {
-      setIsLoading(true)
-    }
+    } 
    
   }, [accessToken, id, loggedIn, userAuth]);
 
@@ -321,6 +323,7 @@ if(loggedIn && !userAuth) {
               usersPlaylist={usersPlaylist}
               followLoading={followLoading}
               navContentsActive={navContentsActive}
+              chosenNavColor={chosenNavColor}
             />
           </section>
           <section className="block   h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -340,6 +343,7 @@ if(loggedIn && !userAuth) {
                 setNavContentsActive={setNavContentsMobileActive}
               ref={childRefMobile}
                navContentsActive={navContentsMobileActive}
+               chosenNavColor={chosenNavColor}
             />
           </section>
         </>

@@ -9,11 +9,36 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AnimatePresence, motion } from "framer-motion";
-
+const containerVariant = {
+  hidden: {
+    opacity: 0,
+    x: 300,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.3,
+      // delay: 0.3,
+      // mass: 0.4,
+      // damping: 8,
+      // when: "beforeChildren"
+      ease: "easeInOut",
+    },
+  },
+  exit: {
+    opacity: 0,
+    x: 300,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+    },
+  },
+};
 function UserBtn() {
   const [newCreatorName, setNewCreatorName] = useState(null);
   const [showOptions, setShowOptions] = useState(false);
-  const { logOut, userData, containerVariant } = useContext(myContext);
+  const { logOut, userData } = useContext(myContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,9 +63,9 @@ function UserBtn() {
   return (
     <>
       {userData && (
-        <div className="relative">
+        <div className="relative ">
           <button
-            className="user_btn items-center hidden ipad:flex p-2 bg-white  gap-3 text-primary border rounded-full font-bold"
+            className="user_btn items-center hidden  min-w-[160px] ipad:flex p-2 bg-white  gap-3 text-primary border rounded-full font-bold"
             onClick={(e) => {
               e.stopPropagation();
               setShowOptions(!showOptions);
@@ -71,7 +96,7 @@ function UserBtn() {
           <AnimatePresence>
             {showOptions && (
               <motion.span
-                className="ipad:absolute flex flex-col ipad:z-[1100] pt-10 font-bold ipad:font-normal text-2xl px-[10%] ipad:p-0 fixed top-0 ipad:top-[127%] h-dvh ipad:h-auto rounded-md ipad:text-sm w-full ipad:w-[120%] left-0 ipad:left-[50%] ipad:translate-x-[-50%] bg-black ipad:bg-white ipad:divide-y ipad:divide-tGray ipad:text-primary "
+                className=" flex ipad:absolute  flex-col text-white z-[1000] pt-10 font-bold ipad:font-normal text-2xl px-[10%] ipad:p-0 fixed top-0 ipad:top-[55px] h-dvh ipad:h-auto rounded-md ipad:text-sm w-full ipad:w-[200px]   right-0 bg-black ipad:bg-white ipad:divide-y ipad:divide-tGray ipad:text-primary "
                 variants={containerVariant}
                 initial="hidden"
                 animate="visible"

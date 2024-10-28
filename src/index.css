@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Gravitas+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -26,7 +26,7 @@ body {
   background-color: #000000;
 }
 
-header a.active {
+#header_aside a.active {
   color: #fff;
 }
 .calcHeight {
@@ -271,6 +271,10 @@ border: 1px solid rgba(0,0,0,0.25);
   transition: all 0.3s ease-in-out;
   /* margin-bottom: 30px; */
 }
+#skeleton_wrapper_home {
+  width: clamp(150px, calc(20% - 16px), 300px);
+}
+
 .home-wrapper {
   width: clamp(150px, 20%, 300px);
   /* padding-bottom: 30px; */
@@ -369,6 +373,7 @@ border: 1px solid rgba(0,0,0,0.25);
    transform: translateX(-50%);
 }
 
+
 .tooltip::before {
   background-color: #36454f;
   position: absolute;
@@ -381,8 +386,16 @@ border: 1px solid rgba(0,0,0,0.25);
   transform: rotate(45deg);
 }
 
+
+
 .tooltip-container:hover .tooltip {
   top: -50px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.tooltip-container.navbar_tooltip:hover .tooltip {
+  top: 50px;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -758,7 +771,98 @@ border: 1px solid rgba(0,0,0,0.25);
  .newtons-cradle__dot:last-child {
   animation: swing2 var(--uib-speed) linear infinite;
  }
+
+.mount_loader{
+  position: relative;
+
+}
+
+.mount_loader span {
+  position: absolute;
+  color: #fff;
+  height: 100%;
+  top: 0;
+  text-align: center;
+  left: 0;
+  width: 100%;
+  /* border: 1px solid red; */
+  /* transform: translate(-50%, -50%); */
+  font-size: 30px;
+  letter-spacing: 5px;
+}
+
+.mount_loader span:nth-child(1) {
+  color: transparent;
+  -webkit-text-stroke: 0.3px rgb(128, 198, 255);
+}
+
+.mount_loader span:nth-child(2) {
+  color: rgb(128, 198, 255);
+  -webkit-text-stroke: 1px rgb(128, 198, 255);
+  animation: uiverse723 3s ease-in-out infinite;
+}
+/* From Uiverse.io by G4b413l */ 
+.line-wobble {
+  --uib-size: 80px;
+  --uib-speed: 1.55s;
+  --uib-color: rgb(128, 198, 255);
+  --uib-line-weight: 5px;
+  position: relative;
+  display: flex;
+  margin-top: 15px;
+  align-items: center;
+  justify-content: center;
+  height: var(--uib-line-weight);
+  width: var(--uib-size);
+  border-radius: calc(var(--uib-line-weight) / 2);
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+ }
  
+ .line-wobble::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--uib-color);
+  opacity: 0.1;
+ }
+ 
+ .line-wobble::after {
+  content: '';
+  height: 100%;
+  width: 100%;
+  border-radius: calc(var(--uib-line-weight) / 2);
+  animation: wobble var(--uib-speed) ease-in-out infinite;
+  transform: translateX(-90%);
+  background-color: var(--uib-color);
+ }
+ 
+ @keyframes wobble {
+  0%,
+   100% {
+   transform: translateX(-90%);
+  }
+ 
+  50% {
+   transform: translateX(90%);
+  }
+ }
+ 
+
+@keyframes uiverse723 {
+  0%, 100% {
+    clip-path: polygon(0% 45%, 15% 44%, 32% 50%, 
+     54% 60%, 70% 61%, 84% 59%, 100% 52%, 100% 100%, 0% 100%);
+  }
+
+  50% {
+    clip-path: polygon(0% 60%, 16% 65%, 34% 66%, 
+     51% 62%, 67% 50%, 84% 45%, 100% 46%, 100% 100%, 0% 100%);
+  }
+}
  @keyframes swing {
   0% {
    transform: rotate(0deg);

@@ -29,6 +29,7 @@ const PlaylistMobileView = forwardRef((
   editPlaylistActiveHandler,
   getPlaylist,
   setNavContentsActive,
+  chosenNavColor
 }, ref) => {
   return (
     <>
@@ -39,8 +40,10 @@ const PlaylistMobileView = forwardRef((
             isLoading={isLoading}
             name={playlistData.name}
             setNavContentsActive={setNavContentsActive}
+            
+            chosenNavColor={chosenNavColor}
           />
-          <section className="flex flex-col px-[2.5%] justify-center items-center gap-2 pt-20 pb-6 bg-[#333333]">
+          <section className={`flex flex-col px-[2.5%] justify-center items-center gap-2 pt-20 pb-6 ${chosenNavColor.normal} `}>
             <img
               src={
                 Object.keys(playlistData).length > 0 &&
@@ -55,7 +58,7 @@ const PlaylistMobileView = forwardRef((
             />
 
             <div className="flex flex-col items-start w-full ">
-              <h1 className="font-bold text-2xl text-left  text-white">
+              <h1 className="font-bold text-2xl text-left font-erica text-white">
                 {playlistData.name}
               </h1>
               {playlistData.type === "playlist" && (
@@ -213,7 +216,7 @@ const PlaylistMobileView = forwardRef((
             </section>
           ) : (
             <span className="w-full  pt-8  flex flex-col gap-2 px-[2.5%]">
-              <h2 className="w-full font-[900] text-center text-2xl">
+              <h2 className="w-full font-[900] font-erica text-center text-2xl">
                 Empty {playlistData.type}
               </h2>
             </span>

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import Navbar from "./Layout/Navbar";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import CheckEmailReg from "./components/CheckEmailReg";
@@ -7,6 +7,7 @@ import Routess from "./Routess";
 import Modals from "./components/Modals";
 import { generateRandomString, sha256, base64encode } from "./lib/utils";
 import PageMountLoader from "./components/PageMountLoader";
+import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
 export const myContext = createContext();
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -75,13 +76,56 @@ function App() {
 
     return isRegistered === "true";
   });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [inputFocused, setInputFocused] = useState(false);
+  
+  const [inputValue, setInputValue] = useState(() => {
+    
+      const refreshedParam = searchParams.get("query");
+      if (refreshedParam) {
+        setInputFocused(true);
+        return refreshedParam;
+      }
+     
+      else {
+        setInputFocused(false);
+        return "";
+      }
+      //  return parsedValue !== null ? parsedValue : "";
+    
+  });
   const [isHandleClicked, setIsHandleClicked] = useState(false);
   // const redirectURI = "https://audiovista.netlify.app/";
-
+const navbarInputRef = useRef();
+const {pathname} = useLocation();
+const navigate = useNavigate()
   const redirectURI = import.meta.env.VITE_REACT_REDIRECT_URI;
 
-  // console.log({ CLIENT_ID, CLIENT_SECRET });
-  // function to get spotify token
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Smooth scrolling behavior
+    });
+  };
+  function clearInputHandler() {
+    scrollToTop();
+    setInputFocused(false);
+    setInputValue("");
+    if (navbarInputRef) {
+      navbarInputRef.current.focus();
+    }
+  }
+  function inputHandler({ target }) {
+    scrollToTop();
+    if(pathname !== "/search") {
+      navigate("/search")
+    }
+    const value = target.value;
+    setInputValue(value);
+  }
+
+
   async function getTokenHandler() {
     const TOKEN_URL = "https://accounts.spotify.com/api/token";
     const TOKEN_PARAMS = {
@@ -129,6 +173,27 @@ function App() {
   useEffect(() => {
     setIsPageMounted(true);
   }, []);
+  useEffect(() => {
+    if(pathname !== "/search" && inputValue.length > 0) {
+      setInputValue("");
+      if (navbarInputRef) {
+        navbarInputRef.current.blur();
+      }
+    }
+      }, [pathname, inputValue])
+      useEffect(() => {
+        function removeFocus(event) {
+          const isElementInFocus = navbarInputRef ? document.activeElement === navbarInputRef.current : false;
+    
+          if (event.key === "Escape" && isElementInFocus) {
+            navbarInputRef.current.blur();
+          }
+        }
+    
+        window.addEventListener("keydown", removeFocus);
+    
+        return () => window.removeEventListener("keydown", removeFocus);
+      }, [navbarInputRef]);
   useEffect(() => {
     let timeoutId;
     if (isPageMounted) {
@@ -563,12 +628,7 @@ function App() {
   }
 
   // useEffect(() =>, [accessToken])
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // Smooth scrolling behavior
-    });
-  };
+  
   useEffect(() => {
     getTokenHandler();
   }, []);
@@ -784,6 +844,37 @@ function App() {
     )}&redirect_uri=${encodeURIComponent(redirectURI)}`;
     window.location.href = accessUrl;
   };
+  const navColors = [
+    { normal: "bg-customRed", light: "bg-customRed-light" },
+    { normal: "bg-customOrange", light: "bg-customOrange-light" },
+    { normal: "bg-customMagenta", light: "bg-customMagenta-light" },
+    { normal: "bg-customYellow", light: "bg-customYellow-light" },
+    { normal: "bg-customPurple", light: "bg-customPurple-light" },
+    { normal: "bg-customTeal", light: "bg-customTeal-light" },
+    { normal: "bg-customNavy", light: "bg-customNavy-light" },
+    { normal: "bg-customCyan", light: "bg-customCyan-light" },
+    { normal: "bg-customPink", light: "bg-customPink-light" },
+    { normal: "bg-customTomato", light: "bg-customTomato-light" },
+    { normal: "bg-customLightBlue", light: "bg-customLightBlue-light" },
+    { normal: "bg-customFirebrick", light: "bg-customFirebrick-light" },
+    { normal: "bg-customAmber", light: "bg-customAmber-light" },
+    { normal: "bg-customPlum", light: "bg-customPlum-light" },
+    { normal: "bg-customSlateBlue", light: "bg-customSlateBlue-light" },
+    { normal: "bg-customIndigo", light: "bg-customIndigo-light" },
+    { normal: "bg-customMaroon", light: "bg-customMaroon-light" },
+    { normal: "bg-customOlive", light: "bg-customOlive-light" },
+    { normal: "bg-customChocolate", light: "bg-customChocolate-light" },
+    { normal: "bg-customGold", light: "bg-customGold-light" },
+  ];
+  const refScrollToTop = (scrollRef) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Smooth scrolling
+      });
+    }
+  };
+  
   // console.log(isOnline);
   // console.log({  unAuthAccessToken, accessToken, authAccessToken, refreshToken, elapsedTime });
 
@@ -831,6 +922,12 @@ function App() {
     isHandleClicked,
     setIsHandleClicked,
     authorizeUser,
+    navColors,
+    inputValue, setInputValue,
+    inputFocused, setInputFocused,
+    clearInputHandler,
+    inputHandler,
+    refScrollToTop
     // createPlaylist,
     // createPlaylistData,
     // createPlaylistError,
@@ -846,7 +943,7 @@ function App() {
       {isPageMounted ? <PageMountLoader/> : (
         <>
         <myContext.Provider value={values}>
-          <Navbar />
+          <Navbar ref={navbarInputRef}/>
          
           {!isOnline && (
             <Modals

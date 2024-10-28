@@ -15,7 +15,8 @@ artistsData,
   durationState,
   trackData,
   setNavContentsActive,
-  navContentsActive
+  navContentsActive,
+  chosenNavColor
 }, ref) =>  {
   const navigate = useNavigate();
   return (
@@ -25,8 +26,10 @@ artistsData,
          <NavLayoutMobile   navContentsActive={navContentsActive}
             isLoading={isLoading}
             name={trackData.name}
-            setNavContentsActive={setNavContentsActive}/>
-          <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 pt-20 pb-6 bg-[#333333]">
+            setNavContentsActive={setNavContentsActive}
+            chosenNavColor={chosenNavColor}
+            />
+          <section className={`flex flex-col px-[2.5%] justify-center items-center gap-4 pt-20 pb-6  ${chosenNavColor.normal}`}>
             <img
               src={
                 Object.keys(trackData).length > 0 &&
@@ -41,7 +44,7 @@ artistsData,
             />
 
             <div className="flex flex-col items-start w-full gap-2">
-              <h1 className="text-2xl font-[900]">{trackData.name}</h1>
+              <h1 className="text-2xl font-[900] font-erica">{trackData.name}</h1>
 
               <div className="flex text-sm w-full font-[400] flex-wrap gap-1">
                 <Link

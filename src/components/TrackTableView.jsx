@@ -32,8 +32,8 @@ function TrackTableView({
     <div className="w-full text-tGray">
       <div
         className={`w-full flex justify-between bg-[#1A1A1A] sticky ${
-          !trackVerify && "top-[60px] px-[2.5%] "
-        } ${trackVerify && "top-[123px]"}
+          !trackVerify && "top-[58px] px-[2.5%] "
+        } ${trackVerify && "top-[67px]"}
          z-[10] flex left-[-2px]`}
       >
         <h2
@@ -41,7 +41,7 @@ function TrackTableView({
             albumVerify ? " w-[85%]" : "w-[55%]"
           }  text-left px-4 py-2`}
         >
-          <span className="w-[46px]   flex">#</span>Title
+          <span className="w-[46px] items-center justify-start  flex">#</span>Title
         </h2>
         {!albumVerify && (
           <h2 className="  w-[30%] text-left px-4 py-2">Album</h2>

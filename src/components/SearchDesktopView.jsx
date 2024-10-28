@@ -1,10 +1,5 @@
 import React, { useRef, useState, useEffect, forwardRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faMagnifyingGlass,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+
 import Card from "./PlaylistCard";
 import avatar from "../assets/user (1).png";
 import TrackCard from "./TrackCard";
@@ -69,33 +64,11 @@ const DesktopView = forwardRef(
         setNavHeight(height);
       }
     }, [inputValue, topResultData]);
-    // useEffect(() => {
-    //   const handleScroll = () => {
-    //     if (tracksData.length > 0 && !isLoading ) {
-    //       const { top } = childRef.current.getBoundingClientRect();
-    //       setTableHeadActive(top <= 20);
-    //     }
-    //   };
-
-    //   const element = parentRef.current;
-    //   if (element) {
-    //     element.addEventListener("scroll", handleScroll);
-    //   }
-
-    //   return () => {
-    //     if (element) {
-    //       element.removeEventListener("scroll", handleScroll);
-    //     }
-    //   };
-    // }, [isLoading, dataError]);
-
+    
     return (
       <>
-        <nav
-          className="flex items-center flex-wrap sticky top-0 z-30   bg-primary gap-3   py-4"
-          ref={navRef}
-        >
-          <div className="flex justify-between w-full gap-2  items-center ">
+       
+          {/* <div className="flex justify-between w-full gap-2  items-center ">
             <span className=" flex items-center justify-start gap-3">
               <button
                 className=" w-[35px] aspect-square bg-black relative rounded-full flex justify-center items-center go_back_btn"
@@ -132,10 +105,15 @@ const DesktopView = forwardRef(
               </form>
             </span>
             <span>{!loggedIn ? <LoginBtn /> : <UserBtn />}</span>
-          </div>
+          </div> */}
           {inputFocused &&
             inputValue.length > 0 &&
-            Object.keys(topResultData).length > 0 && (
+            // Object.keys(topResultData).length > 0 &&
+             (
+              <nav
+              className="flex items-center flex-wrap sticky top-0 z-30   bg-primary gap-3   py-4"
+              ref={navRef}
+            >
               <div className=" flex items-center gap-4 w-full justify-start">
                 <button
                   className={`filter_btn ${
@@ -191,13 +169,14 @@ const DesktopView = forwardRef(
                   </button>
                 )}
               </div>
+              </nav>
             )}
-        </nav>
+       
         {!inputFocused && (
           <>
             {recentSearches.length > 0 && (
-              <section aria-label="Recent searches" className="w-full pb-4">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+              <section aria-label="Recent searches" className="w-full py-4">
+                <h2 className="font-erica w-full font-[900] text-2xl text-white pb-2">
                   Recent Searches
                 </h2>
                 <div className="w-full flex flex-wrap justify-start   gap-y-[30px]  ">
@@ -272,7 +251,7 @@ const DesktopView = forwardRef(
 
             {newGenresArray.length > 0 && (
               <section className="w-full ">
-                <h2 className="w-full font-[900] text-2xl text-white pb-3">
+                <h2 className="font-erica w-full font-[900] text-2xl text-white pb-3">
                   Browse all
                 </h2>
                 <div className="w-full flex flex-wrap justify-between   gap-y-4  ">
@@ -307,7 +286,7 @@ const DesktopView = forwardRef(
                     {inputFocused && !dataError && !isLoading && (
                       <>
                         <section className="w-[48%] h-[244px]">
-                          <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                          <h2 className="font-erica w-full font-[900] text-2xl text-white pb-2">
                             Top result
                           </h2>
                           {Object.keys(topResultData).length > 0 && (
@@ -339,7 +318,7 @@ const DesktopView = forwardRef(
                           )}
                         </section>
                         <section className="w-2/4 h-[286px] ">
-                          <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                          <h2 className="font-erica w-full font-[900] text-2xl text-white pb-2">
                             Songs
                           </h2>
                           {tracksData.length > 0 && (
@@ -396,7 +375,7 @@ const DesktopView = forwardRef(
                       !isLoading &&
                       artistsData.length > 0 && (
                         <>
-                          <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                          <h2 className="font-erica w-full font-[900] text-2xl text-white pb-2">
                             Artists
                           </h2>
                           <span className="w-full justify-start flex ">
@@ -441,7 +420,7 @@ const DesktopView = forwardRef(
                       !isLoading &&
                       albumsData.length > 0 && (
                         <>
-                          <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                          <h2 className="font-erica w-full font-[900] text-2xl text-white pb-2">
                             Albums
                           </h2>
                           <span className="w-full justify-start flex ">
@@ -494,7 +473,7 @@ const DesktopView = forwardRef(
                       !isLoading &&
                       playlistsData.length > 0 && (
                         <>
-                          <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                          <h2 className="font-erica w-full font-[900] text-2xl text-white pb-2">
                             Playlist
                           </h2>
                           <span className="w-full justify-start flex ">
@@ -605,12 +584,12 @@ const DesktopView = forwardRef(
               </div>
             )}
             {filters === "albums" && (
-              <div className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
+             <>
                 {inputFocused &&
                   !dataError &&
                   !isLoading &&
                   albumsData.length > 0 && (
-                    <>
+                    <div className="w-full pt-4  flex  flex-wrap justify-center  gap-y-4 items-center">
                       {albumsData.map((albums_d, index) => {
                         const releaseDate = albums_d.release_date.slice(0, 4);
                         const imgUrl =
@@ -633,24 +612,24 @@ const DesktopView = forwardRef(
                           />
                         );
                       })}
-                    </>
+                    </div>
                   )}
                 {inputFocused && !dataError && isLoading && (
-                  <>
-                    {newGenresArray.map((genre, index) => {
-                      return <CardSkeleton key={index} />;
-                    })}
-                  </>
+                  <div className="w-full pt-4  flex  flex-wrap justify- gap-x-4 gap-y-4 items-center">
+                  {newGenresArray.map((genre, index) => {
+                    return <CardSkeleton key={index} />;
+                  })}
+                </div>
                 )}
-              </div>
+              </>
             )}
             {filters === "playlists" && (
-              <div className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
+              <>
                 {inputFocused &&
                   !dataError &&
                   !isLoading &&
                   playlistsData.length > 0 && (
-                    <>
+                    <div className="w-full pt-4  flex  flex-wrap justify-center  gap-y-4 items-center">
                       {playlistsData.map((playlist_d) => {
                         const imgUrl =
                           playlist_d.images && playlist_d.images.length > 0
@@ -674,16 +653,16 @@ const DesktopView = forwardRef(
                           />
                         );
                       })}
-                    </>
+                    </div>
                   )}
                 {inputFocused && !dataError && isLoading && (
-                  <>
+                  <div className="w-full pt-4  flex  flex-wrap justify- gap-x-4 gap-y-4 items-center">
                     {newGenresArray.map((genre, index) => {
                       return <CardSkeleton key={index} />;
                     })}
-                  </>
+                  </div>
                 )}
-              </div>
+            </>
             )}
           </>
         )}

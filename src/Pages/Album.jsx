@@ -7,6 +7,7 @@ import NotFoundView from "../components/NotFoundView";
 import PlaylistMobileView from "../components/PlaylistMobileView";
 import { msToHMS } from "../lib/utils";
 import useHandleScroll from "../hooks/useHandleScroll";
+import useRandomNavColor from "../hooks/useRandomNavColor";
 function Album() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -31,6 +32,7 @@ function Album() {
   const parentRef = useRef(null);
   const childRef = useRef(null);
   const childRefMobile = useRef(null);
+  const chosenNavColor = useRandomNavColor(id);
   async function getAlbum() {
     setDocumentTitle("Audiovista");
     try {
@@ -60,11 +62,10 @@ https://api.spotify.com/v1/albums/${encodeURIComponent(id)}`;
     }
   }
   useEffect(() => {
+    scrollToTop()
     if (accessToken) {
       getAlbum();
-    } else {
-      setIsLoading(true)
-    }
+    } 
   }, [accessToken, id]);
 useHandleScroll(
   isLoading,
@@ -123,6 +124,7 @@ useHandleScroll(
               ref={childRef}
               BackHandler={BackHandler}
               durationState={durationState}
+                chosenNavColor={chosenNavColor}
             />
           </section>
           <section className="block    h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -137,6 +139,7 @@ useHandleScroll(
               BackHandler={BackHandler}
               setNavContentsActive={setNavContentsMobileActive}
               ref={childRefMobile}
+                chosenNavColor={chosenNavColor}
             />
           </section>
         </>

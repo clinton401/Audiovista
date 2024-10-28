@@ -175,7 +175,7 @@ function CheckEmailReg() {
         onClick={(e) => e.stopPropagation()}
       >
         <span className="flex justify-between gap-x-2 gap-y-4 items-center">
-          <h2 className="text-xl font-bold ">Check Status</h2>
+          <h2 className="text-xl font-bold font-erica">Check Status</h2>
           <button
             className="w-[35px] aspect-square text-2xl rounded-md flex items-center justify-center "
             onClick={() => handlePage(false)}

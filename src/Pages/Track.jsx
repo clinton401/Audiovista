@@ -7,6 +7,7 @@ import TrackDestopView from "../components/TrackDestopView";
 import TrackMobileView from "../components/TrackMobileView";
 import { msToHMS } from "../lib/utils";
 import useHandleScroll from "../hooks/useHandleScroll";
+import useRandomNavColor from "../hooks/useRandomNavColor";
 function Track() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataError, setDataError] = useState(false);
@@ -37,6 +38,7 @@ function Track() {
   const parentRef = useRef(null);
   const childRef = useRef(null);
   const childRefMobile = useRef(null);
+  const chosenNavColor = useRandomNavColor(id);
   async function getTracks() {
     setDocumentTitle('Audiovista')
     try {
@@ -89,9 +91,7 @@ function Track() {
     if (accessToken) {
       getTracks();
       scrollToTop()
-    } else {
-      setIsLoading(true)
-    }
+    } 
   }, [accessToken, id]);
   useEffect(() => {
     if (!trackDataLoading && !artistsLoading) {
@@ -161,6 +161,7 @@ function Track() {
               durationState={durationState}
               trackData={trackData}
               artistsData={artistsData}
+              chosenNavColor={chosenNavColor}
             />
           </section>
           <section className="block   h-full min-h-[300px] relative  ipad:hidden w-full">
@@ -175,6 +176,7 @@ function Track() {
               setNavContentsActive={setNavContentsMobileActive}
               navContentsActive={navContentsMobileActive}
               ref={childRefMobile}
+                                                  chosenNavColor={chosenNavColor}
             />
           </section>
         </>

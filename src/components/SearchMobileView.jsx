@@ -71,7 +71,7 @@ const SearchMobileView = forwardRef(
         {!firstInputFocus && (
           <div className=" w-full px-[2.5%] py-8 min-h-dvh">
             <section className="w-full flex flex-col gap-y-3 pb-4">
-              <h2 className="w-full font-[900] text-2xl text-white ">Search</h2>
+              <h2 className="font-erica w-full font-[900] text-2xl text-white ">Search</h2>
               <form className="relative" onSubmit={submitHandler}>
                 <input
                   type="text"
@@ -96,7 +96,7 @@ const SearchMobileView = forwardRef(
             </section>
             {newGenresArray.length > 0 && (
               <section className="w-full pb-[120px] ">
-                <h2 className="w-full font-[900] text-lg text-white ">
+                <h2 className="font-erica w-full font-[900] text-lg text-white ">
                   Browse all
                 </h2>
                 <div className="w-full flex flex-wrap justify-between   gap-4  ">
@@ -155,8 +155,7 @@ const SearchMobileView = forwardRef(
                   )}
                 </form>
               </div>
-              {inputValue.length > 0 &&
-                Object.keys(topResultData).length > 0 && (
+              {inputValue.length > 0 && (
                   <div className=" flex items-center gap-2 px-4 mobile_filter text-sm w-full overflow-x-auto justify-start">
                     <button
                       className={`filter_btn ${
@@ -218,7 +217,7 @@ const SearchMobileView = forwardRef(
               <>
                 {recentSearches.length > 0 ? (
                   <div className="pt-6 px-[2.5%]">
-                    <h2 className="w-full font-[900] text-xl text-white pb-2">
+                    <h2 className="font-erica w-full font-[900] text-xl text-white pb-2">
                       {" "}
                       Recent Searches{" "}
                     </h2>
@@ -287,7 +286,7 @@ const SearchMobileView = forwardRef(
                   </div>
                 ) : (
                   <div className="pt-6 px-[2.5%]">
-                    <h2 className="w-full font-[900] text-xl text-white pb-2">
+                    <h2 className="font-erica w-full font-[900] text-xl text-white pb-2">
                       {" "}
                       Play what you love
                     </h2>

@@ -134,9 +134,7 @@ function Home() {
       getFeaturedPlaylists();
       getNewReleases();
       // }
-    } else {
-      setIsLoading(true);
-    }
+    } 
   }, [accessToken]);
   function refreshHandler() {
     window.location.reload();
@@ -145,11 +143,11 @@ function Home() {
     <ParentLayouts>
       <nav
         aria-label="Home navigation"
-        className="flex justify-between sticky top-0 z-30 bg-primary   items-center py-4 flex-wrap px-[2.5%]	gap-2 "
+        className="flex ipad:hidden justify-between sticky top-0 z-30 bg-primary   items-center py-4 flex-wrap px-[2.5%]	gap-2 "
       >
         <span className="flex justify-center items-center gap-2">
           <img src={logo} alt="logo" className="aspect-square w-[35px]" />
-          <h2 className=" hidden miniScreen:flex font-[700] text-xl text-white font-Montserrat ">
+          <h2 className=" hidden miniScreen:flex font-[700] text-xl text-white font-erica ">
             Audiovista
           </h2>
         </span>
@@ -165,8 +163,8 @@ function Home() {
       )} */}
 
       {!isLoading && !error && newReleasesData.length > 0 && (
-        <section className="px-[2.5%] flex flex-wrap flex-col pb-6">
-          <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
+        <section className="px-[2.5%] flex flex-wrap flex-col pt-2  ipad:pt-4 pb-6">
+          <h2 className="w-full font-[900]  sm:text-3xl text-2xl text-center font-erica ipad:text-left text-white pb-2 ">
             New Releases
           </h2>
           <div className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
@@ -191,7 +189,7 @@ function Home() {
       )}
       {!isLoading && !error && featuredPlaylistData.length > 0 && (
         <section className="px-[2.5%] flex flex-wrap flex-col">
-          <h2 className="w-full font-[900] sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
+          <h2 className="w-full font-[900] font-erica sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
             Featured playlists
           </h2>
           <div className="w-full pt-4  flex  flex-wrap justify-center gap-y-4 items-center">
@@ -217,13 +215,13 @@ function Home() {
         </section>
       )}
       {isLoading && !error && (
-        <section className="px-[2.5%]">
-          {loggedIn && (
+        <section className="px-[2.5%] pt-4 w-full">
+         
             <span className="w-full justify-center ipad:justify-start flex pb-4">
               <Skeleton type="home_btns" />
             </span>
-          )}
-          <div className=" flex flex-wrap justify-center gap-x-4 ipad:justify-between  ipad:gap-x-0   gap-y-[30px] ">
+       
+          <div className=" flex flex-wrap justify-center gap-x-2 w-full ipad:justify-between    gap-y-[30px] ">
             {numbers.map((numb) => {
               return <CardSkeleton key={numb} />;
             })}
@@ -261,7 +259,7 @@ function Home() {
       )} */}
       {error && (
         <section className="flex flex-col h-[70dvh] max-h-[700px] items-center justify-center gap-4">
-          <h1 className="text-2xl font-[900] text-center w-full px-[2.5%] pt-8 text-white sm:text-4xl">
+          <h1 className="text-2xl font-[900] font-erica text-center w-full px-[2.5%] pt-8 text-white sm:text-4xl">
             Something went wrong
           </h1>
           <span className="flex justify-center items-center">

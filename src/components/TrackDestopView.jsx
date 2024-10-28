@@ -16,6 +16,7 @@ const TrackDestopView = forwardRef(
       durationState,
       trackData,
       artistsData,
+      chosenNavColor
     },
     ref
   ) => {
@@ -30,8 +31,10 @@ const TrackDestopView = forwardRef(
               isLoading={isLoading}
               name={trackData.name}
               loggedIn={loggedIn}
+              
+              chosenNavColor={chosenNavColor}
             />
-            <section className="w-full min-h-[300px] flex items-end  bg-[#333333] gap-4 relative pt-4 pb-8 px-[2.5%] ">
+            <section className={`w-full min-h-[300px] flex items-end ${chosenNavColor.normal} gap-4 relative pt-4 pb-8 px-[2.5%] `}>
               <div className="min-w-[180px] max-w-[200px] hover:scale-105 transition-all duration-300 ease-in   w-[20%] rounded-md">
                 <img
                   src={
@@ -48,7 +51,7 @@ const TrackDestopView = forwardRef(
               </div>
               <div className="flex flex-col justify-end w-[80%] pb-2 flex-wrap min-h-[242px] gap-y-3">
                 <h6 className="text-base ">{trackData.type}</h6>
-                <h1 className="text-3xl font-[900]">{trackData.name}</h1>
+                <h1 className="text-3xl font-[900] font-erica">{trackData.name}</h1>
 
                 <div className="flex text-sm w-full font-[400] flex-wrap gap-1">
                   <Link

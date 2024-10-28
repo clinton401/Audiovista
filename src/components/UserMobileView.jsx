@@ -23,6 +23,7 @@ const UserMobileView = forwardRef(
       followLoading,
       navContentsActive,
       setNavContentsActive,
+      chosenNavColor
     },
     ref
   ) => {
@@ -35,8 +36,9 @@ const UserMobileView = forwardRef(
               isLoading={isLoading}
               name={usersData.display_name}
               setNavContentsActive={setNavContentsActive}
+              chosenNavColor={chosenNavColor}
             />
-            <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 bg-[#333333]">
+            <section className={`flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 ${chosenNavColor.normal}`}>
               <img
                 src={
                   usersData && usersData.images && usersData.images.length > 1
@@ -48,7 +50,7 @@ const UserMobileView = forwardRef(
                 className="aspect-square h-[150px] shadow-xl rounded-full object-cover"
               />
               <div className="flex flex-col items-start w-full gap-2">
-                <h1 className="font-bold text-2xl text-left  text-white">
+                <h1 className="font-bold text-2xl text-left font-erica text-white">
                   {usersData.display_name}
                 </h1>
                 <p className="text-xs text-tGray font-bold">
@@ -86,7 +88,7 @@ const UserMobileView = forwardRef(
             <section className="w-full flex flex-col pb-[120px]" ref={ref}>
               {usersPublicPlaylist.length > 0 && (
                 <section className="w-full px-[2.5%] pt-6">
-                  <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                  <h2 className="w-full font-erica font-[900] text-2xl text-white pb-2">
                     Public playlists{" "}
                   </h2>
                   {usersPublicPlaylist.map((playlist_d, index) => {

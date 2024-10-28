@@ -31,7 +31,8 @@ const ArtistMobileView = forwardRef(({
   followLoading,
   unAuthModalHandler,
   navContentsActive,
-  setNavContentsActive
+  setNavContentsActive,
+  chosenNavColor
 }, ref) => {
   return (
     <>
@@ -42,9 +43,11 @@ const ArtistMobileView = forwardRef(({
             isLoading={isLoading}
             name={artistData.name}
             setNavContentsActive={setNavContentsActive}
+            
+            chosenNavColor={chosenNavColor}
           />
 
-          <section className="flex flex-col px-[2.5%] justify-center items-center gap-4 py-10 bg-[#333333]">
+          <section className={`flex flex-col px-[2.5%] ${chosenNavColor.normal} justify-center items-center gap-4 py-10 bg-[#333333]`}>
             <img
               src={
                 artistData && artistData.images && artistData.images.length > 0
@@ -57,7 +60,7 @@ const ArtistMobileView = forwardRef(({
             />
 
             <div className="flex flex-col items-start w-full gap-2">
-              <h1 className="font-bold text-2xl text-left  text-white">
+              <h1 className="font-bold text-2xl text-left font-erica  text-white">
                 {artistData.name}
               </h1>
               {Object.keys(artistData).length > 0 && (
@@ -93,7 +96,7 @@ const ArtistMobileView = forwardRef(({
           <section className="pb-[120px]" ref={ref}>
             {artistTracks.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className="w-full font-[900] font-erica text-2xl text-white pb-2">
                   Popular
                 </h2>
                 <div className="w-full pt-4  flex  flex-wrap justify-between  items-center ">
@@ -121,7 +124,7 @@ const ArtistMobileView = forwardRef(({
             )}
             {artistAlbum.length > 0 && (
               <section className="w-full px-[2.5%] pt-6 ">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className="w-full font-[900] font-erica text-2xl text-white pb-2">
                   Albums
                 </h2>
                 <section className="w-full  overflow-x-auto mobile_filter  ">
@@ -153,7 +156,7 @@ const ArtistMobileView = forwardRef(({
             )}
             {relatedArtists.length > 0 && (
               <section className="w-full px-[2.5%] pt-6 ">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className="w-full font-[900] text-2xl font-erica text-white pb-2">
                   Fans also like
                 </h2>
                 <section className="w-full  overflow-x-auto mobile_filter  ">
@@ -181,7 +184,7 @@ const ArtistMobileView = forwardRef(({
             )}
             {artistAppearsOn.length > 0 && (
               <section className="w-full px-[2.5%] pt-6">
-                <h2 className="w-full font-[900] text-2xl text-white pb-2">
+                <h2 className="w-full font-[900] text-2xl font-erica text-white pb-2">
                   Appears on
                 </h2>
                 <section className="w-full  overflow-x-auto mobile_filter  ">

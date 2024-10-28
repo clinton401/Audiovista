@@ -29,6 +29,7 @@ const PlaylistDesktopView = forwardRef(
       userAuth,
       editPlaylistActiveHandler,
       getPlaylist,
+      chosenNavColor
     },
     ref
   ) => {
@@ -57,9 +58,10 @@ const PlaylistDesktopView = forwardRef(
               name={playlistData.name}
               loggedIn={loggedIn}
               ref={navRef}
+              chosenNavColor={chosenNavColor}
             />
             {/* </section> */}
-            <section className="w-full min-h-[350px] flex items-end  bg-[#333333] gap-4 relative pt-4 pb-8 px-[2.5%] ">
+            <section className={`w-full min-h-[350px] flex items-end ${chosenNavColor.normal}  gap-4 relative pt-4 pb-8 px-[2.5%] `}>
               <div className="min-w-[230px] hover:scale-105 transition-all duration-300 ease-in   w-[23%] rounded-md">
                 <img
                   src={
@@ -76,7 +78,7 @@ const PlaylistDesktopView = forwardRef(
               </div>
               <div className="flex flex-col justify-end w-[73%] flex-wrap  pb-2 min-h-[242px] gap-y-3">
                 <h6 className="text-base ">{playlistData.type}</h6>
-                <h1 className="text-3xl font-[900]">{playlistData.name}</h1>
+                <h1 className="text-3xl font-[900] font-erica">{playlistData.name}</h1>
                 {playlistData.type === "playlist" && (
                   <>
                     {playlistData.description.charAt(0) !== "<" && (
@@ -179,7 +181,7 @@ const PlaylistDesktopView = forwardRef(
                   />
                 ) : (
                   <span className="w-full flex flex-col gap-2  px-[2.5%]">
-                    <h2 className="w-full font-[900] text-center text-2xl">
+                    <h2 className="w-full font-[900] font-erica text-center text-2xl">
                       Empty {playlistData.type}
                     </h2>
                   </span>
