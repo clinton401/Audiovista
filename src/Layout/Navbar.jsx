@@ -205,7 +205,7 @@ const Navbar = forwardRef(({}, ref) => {
           </form>
         </span>
 
-        {!loggedIn ? <LoginBtn /> : <UserBtn />}
+        {!loggedIn ? <LoginBtn navBarComp={true}/> : <UserBtn />}
       </header>
       <aside
         className="hidden w-[25%] max-w-[440px] pt-[65px] ipad:min-h-[400px]  overflow-y-auto fixed top-0 left-0 ipad:max-h-[900px] h-dvh py-2 px-4 overflow-x-hidden ipad:flex flex-col gap-2"
