@@ -46,7 +46,7 @@ const NavLayoutMobile = forwardRef(
         animate="visible"
         exit="exit"
          key="nav_mobile_modal"
-        className={`fixed  px-[2.5%] py-4 z-40 top-0 flex ${chosenNavColor.normal } w-full  justify-between items-center  gap-2 flex-wrap left-0`}
+        className={`fixed  px-[2.5%] py-2 z-40 top-0 flex ${chosenNavColor.normal } w-full  justify-between items-center  gap-2 flex-wrap left-0`}
         ref={ref && ref}
       >
         <div className="flex-grow flex .ellipsis-container w-[60%] items-center gap-2">
