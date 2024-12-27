@@ -361,7 +361,7 @@ function Search() {
     if (dataFirstItems.length > 0) {
       const filteredResult = dataFirstItems.filter((filtered) => {
         const inputLength = inputValue.length;
-        const filter_name = filtered.name.slice(0, inputLength).toLowerCase();
+        const filter_name = filtered?.name.slice(0, inputLength).toLowerCase() || "NA";
         const filter_value = inputValue.toLowerCase();
         const isMatch = filter_name === filter_value;
 
