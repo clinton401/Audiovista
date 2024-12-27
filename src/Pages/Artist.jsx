@@ -56,30 +56,30 @@ function Artist() {
   const chosenNavColor = useRandomNavColor(id);
   // console.log({ dataError, isLoading, artistData });
 
-  async function getRelatedArtists() {
-    try {
-      setRelatedArtistLoading(true);
-      const SEARCH_URL = `https://api.spotify.com/v1/artists/${encodeURIComponent(
-        id
-      )}/related-artists`;
-      const response = await fetch(SEARCH_URL, SEARCH_PARAM);
-      if (response.ok) {
-        const data = await response.json();
-        setRelatedArtist(data.artists);
-        setDataError(false);
-        setRelatedArtistLoading(false);
-      } else {
-        setRelatedArtist([]);
-        setDataError(true);
-        setRelatedArtistLoading(false);
-      }
-    } catch (error) {
-      setRelatedArtist([]);
-      setDataError(true);
-      setRelatedArtistLoading(false);
-      console.log(error);
-    }
-  }
+  // async function getRelatedArtists() {
+  //   try {
+  //     setRelatedArtistLoading(true);
+  //     const SEARCH_URL = `https://api.spotify.com/v1/artists/${encodeURIComponent(
+  //       id
+  //     )}/related-artists`;
+  //     const response = await fetch(SEARCH_URL, SEARCH_PARAM);
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       setRelatedArtist(data.artists);
+  //       setDataError(false);
+  //       setRelatedArtistLoading(false);
+  //     } else {
+  //       setRelatedArtist([]);
+  //       setDataError(true);
+  //       setRelatedArtistLoading(false);
+  //     }
+  //   } catch (error) {
+  //     setRelatedArtist([]);
+  //     setDataError(true);
+  //     setRelatedArtistLoading(false);
+  //     console.log(error);
+  //   }
+  // }
   async function getArtistAppearsOnAlbum() {
     try {
       setAlbumLoading(true);
@@ -362,8 +362,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
     if (
       artistLoading &&
       tracksLoading &&
-      albumLoading &&
-      relatedArtistsLoading
+      albumLoading
       // arfLoading
     ) {
       setIsLoading(true);
@@ -374,7 +373,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
     artistLoading,
     tracksLoading,
     albumLoading,
-    relatedArtistsLoading,
+    
     // arfLoading,
   ]);
   useEffect(() => {
@@ -410,7 +409,6 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       followHandler();
     }
   }
-
   return (
     <ParentLayouts ref={parentRef}>
       
