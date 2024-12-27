@@ -9,7 +9,7 @@ import UserBtn from "../components/UserBtn";
 import Skeleton from "../components/Skeleton";
 import avatar from "../assets/user (1).png";
 function Home() {
-  const [featuredPlaylistLoading, setFeaturedPlaylistLoading] = useState(true);
+  const [featuredPlaylistLoading, setFeaturedPlaylistLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [featuredPlaylistData, setFeaturedPlaylistData] = useState([]);
@@ -82,7 +82,7 @@ function Home() {
     try {
       setNewReleasesLoading(true);
       const SEARCH_URL =
-        "https://api.spotify.com/v1/browse/new-releases?limit=30";
+        "https://api.spotify.com/v1/browse/new-releases?limit=50";
       const response = await fetch(SEARCH_URL, SEARCH_PARAM);
       if (response.ok) {
         const data = await response.json();
@@ -131,7 +131,7 @@ function Home() {
     if (accessToken) {
       // searchRandomArtistAlbum(randomArtistName);
       // if(loggedIn) {
-      getFeaturedPlaylists();
+      // getFeaturedPlaylists();
       getNewReleases();
       // }
     } 
@@ -187,7 +187,7 @@ function Home() {
           </div>
         </section>
       )}
-      {!isLoading && !error && featuredPlaylistData.length > 0 && (
+      {/* {!isLoading && !error && featuredPlaylistData.length > 0 && (
         <section className="px-[2.5%] flex flex-wrap flex-col">
           <h2 className="w-full font-[900] font-erica sm:text-3xl text-2xl text-center ipad:text-left text-white pb-2 ">
             Featured playlists
@@ -213,7 +213,7 @@ function Home() {
             })}
           </div>
         </section>
-      )}
+      )} */}
       {isLoading && !error && (
         <section className="px-[2.5%] pt-4 w-full">
          

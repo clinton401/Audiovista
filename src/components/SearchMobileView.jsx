@@ -405,6 +405,7 @@ const SearchMobileView = forwardRef(
                     {!isLoading && (
                       <section className="w-full flex flex-col ">
                         {playlistsData.map((playlist_d, index) => {
+                          if(!playlist_d) return;
                           const imgUrl =
                             playlist_d.images && playlist_d.images.length > 0
                               ? playlist_d.images[0].url
@@ -524,6 +525,7 @@ const SearchMobileView = forwardRef(
                               {playlistsData
                                 .slice(0, 5)
                                 .map((playlist_d, index) => {
+                                  if(!playlist_d) return;
                                   const imgUrl =
                                     playlist_d.images &&
                                     playlist_d.images.length > 0

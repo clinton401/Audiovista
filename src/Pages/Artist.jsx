@@ -14,7 +14,7 @@ function Artist() {
   const [tracksLoading, setTracksLoading] = useState(true);
   const [arfLoading, setArfLoading] = useState(true);
   const [albumLoading, setAlbumLoading] = useState(true);
-  const [relatedArtistsLoading, setRelatedArtistLoading] = useState(true);
+  const [relatedArtistsLoading, setRelatedArtistLoading] = useState(false);
   const [dataError, setDataError] = useState(false);
   const [followersWithComma, setFollowersWithComma] = useState("");
   const [artistData, setArtistData] = useState({});
@@ -325,7 +325,7 @@ https://api.spotify.com/v1/me/following/contains?type=artist&ids=${encodeURIComp
       getArtistTracks();
       getArtistAlbum();
       getArtistAppearsOnAlbum();
-      getRelatedArtists();
+      // getRelatedArtists();
       setSearchParamPut({
         method: "PUT",
         headers: {

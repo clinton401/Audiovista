@@ -64,7 +64,6 @@ const DesktopView = forwardRef(
         setNavHeight(height);
       }
     }, [inputValue, topResultData]);
-    
     return (
       <>
        
@@ -478,10 +477,11 @@ const DesktopView = forwardRef(
                           </h2>
                           <span className="w-full justify-start flex ">
                             {playlistsData.slice(0, 5).map((playlist_d) => {
+                              if(!playlist_d) return;
                               const imgUrl =
-                                playlist_d.images &&
-                                playlist_d.images.length > 0
-                                  ? playlist_d.images[0].url
+                                playlist_d?.images &&
+                                playlist_d?.images.length > 0
+                                  ? playlist_d?.images[0].url
                                   : avatar;
                               const creatorName =
                                 playlist_d?.owner?.display_name || "Unknown";
@@ -493,7 +493,7 @@ const DesktopView = forwardRef(
                                   key={playlist_d.id}
                                   artistDetails={playlist_d}
                                   image={imgUrl}
-                                  title={playlist_d.name}
+                                  title={playlist_d?.name || "Unknown"}
                                   path={playlist_d.type}
                                   idNo={playlist_d.id}
                                   playlistCreator={newCreatorName}
@@ -631,6 +631,7 @@ const DesktopView = forwardRef(
                   playlistsData.length > 0 && (
                     <div className="w-full pt-4  flex  flex-wrap justify-center  gap-y-4 items-center">
                       {playlistsData.map((playlist_d) => {
+                        if(!playlist_d) return;
                         const imgUrl =
                           playlist_d.images && playlist_d.images.length > 0
                             ? playlist_d.images[0].url
