@@ -279,7 +279,7 @@ if(playlistImageError) {
 
   return (
     <section
-      className="flex items-center transition-all ease-in duration-300 py-10  ipad:right-5 justify-center px-[2.5%] z-[100]  top-0   fixed w-full h-dvh blurred overflow-x-hidden ipad:max-h-[900px] "
+      className="flex items-center transition-all ease-in duration-300 py-10  ipad:right-5 justify-center px-[2.5%] z-[1000]  top-0   fixed w-full h-dvh blurred overflow-x-hidden ipad:max-h-[900px] "
       onClick={closePage}
     >
       
